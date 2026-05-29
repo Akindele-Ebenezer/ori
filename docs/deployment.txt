@@ -1,0 +1,398 @@
+# Deployment Guide
+
+This guide covers deploying the Sea Service Testimonial & Vessel Tracker application to production environments.
+
+## Prerequisites
+
+- Web server (Apache/Nginx)
+- PHP 8.1+ with required extensions
+- MySQL 5.7+ or MariaDB
+- SSL certificate
+- Domain configuration
+
+## Server Requirements
+
+### PHP Extensions
+```
+- pdo_mysql
+- mbstring
+- xml
+- curl
+- zip
+- gd
+- bcmath
+- json
+```
+
+### Web Server Configuration
+
+#### Apache (.htaccess)
+```apache
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^(.*)$ public/index.php [QSA,L]
+</IfModule>
+```
+
+#### Nginx
+```nginx
+server {
+    listen 80;
+    server_name your-domain.com;
+    root /path/to/ori/public;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ \.php$ {
+        fastcgi_pass unix:/var/run/php/php8.1-fpm.sock;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+
+    location ~ /\.ht {
+        deny all;
+    }
+}
+```
+
+## Deployment Steps
+
+### 1. Code Deployment
+
+```bash
+# Clone repository
+git clone <repository-url> /var/www/ori
+cd /var/www/ori
+
+# Install dependencies
+composer install --no-dev --optimize-autoloader
+npm install
+npm run build
+```
+
+### 2. Environment Configuration
+
+```bash
+cp .env.example .env
+```
+
+Edit `.env` for production:
+
+```env
+APP_NAME="Sea Service Testimonial"
+APP_ENV=production
+APP_KEY=base64:generated-key
+APP_DEBUG=false
+APP_URL=https://your-domain.com
+
+DB_CONNECTION=mysql
+DB_HOST=localhost
+DB_PORT=3306
+DB_DATABASE=ori_production
+DB_USERNAME=production_user
+DB_PASSWORD=secure_password
+
+# Security
+SESSION_SECURE_COOKIE=true
+SANCTUM_STATEFUL_DOMAINS=your-domain.com
+```
+
+Generate application key:
+```bash
+php artisan key:generate
+```
+
+### 3. Database Setup
+
+```bash
+# Create database
+mysql -u root -p
+CREATE DATABASE ori_production;
+GRANT ALL PRIVILEGES ON ori_production.* TO 'production_user'@'localhost' IDENTIFIED BY 'secure_password';
+FLUSH PRIVILEGES;
+EXIT;
+
+# Run migrations
+php artisan migrate --seed
+```
+
+### 4. File Permissions
+
+```bash
+# Set proper ownership
+chown -R www-data:www-data /var/www/ori
+chmod -R 755 /var/www/ori/storage
+chmod -R 755 /var/www/ori/bootstrap/cache
+```
+
+### 5. Storage Link
+
+```bash
+php artisan storage:link
+```
+
+### 6. Caching and Optimization
+
+```bash
+# Cache configuration
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+
+# Optimize autoloader
+composer dump-autoload --optimize
+```
+
+## SSL Configuration
+
+### Let's Encrypt (Recommended)
+
+```bash
+# Install certbot
+sudo apt install certbot python3-certbot-apache
+
+# Generate certificate
+sudo certbot --apache -d your-domain.com -d www.your-domain.com
+```
+
+### Manual SSL
+
+Update Nginx configuration:
+```nginx
+server {
+    listen 443 ssl http2;
+    server_name your-domain.com;
+
+    ssl_certificate /path/to/certificate.crt;
+    ssl_certificate_key /path/to/private.key;
+
+    # ... rest of config
+}
+```
+
+## Domain Configuration
+
+### Host-Based Routing
+
+Configure domains for different modules:
+
+```
+seaservice.your-domain.com → Sea Service Testimonial
+vesseltracker.your-domain.com → Vessel Tracker
+```
+
+Apache virtual hosts:
+```apache
+<VirtualHost *:80>
+    ServerName seaservice.your-domain.com
+    DocumentRoot /var/www/ori/public
+    # ... SSL and other config
+</VirtualHost>
+
+<VirtualHost *:80>
+    ServerName vesseltracker.your-domain.com
+    DocumentRoot /var/www/ori/public
+    # ... SSL and other config
+</VirtualHost>
+```
+
+## Desktop Application Deployment
+
+### Electron Build
+
+```bash
+# Install electron-packager globally
+npm install -g electron-packager
+
+# Build for different platforms
+electron-packager . "Sea Service App" --platform=win32 --arch=x64 --out=dist/
+electron-packager . "Sea Service App" --platform=darwin --arch=x64 --out=dist/
+electron-packager . "Sea Service App" --platform=linux --arch=x64 --out=dist/
+```
+
+### Distribution
+
+- Windows: `.exe` installer
+- macOS: `.dmg` or `.pkg`
+- Linux: `.deb` or AppImage
+
+## Backup Strategy
+
+### Database Backup
+
+```bash
+# Daily backup script
+mysqldump -u production_user -p ori_production > backup_$(date +%Y%m%d).sql
+```
+
+### File Backup
+
+```bash
+# Backup uploads and config
+tar -czf files_backup_$(date +%Y%m%d).tar.gz storage/ .env
+```
+
+### Automated Backups
+
+Set up cron jobs:
+```bash
+# Daily at 2 AM
+0 2 * * * /path/to/backup-script.sh
+```
+
+## Monitoring and Maintenance
+
+### Log Rotation
+
+```bash
+# Laravel logs
+logrotate -f /etc/logrotate.d/laravel
+```
+
+### Performance Monitoring
+
+- Enable Laravel Telescope for production monitoring
+- Set up New Relic or similar APM
+- Monitor PHP-FPM and MySQL performance
+
+### Health Checks
+
+Create health check endpoint:
+```php
+// routes/web.php
+Route::get('/health', function () {
+    return response()->json(['status' => 'ok']);
+});
+```
+
+### Security Updates
+
+```bash
+# Regular updates
+composer update
+npm audit fix
+
+# Laravel security patches
+php artisan --version
+# Check for security advisories at https://laravel.com/docs/security
+```
+
+## Scaling Considerations
+
+### Horizontal Scaling
+
+- Use load balancer for multiple web servers
+- Shared session storage (Redis)
+- Database read replicas
+
+### Database Optimization
+
+```sql
+-- Add indexes for performance
+CREATE INDEX idx_vessel_name ON vessels_vessel_information (VesselName);
+CREATE INDEX idx_employee_id ON employees (EmployeeId);
+CREATE INDEX idx_status_date ON vessel_availabilities (Status, StartDate);
+```
+
+### Caching
+
+```bash
+# Redis for sessions and cache
+CACHE_DRIVER=redis
+SESSION_DRIVER=redis
+```
+
+## Troubleshooting
+
+### Common Issues
+
+1. **Permission Denied**: Check file ownership and permissions
+2. **White Screen**: Check PHP error logs, ensure APP_KEY is set
+3. **Database Connection**: Verify credentials and network access
+4. **Assets Not Loading**: Run `npm run build` and check public/build/
+
+### Debug Mode
+
+Temporarily enable debug for troubleshooting:
+```env
+APP_DEBUG=true
+```
+
+Remember to disable in production.
+
+### Log Analysis
+
+```bash
+# Check Laravel logs
+tail -f storage/logs/laravel.log
+
+# Check web server logs
+tail -f /var/log/apache2/error.log
+# or
+tail -f /var/log/nginx/error.log
+```
+
+## Rollback Strategy
+
+### Git-based Rollback
+
+```bash
+# Rollback to previous commit
+git log --oneline -10
+git reset --hard <commit-hash>
+php artisan migrate:rollback
+npm run build
+```
+
+### Database Rollback
+
+```bash
+# Rollback migrations
+php artisan migrate:rollback --step=1
+```
+
+## Performance Tuning
+
+### PHP Optimization
+
+```ini
+; php.ini
+memory_limit = 256M
+max_execution_time = 300
+upload_max_filesize = 50M
+post_max_size = 50M
+```
+
+### MySQL Optimization
+
+```ini
+; my.cnf
+innodb_buffer_pool_size = 1G
+innodb_log_file_size = 256M
+query_cache_size = 256M
+```
+
+### Laravel Optimization
+
+```bash
+# Additional caching
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+php artisan event:cache
+```
+
+## Security Checklist
+
+- [ ] SSL certificate installed
+- [ ] File permissions set correctly
+- [ ] Database credentials secured
+- [ ] APP_DEBUG disabled
+- [ ] APP_KEY generated
+- [ ] .env not in version control
+- [ ] Regular security updates
+- [ ] Firewall configured
+- [ ] Backup system in place

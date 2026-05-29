@@ -1,0 +1,57 @@
+.chart-3 {
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    display: flex;
+    width: 100%;  
+
+    .Close {
+        color: red;
+        cursor: pointer;
+        font-size: 1.3em;
+        font-weight: bold;
+        position: absolute;
+        right: 1.5em;
+        top: 1em;
+    }
+}
+  .row {    
+      align-items: center;
+      background: #fff;
+      border-radius: .5em;
+      display: flex; 
+      flex-wrap: wrap; 
+      height: 95%;
+      justify-content: center;
+      overflow-x: hidden;
+      overflow-y: scroll;
+      padding: 2em;
+      position: relative;
+      width: 67%;
+
+      img {
+        cursor: pointer;
+        margin-right: 1em; 
+        translate: 0 -.25em;
+        width: 2em;
+      }
+}
+.cell {
+    background-color: #fff;
+    padding: 4em;
+    position: relative;
+
+    .days {
+      font-weight: 600;
+      left: -1.25em;
+      position: absolute;
+    }
+
+    span {
+      // border: 1px solid;
+      display: inline-block;
+      padding-bottom: 1em;
+      margin: -2.5px;
+      text-align: center;
+      width: 6.5em;
+    }
+}

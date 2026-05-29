@@ -1,0 +1,255 @@
+.availability {
+    position: relative;
+    width: 20%;
+    .upper-links { 
+        display: flex;
+        a, div {
+            color: #fff;
+            padding: .5em;
+            margin: .5em;
+            font-style: italic;
+            text-decoration: unset; 
+            background: #ff6868;
+            cursor: pointer;
+        }
+    }
+
+    .company-logo {
+        background-color: #fff;
+        height: 8em;
+        position: sticky;
+        text-align: center;
+        translate: 0 -1em;
+        width: 100%;
+        z-index: 100;
+    }
+             
+    &.dashboard {
+        width: 70%;
+    } 
+
+    .dashboard-inner {
+        .FilterByDateButton, .FilterReportByDateButton,.FilterReportForVesselByDate, .FilterChart4ForVesselData, .RecordAvailabilityButton, .DisplayChart5Button {
+            background-color: #ff6868;
+            color: #fff;
+            border: none;
+            border-radius: 0.3em;
+            cursor: pointer;
+            margin-block: 0.5em;
+            padding: 1em 2em;
+            position: absolute;
+            right: 1em;
+            top: 1em;
+            z-index: 100;
+        } 
+
+        .RecordAvailabilityButton {
+            right: 9em;
+        }
+    }
+
+    .list {
+        // padding: unset;
+
+        .-x {
+            .notification-wrapper {
+                align-items: center;
+                color: #888 !important;
+                display: flex;
+                padding: 0 .5em;
+
+                .vessel-name-- {
+                    width: 12em;
+                }
+
+                .captain-- {
+                    bottom: .2em;
+                    padding: 0.4em;
+                    position: absolute;
+                    left: 2.5em;
+                    width: 2em;
+                    display: inline-block;
+                }
+
+                .vessel-captain--, .vessel-night-duty-captain-- {
+                    background: #f4f4f4;
+                    border: 1px solid #ddd;
+                    bottom: 0;
+                    font-style: italic;
+                    padding: .4em;
+                    position: absolute;
+                    left: 7.5em;
+                    text-transform: uppercase;
+                    font-size: .6em !important;
+                }
+                .vessel-night-duty-captain-- { 
+                    left: 19.5em;
+                }
+
+                .vessel-rob-- {
+                    position: absolute;
+                    right: 3.5em;
+                    bottom: 0;
+                }
+               .vessel-area-- {
+                    font-size: .9em;
+                    font-weight: 500;
+                    color: #2d3748;
+                    background: #f7fafc;
+                    padding: 6px 16px 6px 32px;
+                    border-radius: 20px;
+                    display: inline-block;
+                    position: absolute;
+                    right: 10em;
+                    bottom: 1.5em;
+                }
+                .vessel-area--::before {
+                    content: "📍";
+                    position: absolute;
+                    left: 10px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    font-size: 0.9rem;
+                }
+
+                span {
+                    &:nth-child(2) {
+                        margin-left: 1em;
+                        width: 12em;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 1785px) {
+    .availability {
+        width: 25%;
+
+        &.vessel-content {
+            h2 {
+                font-size: 2em;
+                padding: 0.15em;
+                text-align: center;
+            }
+        }
+
+        #chart_div1 {
+            display: none;
+        }
+
+        .list {
+            padding: .5em 0;
+        }
+
+        .RecordAvailabilityButton, .FilterByDateButton {
+            top: 0.2em !important;
+        }
+    }
+
+    .availability.dashboard {
+        .board-1 {
+            .div {
+                width: 49%;
+
+                &:nth-child(3) {
+                    display: none;
+                }
+
+                .indicators-wrapper {
+                    display: unset;
+
+                    .indicators-inner {
+                        width: 100%;
+
+                        &-x {
+                            span {
+                                &:first-of-type { 
+                                    height: 1em;
+                                    width: 1em;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .status {
+                    // height: 1em !important;
+                    width: 100% !important;
+                }
+
+                table {
+                    tr {
+                        .operation-responsive {
+                            // display: block !important;
+                            display: none;
+                        }
+                    }
+                }
+            }
+        } 
+    }
+
+    .availability.notifications {
+        .list {
+            .inner.-x {
+                .notification-wrapper {
+                    span {
+                        font-size: .75em;
+                    }
+                }
+            }
+        }
+    }
+  }
+
+  .DisplayChart5Button, .DisplayAddChecklist1Button, .DisplayMap1Button, .DisplayGeneratorAvailabilityFormButton, .AddGeneratorButton, .DisplayVesselsOnSiteButton, .DisplayTanksButton, .DisplayMapButton {
+    cursor: pointer;
+    position: absolute;
+    top: unset;
+    bottom: .5em;
+    right: 1em;
+    z-index: 200;
+    background-color: #ff6868;
+    border: none;
+    border-radius: .3em;
+    padding: .3em;
+
+    svg {
+        fill: #fff;
+    }
+  }
+  .DisplayAddChecklist1Button {
+    right: 4em;
+  }
+  .DisplayMap1Button {
+    right: 7em;
+  }
+  .DisplayGeneratorAvailabilityFormButton, .AddGeneratorButton, .DisplayVesselsOnSiteButton, .DisplayTanksButton, .DisplayMapButton {
+    right: 10em;
+  }
+  .AddGeneratorButton {
+    right: 13em;
+  }
+  .DisplayTanksButton {
+    right: 16em;
+  }
+  .DisplayMapButton {
+    right: 19em;
+  }
+  .DisplayVesselsOnSiteButton {
+    right: 19em;
+  }
+  .report-summary.-x {
+    background-color: rgb(134, 127, 240);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    font-size: x-small;
+    img {
+        cursor: pointer;
+        width: 1em;
+        margin-right: 1em;
+    }
+  }

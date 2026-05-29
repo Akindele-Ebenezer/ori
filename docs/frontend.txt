@@ -1,0 +1,330 @@
+# Frontend Guide
+
+This document describes the frontend architecture, views, components, and styling for the Sea Service Testimonial & Vessel Tracker application.
+
+## Technology Stack
+
+- **Template Engine**: Laravel Blade
+- **Build Tool**: Vite
+- **CSS Framework**: Custom SASS/CSS
+- **JavaScript**: Vanilla JS with Axios for HTTP requests
+- **Icons/Fonts**: Custom font files (DejaVuSans, AncientSans)
+
+## Directory Structure
+
+```
+resources/
+├── css/           # Compiled CSS files
+├── js/            # JavaScript files
+├── sass/          # SASS source files
+└── views/         # Blade templates
+    ├── Components/    # Reusable components
+    ├── Pages/         # Main page views
+    └── layouts/       # Layout templates
+```
+
+## Layout System
+
+### Primary Layout (`layout-1.blade.php`)
+Main application layout with:
+- HTML5 structure
+- Meta tags and favicon
+- CSS/JS asset inclusion via Vite
+- Navigation header
+- Main content area
+- Footer
+
+### Alternative Layout (`layout-2.blade.php`)
+Used by vessel-related pages with:
+- Different styling
+- Specialized navigation
+- Additional JavaScript includes
+
+## Page Views
+
+Located in `resources/views/Pages/`, each corresponding to a main route.
+
+### Main Pages
+
+| View File | Route | Description |
+|-----------|-------|-------------|
+| `Vessels.blade.php` | `/Vessels` | Vessel registry with search and CRUD |
+| `Employees.blade.php` | `/Employees` | Employee directory |
+| `DeckRating.blade.php` | `/DeckRating` | Deck rating crew filter |
+| `Engineers.blade.php` | `/Engineers` | Engineering crew filter |
+| `Captains.blade.php` | `/Captains` | Captain crew filter |
+| `Testimonials.blade.php` | `/Testimonials` | Sea service testimonial archive |
+| `Operations.blade.php` | `/Operations` | Operational history view |
+| `Availability.blade.php` | `/Availability` | Vessel/Generator status tracking |
+| `Notifications.blade.php` | `/Notifications` | System alerts & statistics |
+| `Users.blade.php` | `/Users` | User account management |
+| `Login.blade.php` | `/` | Authentication interface |
+
+### View Structure
+
+Each page follows a consistent pattern:
+
+```blade
+@extends('layouts.layout-1')
+
+@section('title', 'Page Title')
+
+@section('content')
+<!-- Main content -->
+@endsection
+
+@section('scripts')
+<!-- Page-specific JavaScript -->
+@endsection
+```
+
+## Component System
+
+Located in `resources/views/Components/`, organized by functionality.
+
+### Forms (`Components/Forms/`)
+Modular form components for CRUD operations:
+
+```
+Forms/
+├── Add/
+│   ├── Employee.blade.php
+│   ├── Vessel.blade.php
+│   └── ...
+├── Edit/
+│   ├── Employee.blade.php
+│   ├── Vessel.blade.php
+│   └── ...
+└── Delete/
+    ├── Employee.blade.php
+    ├── Vessel.blade.php
+    └── ...
+```
+
+**Usage:**
+```blade
+@include('Components.Forms.Add.Vessel', ['vessel' => null])
+```
+
+### Charts (`Components/Charts/`)
+Data visualization components:
+- Statistical charts
+- Dashboard widgets
+- Progress indicators
+
+### Includes (`Components/Includes/`)
+Reusable snippets:
+- Headers and footers
+- Navigation menus
+- Search forms
+- Pagination controls
+
+### Inner Components (`Components/Inner/`)
+Page sections:
+- Data tables
+- Filter panels
+- Action buttons
+- Status indicators
+
+### History (`Components/History/`)
+Historical data displays:
+- Audit trails
+- Change logs
+- Timeline views
+
+### Location (`Components/Location/`)
+Geographic components:
+- Vessel position displays
+- Location tracking
+- Map integrations
+
+### Maps (`Components/Maps/`)
+Mapping functionality:
+- Vessel tracking maps
+- Route visualization
+- Geographic data display
+
+### Tanks (`Components/Tanks/`)
+Fuel and tank monitoring:
+- Tank level indicators
+- Capacity displays
+- Fuel consumption charts
+
+### Loader (`Components/Loader/`)
+Loading states:
+- Spinners
+- Progress bars
+- Skeleton screens
+
+## Styling Architecture
+
+### SASS Structure
+```
+resources/sass/
+├── _variables.scss     # Color schemes, fonts, spacing
+├── _mixins.scss       # Reusable SASS functions
+├── _components.scss   # Component-specific styles
+├── _layout.scss       # Layout and grid system
+├── _responsive.scss   # Media queries
+└── app.scss          # Main SASS file
+```
+
+### CSS Classes
+
+**Layout Classes:**
+- `.container` - Main content wrapper
+- `.row` - Flex row container
+- `.col-*` - Column grid system
+- `.card` - Content cards
+- `.panel` - Administrative panels
+
+**Component Classes:**
+- `.btn-*` - Button variants (primary, secondary, danger)
+- `.form-group` - Form field containers
+- `.table-responsive` - Responsive tables
+- `.alert-*` - Notification messages
+
+**State Classes:**
+- `.active` - Active navigation items
+- `.disabled` - Disabled elements
+- `.loading` - Loading states
+- `.hidden` - Hidden elements
+
+### Responsive Design
+
+Mobile-first approach with breakpoints:
+- Mobile: < 768px
+- Tablet: 768px - 1024px
+- Desktop: > 1024px
+
+### Theme Customization
+
+Color scheme defined in `_variables.scss`:
+```scss
+$primary-color: #007bff;
+$secondary-color: #6c757d;
+$success-color: #28a745;
+$danger-color: #dc3545;
+$warning-color: #ffc107;
+```
+
+## JavaScript Architecture
+
+### Asset Compilation
+Configured in `vite.config.js`:
+- Entry points for different pages
+- Hot module replacement for development
+- Production optimization
+
+### AJAX Requests
+Using Axios for API calls:
+```javascript
+axios.post('/Add/Vessel', formData)
+    .then(response => {
+        // Handle success
+    })
+    .catch(error => {
+        // Handle error
+    });
+```
+
+### DOM Manipulation
+Vanilla JavaScript for dynamic interactions:
+- Form validation
+- Modal dialogs
+- Dynamic content loading
+- Real-time updates
+
+### Event Handling
+Event delegation for dynamic elements:
+```javascript
+document.addEventListener('click', function(e) {
+    if (e.target.matches('.delete-btn')) {
+        // Handle delete action
+    }
+});
+```
+
+## Font Management
+
+### Custom Fonts
+- **DejaVuSans**: Primary UI font
+- **AncientSans**: Specialized maritime styling
+
+Font files stored in `public/fonts/`:
+- `.php` files for dynamic loading
+- `.z` compressed archives
+
+### Font Loading
+```css
+@font-face {
+    font-family: 'DejaVuSans';
+    src: url('/fonts/DejaVuSans.php') format('truetype');
+}
+```
+
+## Performance Optimization
+
+### Asset Optimization
+- Vite handles bundling and minification
+- CSS/JS split by page for better caching
+- Image optimization for vessel photos
+
+### Loading Strategies
+- Lazy loading for images
+- Progressive enhancement for JavaScript
+- Critical CSS inlining
+
+### Caching
+- Browser caching for static assets
+- Service worker for offline functionality (planned)
+
+## Accessibility
+
+### Standards Compliance
+- WCAG 2.1 AA compliance
+- Semantic HTML structure
+- Keyboard navigation support
+- Screen reader compatibility
+
+### Implementation
+- ARIA labels and roles
+- Focus management
+- Color contrast ratios
+- Alternative text for images
+
+## Browser Support
+
+- Chrome 90+
+- Firefox 88+
+- Safari 14+
+- Edge 90+
+
+## Development Workflow
+
+### Local Development
+```bash
+npm run dev    # Start Vite dev server
+npm run build  # Production build
+npm run start  # Electron desktop app
+```
+
+### File Watching
+Vite automatically watches for changes and recompiles assets.
+
+### Debugging
+- Browser developer tools
+- Laravel debugbar (when enabled)
+- Console logging for JavaScript errors
+
+## Testing
+
+### Visual Testing
+- Cross-browser testing
+- Responsive design validation
+- Accessibility auditing
+
+### Performance Testing
+- Lighthouse audits
+- Page load time monitoring
+- Bundle size analysis

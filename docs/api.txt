@@ -1,0 +1,202 @@
+# API Reference
+
+This document provides a comprehensive reference for all routes, controllers, and API endpoints in the Sea Service Testimonial & Vessel Tracker application.
+
+## Route Structure
+
+The application uses Laravel's web routes with session-based authentication. All routes are defined in `routes/web.php`.
+
+## Authentication Routes
+
+| Method | Route | Controller | Description |
+|--------|-------|------------|-------------|
+| GET | `/` | LoginController@login | Display login page |
+| POST | `/Auth` | LoginController@auth | Process login authentication |
+| GET | `/Logout` | LoginController@logout | Process logout |
+
+## Vessel Management Routes
+
+| Method | Route | Controller | Description |
+|--------|-------|------------|-------------|
+| GET | `/Vessels` | VesselController@index | List all vessels with search |
+| POST | `/Add/Vessel` | VesselController@create | Create new vessel |
+| POST | `/Edit/Vessel/{Id?}` | VesselController@update | Update vessel information |
+| GET | `/Delete/Vessel/{Id}` | VesselController@destroy | Delete vessel |
+| GET | `/Operations` | VesselController@operations | View testimonials by vessel |
+| GET | `/save-vessel-position` | VesselController@savePosition | Save vessel position data |
+
+## Employee Management Routes
+
+| Method | Route | Controller | Description |
+|--------|-------|------------|-------------|
+| GET | `/Employees` | EmployeeController@index | List all employees |
+| POST | `/Add/Employee` | EmployeeController@create | Create new employee |
+| POST | `/Edit/Employee/{Id}` | EmployeeController@update | Update employee information |
+| GET | `/Delete/Employee/{Id}` | EmployeeController@destroy | Delete employee |
+| GET | `/DeckRating` | EmployeeController@deck_rating | Filter employees by deck rating |
+| GET | `/Engineers` | EmployeeController@engineers | Filter employees by engineers |
+| GET | `/Captains` | EmployeeController@captains | Filter employees by captains |
+
+## Testimonial Routes
+
+| Method | Route | Controller | Description |
+|--------|-------|------------|-------------|
+| GET | `/Testimonials` | SeaServiceTestimonialController@index | List all testimonials |
+| POST | `/Add/Testimonial` | SeaServiceTestimonialController@create | Create new testimonial |
+| POST | `/Edit/Testimonial/{Id}` | SeaServiceTestimonialController@update | Update testimonial |
+| GET | `/Delete/Testimonial/{Id}` | SeaServiceTestimonialController@destroy | Delete testimonial |
+| GET | `/Notifications` | SeaServiceTestimonialController@notifications | View notifications dashboard |
+
+## Availability Tracking Routes
+
+| Method | Route | Controller | Description |
+|--------|-------|------------|-------------|
+| GET | `/Availability` | VesselAvailabilityController@index | Main availability dashboard |
+| POST | `/Add/Availability` | PriorityExcelImportController@import | Import availability data via Excel |
+| POST | `/Edit/Availability/{Id}` | VesselAvailabilityController@update | Update availability record |
+| GET | `/Delete/Availability/{Id}` | VesselAvailabilityController@destroy | Delete availability record |
+
+## Generator Routes
+
+| Method | Route | Controller | Description |
+|--------|-------|------------|-------------|
+| GET | `/Generators` | GeneratorController@index | List all generators |
+| POST | `/Add/Generator` | GeneratorController@create | Create new generator |
+| POST | `/Edit/Generator/{Id?}` | GeneratorController@update | Update generator |
+
+## Generator Availability Routes
+
+| Method | Route | Controller | Description |
+|--------|-------|------------|-------------|
+| POST | `/Add/Availability/Generator` | GeneratorAvailabilityController@create | Create generator availability |
+| POST | `/Edit/Availability/Generator/{Id}` | GeneratorAvailabilityController@update | Update generator availability |
+| GET | `/Delete/Availability/Generator/{Id}` | GeneratorAvailabilityController@destroy | Delete generator availability |
+
+## User Management Routes
+
+| Method | Route | Controller | Description |
+|--------|-------|------------|-------------|
+| GET | `/Users` | UserController@index | List all users |
+| POST | `/Add/User` | UserController@create | Create new user |
+| POST | `/Edit/User/{Id}` | UserController@update | Update user information |
+| GET | `/Delete/User/{Id}` | UserController@destroy | Delete user |
+
+## Rank and Company Management Routes
+
+| Method | Route | Controller | Description |
+|--------|-------|------------|-------------|
+| POST | `/Add/Rank` | RankController@create | Create new rank |
+| POST | `/Edit/Rank/{Id}` | RankController@update | Update rank |
+| GET | `/Delete/Rank/{Id}` | RankController@destroy | Delete rank |
+| POST | `/Add/Company` | CompanyController@create | Create new company |
+| POST | `/Edit/Company/{Id}` | CompanyController@update | Update company |
+| GET | `/Delete/Company/{Id}` | CompanyController@destroy | Delete company |
+
+## PDF Generation Routes
+
+| Method | Route | Controller | Description |
+|--------|-------|------------|-------------|
+| GET | `/Testimonials/Template/1` | SeaServiceTestimonialPdf@template_1 | Generate PDF template 1 |
+| GET | `/Testimonials/Template/2` | SeaServiceTestimonialPdf@template_2 | Generate PDF template 2 |
+| GET | `/Testimonials/Template/3` | SeaServiceTestimonialPdf@template_3 | Generate PDF template 3 |
+| GET | `/Testimonials/Template/4` | SeaServiceTestimonialPdf@template_4 | Generate PDF template 4 |
+| GET | `/Testimonials/Template/5` | SeaServiceTestimonialPdf@template_5 | Generate PDF template 5 |
+| GET | `/Testimonials/Template/1_` | SeaServiceTestimonialPdf@template_1_ | Generate PDF template 1 (alt) |
+| GET | `/Testimonials/Template/2_` | SeaServiceTestimonialPdf@template_2_ | Generate PDF template 2 (alt) |
+| GET | `/Testimonials/Template/3_` | SeaServiceTestimonialPdf@template_3_ | Generate PDF template 3 (alt) |
+| GET | `/Testimonials/Template/4_` | SeaServiceTestimonialPdf@template_4_ | Generate PDF template 4 (alt) |
+| GET | `/Testimonials/Template/5_` | SeaServiceTestimonialPdf@template_5_ | Generate PDF template 5 (alt) |
+| GET | `/Availability/Report` | VesselAvailabilityPdf@vessel_availability_report | Generate availability report |
+| GET | `/Availability/Report/Checklists/SpeedBoats` | SpeedBoatsPdf@speed_boat_report | Generate speed boat report |
+| GET | `/Availability/Report/Checklists/SmallBoats` | SmallBoatsPdf@small_boat_report | Generate small boat report |
+
+## Checklist Routes
+
+| Method | Route | Controller | Description |
+|--------|-------|------------|-------------|
+| POST | `/Add/Checklist1` | Checklist1Controller@create | Create checklist entry |
+| POST | `/Edit/Checklist1/{Id}` | Checklist1Controller@update | Update checklist entry |
+| GET | `/Delete/Checklist1/{Id}` | Checklist1Controller@destroy | Delete checklist entry |
+
+## Controller Details
+
+### LoginController
+Handles user authentication and session management.
+
+**Key Methods:**
+- `login()`: Returns login view
+- `auth()`: Validates credentials, sets session, redirects based on host
+- `logout()`: Clears session, logs audit trail
+
+### VesselController
+Manages vessel CRUD operations and operations view.
+
+**Key Methods:**
+- `index()`: Paginated vessel list with search functionality
+- `create()`: Validates and stores new vessel
+- `update()`: Updates existing vessel data
+- `destroy()`: Soft deletes vessel
+- `operations()`: Shows testimonials grouped by vessel
+
+### EmployeeController
+Handles crew member management.
+
+**Key Methods:**
+- `index()`: Main employee listing
+- `deck_rating()`, `engineers()`, `captains()`: Role-based filtering
+- Standard CRUD operations
+
+### SeaServiceTestimonialController
+Manages testimonial records.
+
+**Key Methods:**
+- `index()`: Testimonial listing with search
+- `notifications()`: Dashboard with statistics
+- Standard CRUD operations
+
+### VesselAvailabilityController
+Tracks vessel operational status.
+
+**Key Methods:**
+- `index()`: Status dashboard with filtering
+- Auto-updates "TillNow" records on page load
+
+### PDF Controllers
+Handle document generation using FPDF library.
+
+**Templates:**
+- 5 main testimonial templates with alternate versions
+- Availability reports
+- Specialized boat reports
+
+## Middleware and Security
+
+- Session-based authentication required for all routes except login
+- Role-based access control implemented in views
+- CSRF protection on POST routes
+- Input validation in controllers
+
+## Request/Response Format
+
+### Standard Response
+All controllers return views with data arrays. No JSON API endpoints.
+
+### Form Data
+POST requests expect form-encoded data matching model attributes.
+
+### File Uploads
+Supported for images and documents in vessel/generator forms.
+
+## Error Handling
+
+- Laravel's built-in validation with redirect back on errors
+- Custom error messages in controllers
+- Database transaction rollback on failures
+- User-friendly error pages
+
+## Performance Considerations
+
+- Paginated results for large datasets
+- Eager loading for related data
+- Database indexes on search fields
+- Caching for frequently accessed data

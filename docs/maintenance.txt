@@ -1,0 +1,660 @@
+# Maintenance Guide
+
+This guide covers ongoing maintenance, code organization, and best practices for the Sea Service Testimonial & Vessel Tracker application.
+
+## Code Organization
+
+### Directory Structure
+
+```
+app/
+├── Console/           # Artisan commands
+├── Exceptions/        # Custom exceptions
+├── Http/
+│   ├── Controllers/   # Web controllers
+│   ├── Middleware/    # HTTP middleware
+│   └── Kernel.php     # HTTP kernel
+├── Imports/           # Data import classes
+├── Models/            # Eloquent models
+├── Providers/         # Service providers
+└── Http/Controllers/  # API controllers
+
+database/
+├── factories/         # Model factories
+├── migrations/        # Database migrations
+└── seeders/          # Database seeders
+
+resources/
+├── css/              # Compiled stylesheets
+├── js/               # JavaScript files
+├── sass/             # SASS source files
+└── views/            # Blade templates
+
+routes/
+├── api.php           # API routes
+├── channels.php      # Broadcast channels
+├── console.php       # Console routes
+└── web.php           # Web routes
+
+tests/                # Test files
+├── Feature/          # Feature tests
+└── Unit/             # Unit tests
+```
+
+### Naming Conventions
+
+**Controllers:**
+- PascalCase class names
+- Descriptive method names
+- Resourceful routing where applicable
+
+**Models:**
+- Singular nouns
+- PascalCase
+- Relationships defined with proper naming
+
+**Views:**
+- kebab-case filenames
+- Consistent with route names
+- Component-based organization
+
+**Database:**
+- snake_case table names
+- Foreign keys: `table_id`
+- Indexes on searchable columns
+
+## Development Workflow
+
+### Version Control
+
+```bash
+# Feature branch workflow
+git checkout -b feature/new-functionality
+# Make changes
+git add .
+git commit -m "Add new functionality"
+git push origin feature/new-functionality
+# Create pull request
+```
+
+### Code Standards
+
+Follow PSR-12 coding standards:
+- 4 spaces indentation
+- CamelCase for classes/methods
+- snake_case for variables/properties
+- Descriptive naming
+
+### Commit Messages
+
+```
+type(scope): description
+
+Types:
+- feat: New feature
+- fix: Bug fix
+- docs: Documentation
+- style: Code style changes
+- refactor: Code refactoring
+- test: Testing
+- chore: Maintenance
+```
+
+## Model Relationships
+
+### Current Models
+
+```php
+// User.php
+class User extends Authenticatable
+{
+    use HasApiTokens, HasFactory, Notifiable;
+
+    protected $fillable = ['name', 'email', 'password'];
+    protected $hidden = ['password', 'remember_token'];
+    protected $casts = ['email_verified_at' => 'datetime'];
+}
+```
+
+### Recommended Enhancements
+
+Add relationships and business logic:
+
+```php
+// Vessel.php
+class Vessel extends Model
+{
+    use HasFactory;
+
+    protected $table = 'vessels_vessel_information';
+
+    protected $fillable = [
+        'VesselName', 'ImoNumber', 'Captain', 'Company',
+        'VesselType', 'Flag', 'PortOfRegistry'
+    ];
+
+    // Relationships
+    public function testimonials()
+    {
+        return $this->hasMany(Testimonial::class, 'CurrentVessel', 'VesselName');
+    }
+
+    public function availability()
+    {
+        return $this->hasMany(VesselAvailability::class, 'VesselName', 'VesselName');
+    }
+
+    // Accessors
+    public function getFullNameAttribute()
+    {
+        return $this->VesselName . ' (' . $this->ImoNumber . ')';
+    }
+}
+```
+
+```php
+// Employee.php
+class Employee extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'EmployeeId', 'FullName', 'DateOfBirth',
+        'Rank', 'Company', 'DischargeBook'
+    ];
+
+    // Relationships
+    public function testimonials()
+    {
+        return $this->hasMany(Testimonial::class, 'EmployeeId', 'EmployeeId');
+    }
+
+    // Scopes
+    public function scopeByRank($query, $rank)
+    {
+        return $query->where('Rank', $rank);
+    }
+
+    public function scopeDeckRating($query)
+    {
+        return $query->where('Rank', 'Deck Rating');
+    }
+}
+```
+
+```php
+// Testimonial.php
+class Testimonial extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'EmployeeName', 'EmployeeId', 'CurrentVessel',
+        'PreviousVessel', 'Rank', 'Company', 'Template'
+    ];
+
+    // Relationships
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class, 'EmployeeId', 'EmployeeId');
+    }
+
+    public function currentVessel()
+    {
+        return $this->belongsTo(Vessel::class, 'CurrentVessel', 'VesselName');
+    }
+
+    public function previousVessel()
+    {
+        return $this->belongsTo(Vessel::class, 'PreviousVessel', 'VesselName');
+    }
+}
+```
+
+## Controller Best Practices
+
+### Structure
+
+```php
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Vessel;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+
+class VesselController extends Controller
+{
+    public function index(Request $request)
+    {
+        $query = Vessel::query();
+
+        // Search functionality
+        if ($request->has('search')) {
+            $search = $request->search;
+            $query->where('VesselName', 'LIKE', "%{$search}%")
+                  ->orWhere('ImoNumber', 'LIKE', "%{$search}%");
+        }
+
+        $vessels = $query->paginate(15);
+
+        return view('Pages.Vessels', compact('vessels'));
+    }
+
+    public function create(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'VesselName' => 'required|string|max:255',
+            'ImoNumber' => 'required|string|unique:vessels_vessel_information',
+            'Company' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                           ->withErrors($validator)
+                           ->withInput();
+        }
+
+        Vessel::create($request->all());
+
+        return redirect()->route('Vessels')->with('success', 'Vessel created successfully');
+    }
+
+    public function update(Request $request, $id)
+    {
+        $vessel = Vessel::findOrFail($id);
+
+        $vessel->update($request->all());
+
+        return redirect()->route('Vessels')->with('success', 'Vessel updated successfully');
+    }
+
+    public function destroy($id)
+    {
+        $vessel = Vessel::findOrFail($id);
+        $vessel->delete();
+
+        return redirect()->route('Vessels')->with('success', 'Vessel deleted successfully');
+    }
+}
+```
+
+### Validation Rules
+
+Centralize validation rules:
+
+```php
+// In Vessel model
+public static function rules($id = null)
+{
+    return [
+        'VesselName' => 'required|string|max:255',
+        'ImoNumber' => 'required|string|unique:vessels_vessel_information,ImoNumber,' . $id,
+        'Company' => 'required|string',
+        'Flag' => 'nullable|string',
+        'PortOfRegistry' => 'nullable|string',
+    ];
+}
+```
+
+## Database Maintenance
+
+### Migrations
+
+Always create migrations for schema changes:
+
+```bash
+php artisan make:migration add_engine_details_to_vessels_table --table=vessels_vessel_information
+```
+
+### Seeders
+
+Create seeders for initial data:
+
+```php
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\Rank;
+use Illuminate\Database\Seeder;
+
+class RankSeeder extends Seeder
+{
+    public function run()
+    {
+        $ranks = [
+            ['name' => 'Captain'],
+            ['name' => 'Chief Engineer'],
+            ['name' => 'Deck Rating'],
+            ['name' => 'Engine Rating'],
+        ];
+
+        foreach ($ranks as $rank) {
+            Rank::create($rank);
+        }
+    }
+}
+```
+
+### Indexes
+
+Add indexes for performance:
+
+```php
+// In migration
+$table->index(['VesselName', 'ImoNumber']);
+$table->index('Status');
+$table->index(['StartDate', 'EndDate']);
+```
+
+## Testing
+
+### Unit Tests
+
+```php
+<?php
+
+namespace Tests\Unit;
+
+use App\Models\Vessel;
+use Tests\TestCase;
+
+class VesselTest extends TestCase
+{
+    public function test_vessel_has_fillable_attributes()
+    {
+        $vessel = new Vessel();
+        $this->assertEquals([
+            'VesselName', 'ImoNumber', 'Captain', 'Company',
+            'VesselType', 'Flag', 'PortOfRegistry'
+        ], $vessel->getFillable());
+    }
+
+    public function test_vessel_belongs_to_company()
+    {
+        $vessel = Vessel::factory()->create();
+        $this->assertInstanceOf(Company::class, $vessel->company);
+    }
+}
+```
+
+### Feature Tests
+
+```php
+<?php
+
+namespace Tests\Feature;
+
+use App\Models\User;
+use Tests\TestCase;
+
+class VesselManagementTest extends TestCase
+{
+    public function test_user_can_create_vessel()
+    {
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)
+                        ->post('/Add/Vessel', [
+                            'VesselName' => 'Test Vessel',
+                            'ImoNumber' => '1234567',
+                            'Company' => 'Test Company'
+                        ]);
+
+        $response->assertRedirect('/Vessels');
+        $this->assertDatabaseHas('vessels_vessel_information', [
+            'VesselName' => 'Test Vessel'
+        ]);
+    }
+}
+```
+
+## Error Handling
+
+### Global Exception Handler
+
+```php
+// app/Exceptions/Handler.php
+public function render($request, Throwable $exception)
+{
+    if ($exception instanceof ModelNotFoundException) {
+        return response()->view('errors.404', [], 404);
+    }
+
+    if ($exception instanceof AuthorizationException) {
+        return response()->view('errors.403', [], 403);
+    }
+
+    return parent::render($request, $exception);
+}
+```
+
+### Custom Exceptions
+
+```php
+<?php
+
+namespace App\Exceptions;
+
+use Exception;
+
+class VesselNotFoundException extends Exception
+{
+    public function __construct($message = "Vessel not found", $code = 404)
+    {
+        parent::__construct($message, $code);
+    }
+}
+```
+
+## Performance Optimization
+
+### N+1 Query Prevention
+
+```php
+// Bad
+$vessels = Vessel::all();
+foreach ($vessels as $vessel) {
+    echo $vessel->company->name;
+}
+
+// Good
+$vessels = Vessel::with('company')->get();
+foreach ($vessels as $vessel) {
+    echo $vessel->company->name;
+}
+```
+
+### Caching
+
+```php
+// Cache expensive operations
+$companies = Cache::remember('companies', 3600, function () {
+    return Company::all();
+});
+```
+
+### Database Optimization
+
+```sql
+-- Add composite indexes
+CREATE INDEX idx_vessel_search ON vessels_vessel_information (VesselName, ImoNumber, CallSign, Flag);
+CREATE INDEX idx_availability_status ON vessel_availabilities (Status, StartDate, EndDate);
+```
+
+## Security Best Practices
+
+### Input Validation
+
+Always validate user input:
+
+```php
+$request->validate([
+    'email' => 'required|email',
+    'password' => 'required|min:8',
+]);
+```
+
+### Mass Assignment Protection
+
+Use fillable properties:
+
+```php
+protected $fillable = ['name', 'email'];
+protected $guarded = []; // Never use this
+```
+
+### SQL Injection Prevention
+
+Use Eloquent or parameterized queries:
+
+```php
+// Good
+User::where('email', $email)->first();
+
+// Bad
+DB::select("SELECT * FROM users WHERE email = '$email'");
+```
+
+### XSS Protection
+
+Escape output in Blade:
+
+```blade
+{{ $user->name }} <!-- Escaped -->
+{!! $user->bio !!} <!-- Not escaped, use with caution -->
+```
+
+## Monitoring and Logging
+
+### Laravel Logging
+
+```php
+// config/logging.php
+'channels' => [
+    'single' => [
+        'driver' => 'single',
+        'path' => storage_path('logs/laravel.log'),
+        'level' => env('LOG_LEVEL', 'debug'),
+    ],
+],
+```
+
+### Custom Logging
+
+```php
+Log::info('User created vessel', [
+    'user_id' => auth()->id(),
+    'vessel_id' => $vessel->id,
+    'vessel_name' => $vessel->VesselName
+]);
+```
+
+### Audit Trail
+
+Track important actions:
+
+```php
+// In controller
+activity()
+    ->performedOn($vessel)
+    ->causedBy(auth()->user())
+    ->log('created');
+```
+
+## Backup and Recovery
+
+### Database Backup
+
+```bash
+# Daily backup
+mysqldump -u username -p database_name > backup_$(date +%Y%m%d).sql
+```
+
+### File Backup
+
+```bash
+# Backup uploads
+tar -czf uploads_backup_$(date +%Y%m%d).tar.gz storage/app/public/uploads/
+```
+
+### Recovery Testing
+
+Regularly test backup restoration:
+
+```bash
+mysql -u username -p database_name < backup_file.sql
+```
+
+## Documentation Updates
+
+### Code Comments
+
+```php
+/**
+ * Create a new vessel record
+ *
+ * @param Request $request
+ * @return \Illuminate\Http\RedirectResponse
+ */
+public function create(Request $request)
+{
+    // Validate input
+    // Create vessel
+    // Log activity
+    // Redirect with success message
+}
+```
+
+### README Updates
+
+Keep README.md current with:
+- Installation instructions
+- API documentation
+- Contributing guidelines
+- Change log
+
+### API Documentation
+
+Use tools like Swagger/OpenAPI for API documentation.
+
+## Future Improvements
+
+### Planned Enhancements
+
+1. **API Versioning**: Implement API versioning for mobile apps
+2. **Real-time Updates**: WebSocket integration for live status updates
+3. **Advanced Search**: Elasticsearch integration
+4. **Reporting**: Advanced analytics and reporting dashboard
+5. **Mobile App**: React Native mobile application
+6. **Multi-tenancy**: Support for multiple shipping companies
+7. **Workflow Automation**: Automated notifications and approvals
+8. **Integration APIs**: Third-party system integrations
+
+### Technical Debt
+
+Address technical debt regularly:
+- Refactor legacy code
+- Update dependencies
+- Improve test coverage
+- Optimize performance bottlenecks
+
+## Support and Training
+
+### Developer Onboarding
+
+- Code walkthrough
+- Development environment setup
+- Code standards review
+- Testing procedures
+
+### User Training
+
+- User manuals
+- Video tutorials
+- FAQ documentation
+- Support contact information
+
+This maintenance guide should be updated regularly as the application evolves and new best practices are adopted.

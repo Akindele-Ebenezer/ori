@@ -1,0 +1,118 @@
+
+:root {
+    /* Light Theme Color Palette */
+    --bg-main: #f8fafc;
+    --bg-stage: #ffffff;
+    --marine-primary: #00b4b4;
+    --navy-text: #0f172a;
+    --slate-text: #64748b;
+    --border-color: #e2e8f0;
+    --transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.loader2 {
+    .controls {
+        margin-bottom: 20px;
+        display: flex;
+        display: none;
+        gap: 8px;
+        background: var(--bg-stage);
+        padding: 6px 12px;
+        border-radius: 50px;
+        border: 1px solid var(--border-color);
+        align-items: center;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    
+    button {
+        background: transparent;
+        color: var(--slate-text);
+        border: none;
+        padding: 6px 12px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 11px;
+        transition: var(--transition);
+    }
+    
+    button.active {
+        background: var(--marine-primary);
+        color: white;
+        box-shadow: 0 2px 8px rgba(0, 180, 180, 0.3);
+    }
+    
+    #btn-auto {
+        border: 1px solid var(--marine-primary);
+        margin-left: 5px;
+        color: var(--marine-primary);
+    }
+    
+    #btn-auto.cycling {
+        background: #ef4444;
+        border-color: #ef4444;
+        color: white;
+        box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+    }
+    
+    /* Reduced by 50% for Sidebar use */
+    .stage {
+        display: flex;
+        translate: -1em;
+        justify-content: center;
+        align-items: center;
+        width: 250px; /* Reduced from 600px */
+        height: 100px; /* Reduced from 350px */
+        background: var(--bg-stage);
+        border-radius: 12px; 
+        position: relative;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        overflow: hidden;
+    }
+    
+    svg {
+        width: 200px; /* Reduced from 450px */
+        position: absolute;
+        opacity: 0;
+        transform: scale(0.8);
+        pointer-events: none;
+        transition: var(--transition);
+    }
+    
+    svg.active {
+        opacity: 1;
+        transform: scale(1);
+        pointer-events: auto;
+    }
+    
+    /* --- LOGO TEXT COLORS (Adjusted sizes for small scale) --- */
+    .logo-text { font-weight: 900; font-size: 80px; fill: var(--navy-text); }
+    .subtitle-text { font-weight: bold; font-size: 16px; fill: var(--marine-primary); letter-spacing: 2px; }
+    
+    /* --- 1. RADAR SWEEP --- */
+    .radar-pulse { transform-origin: 60px 60px; animation: pulse 2s infinite; }
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 1; stroke-width: 6; }
+        50% { transform: scale(1.05); opacity: 0.6; stroke-width: 3; }
+    }
+    .sweep-arm { transform-origin: 60px 60px; animation: rotate 2s linear infinite; }
+    @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    
+    /* --- 2. COMPASS LOADER --- */
+    .compass-spin { transform-origin: 60px 60px; animation: compassSpin 3s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite; }
+    @keyframes compassSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    
+    /* --- 3. SONAR PULSE --- */
+    .sonar-ring { transform-origin: 60px 60px; animation: sonar 2s ease-out infinite; opacity: 0; }
+    .delay-1 { animation-delay: 0.5s; }
+    .delay-2 { animation-delay: 1s; }
+    @keyframes sonar {
+        0% { transform: scale(0.5); opacity: 0.8; stroke-width: 8; }
+        100% { transform: scale(1.5); opacity: 0; stroke-width: 1; }
+    }
+    
+    /* --- 4. WAVE FILL --- */
+    .wave-clip { animation: waveMove 3s linear infinite; }
+    @keyframes waveMove { 0% { transform: translateX(-100px); } 100% { transform: translateX(0px); } }
+}
+

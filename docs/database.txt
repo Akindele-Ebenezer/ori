@@ -1,0 +1,207 @@
+# Database Design
+
+This document describes the database schema and relationships for the Sea Service Testimonial & Vessel Tracker system.
+
+## Overview
+
+The database is designed to support maritime operations management, focusing on vessel tracking, crew management, and compliance documentation. It uses MySQL with Laravel's Eloquent ORM.
+
+## Core Tables
+
+### Users (`users`)
+Standard Laravel authentication table with Sanctum API tokens.
+
+| Column | Type | Description |
+|--------|------|-------------|
+| id | BIGINT UNSIGNED | Primary key |
+| name | VARCHAR(255) | User full name |
+| email | VARCHAR(255) | Unique email address |
+| email_verified_at | TIMESTAMP | Email verification timestamp |
+| password | VARCHAR(255) | Hashed password |
+| remember_token | VARCHAR(100) | Remember token |
+| created_at | TIMESTAMP | Creation timestamp |
+| updated_at | TIMESTAMP | Update timestamp |
+
+### Employees (`employees`)
+Crew member information and credentials.
+
+| Column | Type | Description |
+|--------|------|-------------|
+| id | BIGINT UNSIGNED | Primary key |
+| EmployeeId | VARCHAR(255) | Unique employee identifier |
+| FullName | VARCHAR(255) | Employee full name |
+| DateOfBirth | VARCHAR(255) | Date of birth |
+| DischargeBook | VARCHAR(255) | Maritime discharge book number |
+| Location | VARCHAR(255) | Current location |
+| Rank | VARCHAR(255) | Job rank/position |
+| Company | VARCHAR(255) | Associated company |
+| created_at | TIMESTAMP | Creation timestamp |
+| updated_at | TIMESTAMP | Update timestamp |
+
+### Vessels (`vessels_vessel_information`)
+Complete vessel registry with IMO compliance data.
+
+| Column | Type | Description |
+|--------|------|-------------|
+| id | BIGINT UNSIGNED | Primary key |
+| UserId | VARCHAR(255) | User who created entry |
+| DateIn | VARCHAR(255) | Entry date |
+| TimeIn | VARCHAR(255) | Entry time |
+| VesselName | VARCHAR(255) | Vessel name |
+| Captain | VARCHAR(255) | Current captain |
+| NightDutyCaptain | VARCHAR(255) | Night duty captain |
+| VesselType | VARCHAR(255) | Type of vessel |
+| Picture | VARCHAR(255) | Vessel image path |
+| ImoNumber | VARCHAR(255) | IMO registration number |
+| Company | VARCHAR(255) | Owning company |
+| CallSign | VARCHAR(255) | Radio call sign |
+| Flag | VARCHAR(255) | Flag state |
+| PortOfRegistry | VARCHAR(255) | Registration port |
+| RegistrationOfficialNumber | VARCHAR(255) | Official registration number |
+| Loa | VARCHAR(255) | Length overall |
+| Boa | VARCHAR(255) | Breadth overall |
+| DepthMouled | VARCHAR(255) | Depth moulded |
+| created_at | TIMESTAMP | Creation timestamp |
+| updated_at | TIMESTAMP | Update timestamp |
+
+### Testimonials (`testimonials`)
+Sea service testimonial records for crew members.
+
+| Column | Type | Description |
+|--------|------|-------------|
+| id | BIGINT UNSIGNED | Primary key |
+| UserId | VARCHAR(255) | User who created entry |
+| DateIn | VARCHAR(255) | Entry date |
+| TimeIn | VARCHAR(255) | Entry time |
+| Date | VARCHAR(255) | Testimonial date |
+| EmployeeName | VARCHAR(255) | Employee name |
+| EmployeeId | VARCHAR(255) | Employee identifier |
+| DateOfBirth | VARCHAR(255) | Employee date of birth |
+| AreaOfOperation | VARCHAR(255) | Operational area |
+| DischargeBook | VARCHAR(255) | Discharge book reference |
+| PreviousVessel | VARCHAR(255) | Previous vessel assignment |
+| CurrentVessel | VARCHAR(255) | Current vessel assignment |
+| Rank | VARCHAR(255) | Employee rank |
+| Company | VARCHAR(255) | Associated company |
+| Template | VARCHAR(255) | PDF template used |
+| created_at | TIMESTAMP | Creation timestamp |
+| updated_at | TIMESTAMP | Update timestamp |
+
+### Vessel Availability (`vessel_availabilities`)
+Operational status tracking for vessels.
+
+| Column | Type | Description |
+|--------|------|-------------|
+| id | BIGINT UNSIGNED | Primary key |
+| UserId | VARCHAR(255) | User who created entry |
+| DateIn | VARCHAR(255) | Entry date |
+| TimeIn | VARCHAR(255) | Entry time |
+| VesselName | VARCHAR(255) | Vessel name |
+| Status | VARCHAR(255) | Current status (IDLE, BUNKERY, INSPECTION, etc.) |
+| StartDate | VARCHAR(255) | Status start date |
+| StartTime | VARCHAR(255) | Status start time |
+| EndDate | VARCHAR(255) | Status end date |
+| EndTime | VARCHAR(255) | Status end time |
+| TillNow | VARCHAR(255) | Ongoing status flag |
+| Location | VARCHAR(255) | Current location |
+| DoneBy | VARCHAR(255) | User who updated |
+| Source | VARCHAR(255) | Data source |
+| Attachments | TEXT | File attachments |
+| Comments | TEXT | Status comments |
+| Pictures | TEXT | Image paths |
+| Reports | TEXT | Report data |
+| created_at | TIMESTAMP | Creation timestamp |
+| updated_at | TIMESTAMP | Update timestamp |
+
+### Generators (`generators`)
+Generator equipment registry.
+
+| Column | Type | Description |
+|--------|------|-------------|
+| id | BIGINT UNSIGNED | Primary key |
+| UserId | VARCHAR(255) | User who created entry |
+| DateIn | VARCHAR(255) | Entry date |
+| TimeIn | VARCHAR(255) | Entry time |
+| Priority_InternalNo | VARCHAR(255) | Internal priority number |
+| EngineMake | VARCHAR(255) | Engine manufacturer |
+| Power | VARCHAR(255) | Power rating |
+| Model | VARCHAR(255) | Model number |
+| SerialNumber | VARCHAR(255) | Serial number |
+| EngineType | VARCHAR(255) | Engine type |
+| MachineType | VARCHAR(255) | Machine type |
+| Class | VARCHAR(255) | Equipment class |
+| Location | VARCHAR(255) | Installation location |
+| Company | VARCHAR(255) | Owning company |
+| UsedBy | VARCHAR(255) | User/crew member |
+| Picture | VARCHAR(255) | Equipment image |
+| created_at | TIMESTAMP | Creation timestamp |
+| updated_at | TIMESTAMP | Update timestamp |
+
+## Supporting Tables
+
+### Ranks (`ranks`)
+Maritime rank hierarchy.
+
+### Companies (`companies`)
+Shipping company registry.
+
+### Working Periods (`working_periods`)
+Employee work cycle tracking (5 consecutive periods per vessel).
+
+### User Logins (`user_logins`)
+Audit trail with source tracking (SEA_SERVICE_TESTIMONIAL vs VESSEL_TRACKER).
+
+### Notifications (`notifications`)
+System notification management.
+
+### Checklists (`checklist_1a` through `checklist_1e`)
+Compliance checklists split by sections.
+
+### Extended Vessel Tables
+- `vessels_general_others`: Additional specifications (Owner, Builder, Material, Tonnage)
+- `vessels_section_3`: Engine specifications
+- `vessels_section_4`: Tonnage and tank capacity data
+
+## Relationships
+
+### Key Relationships
+
+1. **Employees ↔ Testimonials**: One-to-many (employee can have multiple testimonials)
+2. **Vessels ↔ Testimonials**: Many-to-many through testimonials
+3. **Vessels ↔ Vessel Availability**: One-to-many
+4. **Users ↔ All Tables**: Many-to-one (audit trail via UserId)
+5. **Companies ↔ Employees/Vessels**: One-to-many
+6. **Ranks ↔ Employees**: One-to-many
+
+## Data Flow
+
+1. **Vessel Registration**: Vessels are registered with complete IMO data
+2. **Crew Management**: Employees are added with ranks and companies
+3. **Service Tracking**: Testimonials document crew transitions between vessels
+4. **Status Monitoring**: Availability tracking monitors vessel operational status
+5. **Equipment Tracking**: Generators are registered and their availability tracked
+6. **Compliance**: Checklists ensure regulatory compliance
+
+## Indexes and Performance
+
+Key indexes should be created on:
+- UserId columns for audit queries
+- VesselName and ImoNumber for vessel searches
+- EmployeeId for crew lookups
+- Status and date columns for availability filtering
+- DateIn/TimeIn for chronological sorting
+
+## Data Integrity
+
+- Foreign key constraints where applicable
+- Unique constraints on identifiers (EmployeeId, ImoNumber)
+- NOT NULL constraints on critical fields
+- Soft deletes for audit compliance
+
+## Backup Strategy
+
+Regular backups should include:
+- Full database dumps
+- File attachments and images
+- Configuration files
+- Log files for audit trails
