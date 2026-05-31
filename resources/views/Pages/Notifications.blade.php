@@ -92,26 +92,7 @@
                         <th>Time</th> 
                         <th>Date</th> 
                         <th>Action</th> 
-                    </tr>
-                @if (parse_url(url()->current())['host'] == 'seaservice.lttcoastalmarine.com')
-                    @foreach (\DB::table('user_logins')->where('Source', 'SEA_SERVICE_TESTIMONIAL')->orderBy('Date', 'DESC')->orderBy('Time', 'DESC')->paginate(30) as $User)
-                    @php
-                        $Today_COUNT = \DB::table('user_logins')->where('Date', date('Y-m-d'))->where('Source', 'SEA_SERVICE_TESTIMONIAL')->get();
-                        $ThisWeek_COUNT = \DB::table('user_logins')->where('Date', '>=', date('Y-m-d', strtotime('last Sunday')))->where('Source', 'SEA_SERVICE_TESTIMONIAL')->get();
-                        $LastWeek_COUNT = \DB::table('user_logins')->where('Date', '>=', date('Y-m-d', strtotime('last week Monday')))->where('Date', '<', date('Y-m-d', strtotime('last Sunday')))->where('Source', 'SEA_SERVICE_TESTIMONIAL')->get();
-                        $Older_COUNT = \DB::table('user_logins')->where('Date', '<', date('Y-m-d', strtotime('last week Monday')))->where('Source', 'SEA_SERVICE_TESTIMONIAL')->get();
-                        $Date = $User->Date;
-                    @endphp
-                    @include('Components.History.History') 
-                    <tr> 
-                        <td>{{ $User->Name }}</td>
-                        <td>{{ $User->Time }}</td> 
-                        <td>{{ $User->Date }}</td> 
-                        <td>{{ $User->Action }}</td> 
-                    </tr>
-                    @endforeach
-                @endif
-                @if (parse_url(url()->current())['host'] == 'vesseltracker.lttcoastalmarine.com' || parse_url(url()->current())['host'] == '192.168.20.252')
+                    </tr> 
                     @foreach (\DB::table('user_logins')->where('Source', 'VESSEL_TRACKER')->orderBy('Date', 'DESC')->orderBy('Time', 'DESC')->paginate(30) as $User)
                     @php
                         $Today_COUNT = \DB::table('user_logins')->where('Date', date('Y-m-d'))->where('Source', 'VESSEL_TRACKER')->get();
@@ -128,14 +109,8 @@
                         <td>{{ $User->Action }}</td> 
                     </tr>
                     @endforeach
-                @endif
-                </table>
-                @if (parse_url(url()->current())['host'] == 'seaservice.lttcoastalmarine.com')
-                {{ \DB::table('user_logins')->where('Source', 'SEA_SERVICE_TESTIMONIAL')->paginate(30)->appends(request()->query())->links() }}
-                @endif
-                @if (parse_url(url()->current())['host'] == 'vesseltracker.lttcoastalmarine.com' || parse_url(url()->current())['host'] == '192.168.20.252')
+                </table> 
                 {{ \DB::table('user_logins')->where('Source', 'VESSEL_TRACKER')->paginate(30)->appends(request()->query())->links() }}
-                @endif
             </div>
         </div>
         <div class="board-3">

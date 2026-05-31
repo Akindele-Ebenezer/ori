@@ -114,11 +114,7 @@ This will launch the application in an Electron window.
 ## Host-Based Configuration
 
 The application supports different domains for different functionalities:
-
-- `seaservice.lttcoastalmarine.com` → Sea Service Testimonial module
-- `vesseltracker.lttcoastalmarine.com` → Vessel Tracker module
-- `192.168.20.252` → Vessel Tracker (local network)
-
+ 
 Update your hosts file or web server configuration accordingly.
 
 ## User Roles and Permissions
