@@ -25,17 +25,7 @@ class LoginController extends Controller
                 session()->forget('Error');
                 \DB::table('users')->where('id', $User->id)->update([
                     'LastLogin' => date('Y-m-d H:i A'),
-                ]);
-                // if(parse_url(url()->current())['host'] == 'ori.lttcoastalmarine.com') {
-                //     \DB::table('user_logins')->insert([
-                //         'Name' => $User->FullName,
-                //         'Time' => date('H:i A'),
-                //         'Date' => date('Y-m-d'),
-                //         'Action' => 'LOGGED IN', 
-                //         'Source' => 'SEA_SERVICE_TESTIMONIAL', 
-                //     ]);
-                //     return redirect('/Vessels');
-                // }
+                ]); 
                 \DB::table('user_logins')->insert([
                     'Name' => $User->FullName,
                     'Time' => date('H:i A'),
@@ -54,24 +44,13 @@ class LoginController extends Controller
         \DB::table('users')->where('id', session()->get('USER_ID'))->update([
             'LastLogout' => date('Y-m-d H:i A'),
         ]);
-        if(parse_url(url()->current())['host'] == 'ori.lttcoastalmarine.com') {
-            \DB::table('user_logins')->insert([
-                'Name' => session()->get('FullName'),
-                'Time' => date('H:i A'),
-                'Date' => date('Y-m-d'),
-                'Action' => 'LOGGED OUT', 
-                'Source' => 'SEA_SERVICE_TESTIMONIAL', 
-            ]);
-        }
-        if(parse_url(url()->current())['host'] == 'ori.lttcoastalmarine.com') {
-            \DB::table('user_logins')->insert([
-                'Name' => session()->get('FullName'),
-                'Time' => date('H:i A'),
-                'Date' => date('Y-m-d'),
-                'Action' => 'LOGGED OUT', 
-                'Source' => 'VESSEL_TRACKER', 
-            ]);
-        }
+        \DB::table('user_logins')->insert([
+            'Name' => session()->get('FullName'),
+            'Time' => date('H:i A'),
+            'Date' => date('Y-m-d'),
+            'Action' => 'LOGGED OUT', 
+            'Source' => 'ORI', 
+        ]);
         session()->forget('USER_ID');
         session()->forget('FullName');
         session()->forget('Role');
