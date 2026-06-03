@@ -93,12 +93,12 @@
                         <th>Date</th> 
                         <th>Action</th> 
                     </tr> 
-                    @foreach (\DB::table('user_logins')->where('Source', 'VESSEL_TRACKER')->orderBy('Date', 'DESC')->orderBy('Time', 'DESC')->paginate(30) as $User)
+                    @foreach (\DB::table('user_logins')->where('Source', 'ORI')->orderBy('Date', 'DESC')->orderBy('Time', 'DESC')->paginate(30) as $User)
                     @php
-                        $Today_COUNT = \DB::table('user_logins')->where('Date', date('Y-m-d'))->where('Source', 'VESSEL_TRACKER')->get();
-                        $ThisWeek_COUNT = \DB::table('user_logins')->where('Date', '>=', date('Y-m-d', strtotime('last Sunday')))->where('Source', 'VESSEL_TRACKER')->get();
-                        $LastWeek_COUNT = \DB::table('user_logins')->where('Date', '>=', date('Y-m-d', strtotime('last week Monday')))->where('Date', '<', date('Y-m-d', strtotime('last Sunday')))->where('Source', 'VESSEL_TRACKER')->get();
-                        $Older_COUNT = \DB::table('user_logins')->where('Date', '<', date('Y-m-d', strtotime('last week Monday')))->where('Source', 'VESSEL_TRACKER')->get();
+                        $Today_COUNT = \DB::table('user_logins')->where('Date', date('Y-m-d'))->where('Source', 'ORI')->get();
+                        $ThisWeek_COUNT = \DB::table('user_logins')->where('Date', '>=', date('Y-m-d', strtotime('last Sunday')))->where('Source', 'ORI')->get();
+                        $LastWeek_COUNT = \DB::table('user_logins')->where('Date', '>=', date('Y-m-d', strtotime('last week Monday')))->where('Date', '<', date('Y-m-d', strtotime('last Sunday')))->where('Source', 'ORI')->get();
+                        $Older_COUNT = \DB::table('user_logins')->where('Date', '<', date('Y-m-d', strtotime('last week Monday')))->where('Source', 'ORI')->get();
                         $Date = $User->Date;
                     @endphp
                     @include('Components.History.History') 
@@ -110,7 +110,7 @@
                     </tr>
                     @endforeach
                 </table> 
-                {{ \DB::table('user_logins')->where('Source', 'VESSEL_TRACKER')->paginate(30)->appends(request()->query())->links() }}
+                {{ \DB::table('user_logins')->where('Source', 'ORI')->paginate(30)->appends(request()->query())->links() }}
             </div>
         </div>
         <div class="board-3">
