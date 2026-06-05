@@ -8,7 +8,12 @@ const vessels = [
 
         @php
         $capacity = ((float) ($Vessel->TankCapacity ?? 0)) / 1000;
-        $rob = ((float) ($Vessel->ROB ?? 0)) / 1000;
+        $rob = (float) ($Vessel->ROB ?? 0);
+
+        // If ROB is a huge number (e.g., 40850), scale it down to match capacity (e.g., 40.85)
+        if ($rob > 1000) {
+            $rob = $rob / 1000;
+        }
 
         // Prevent division by zero
         $fuelLevel = $capacity > 0 ? round(($rob / $capacity) * 100, 1) : 0;
