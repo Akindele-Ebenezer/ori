@@ -8,15 +8,11 @@ const vessels = [
 
         @php
         $capacity = ((float) ($Vessel->TankCapacity ?? 0)) / 1000;
-        $rob = (float) ($Vessel->ROB ?? 0);
+        $rob = (float) ($Vessel->ROB ?? 0) / 1000; // litres -> m³
 
-        // If ROB is a huge number (e.g., 40850), scale it down to match capacity (e.g., 40.85)
-        if ($rob > 1000) {
-            $rob = $rob / 1000;
-        }
-
-        // Prevent division by zero
-        $fuelLevel = $capacity > 0 ? round(($rob / $capacity) * 100, 1) : 0;
+        $fuelLevel = $capacity > 0
+            ? round(($rob / $capacity) * 100, 1)
+            : 0;
         // Fuel Status + Tank Color
         if ($fuelLevel >= 70) {
                 $fuelStatus = 'HIGH';
