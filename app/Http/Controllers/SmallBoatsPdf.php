@@ -21,9 +21,9 @@ class SmallBoatsPdf extends Controller
         $fpdf->SetTitle('HANDOVER STATEMENT - ' . $Request->Boat);
 
         if($Company == null) {
-            $fpdf->Image('../public/images/ltt-letter-head.png', 10, 7, 190);   
+            $fpdf->Image('../public/images/letter-head.png', 10, 7, 190);   
         } else if ($Company->Company == 'L.T.T') {
-            $fpdf->Image('../public/images/ltt-letter-head.png', 10, 7, 190);    
+            $fpdf->Image('../public/images/letter-head.png', 10, 7, 190);    
         } else if ($Company->Company == 'DEPASA') {  
             $fpdf->Image('../public/images/depasa-letter-head.png', 10, 7, 190);    
         } 

@@ -2664,7 +2664,11 @@ main .left-navigation ul li .total {
   padding: 0 0.5em;
 }
 .availability .list .-x .notification-wrapper .vessel-name-- {
-  width: 12em;
+  width: 6em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .availability .list .-x .notification-wrapper .captain-- {
   bottom: 0.2em;
@@ -2715,7 +2719,7 @@ main .left-navigation ul li .total {
 }
 .availability .list .-x .notification-wrapper span:nth-child(2) {
   margin-left: 1em;
-  width: 12em;
+  width: 11em;
 }
 
 @media (max-width: 1785px) {

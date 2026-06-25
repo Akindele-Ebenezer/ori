@@ -29,7 +29,7 @@
     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M640-160v-280h160v280H640Zm-240 0v-640h160v640H400Zm-240 0v-440h160v440H160Z"/></svg>
 </button>
 <div class="vessel-content notifications availability">  
-    <h3 class="company-logo"><img src="{{ asset('Images/LTT -DEPASA Logo.png') }}" alt=""></h3>
+    <h3 class="company-logo"><img src="{{ asset('Images/company-logo.png') }}" alt=""></h3>
     {{-- <h3>LIVE</h3> :: {{ count($Vessels) }} --}} 
     @unless (count($Vessels) > 0)
         <p class="empty-data">There's no vessel in the system..</p>
@@ -1229,7 +1229,8 @@
                         $Companies = \DB::table('companies_')->get();
                     @endphp
                     @foreach ($Companies as $Company)
-                        {{ $Company->Organization }}/
+                        {{-- {{ $Company->Organization }}/ --}}
+                        DredgeMaster Prime MARINE LTD/
                     @endforeach
                     FLEET
                 </h2>
@@ -2166,9 +2167,9 @@
                         <td>{{ $Availability->DoneBy }}</td>
                         <td class="Hide">{{ $Availability->Remarks }}</td>
                         <td>{{ $Availability->StartDate }}</td>
-                        <td>{{ $Availability->StartTime }}</td>
+                        <td>{{ $Availability->StartTime }} HRS</td>
                         <td>{{ $Availability->EndDate }}</td>
-                        <td>{{ $Availability->EndTime }}</td> 
+                        <td>{{ $Availability->EndTime }} HRS</td> 
                         <td class="Hide">{{ $Availability->TillNow }}</td>
                         <td class="action"> 
                             <span class="Hide">{{ $Availability->id }}</span> 

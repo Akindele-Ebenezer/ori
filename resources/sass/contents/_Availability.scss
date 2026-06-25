@@ -59,7 +59,11 @@
                 padding: 0 .5em;
 
                 .vessel-name-- {
-                    width: 12em;
+                        width: 6em;
+                        text-transform: uppercase;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
                 }
 
                 .captain-- {
@@ -115,7 +119,7 @@
                 span {
                     &:nth-child(2) {
                         margin-left: 1em;
-                        width: 12em;
+                        width: 11em;
                     }
                 }
             }

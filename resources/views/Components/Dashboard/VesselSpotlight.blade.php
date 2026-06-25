@@ -1,7 +1,7 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <div class="VesselSpotlight">
         <div class="icancel-button">✖</div>
-        <img src="{{ asset('images/ltt-logo.png') }}">
+        <img src="{{ asset('images/company-logo.png') }}">
         <div class="chart-header">LIVE DATA</div>
         <div class="body">
                 <!-- Background Decorative Element -->

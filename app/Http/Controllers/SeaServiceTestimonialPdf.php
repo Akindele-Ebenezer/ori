@@ -87,13 +87,13 @@ class SeaServiceTestimonialPdf extends Controller
         $fpdf->SetTitle('Template 1 - ' . session()->get('APP_NAME'));         
 
         if(empty($Company)) {
-            $fpdf->Image('../public/images/ltt-letter-head.png', 10, 0, 190);    
+            $fpdf->Image('../public/images/letter-head.png', 10, 0, 190);    
             $fpdf->Ln(30);     
             $fpdf->SetFont('Times', '', 11); 
             $fpdf->Cell(162.7, -10, 'Date: ' . date("j F, Y"), 0, 1, 'R'); 
         } else { 
             if($Company->Company === 'L.T.T') {
-                $fpdf->Image('../public/images/ltt-letter-head.png', 10, 0, 190);    
+                $fpdf->Image('../public/images/letter-head.png', 10, 0, 190);    
                 $fpdf->Ln(30);     
                 $fpdf->SetFont('Times', '', 11); 
                 if(date("j") < 9) {
@@ -459,13 +459,13 @@ class SeaServiceTestimonialPdf extends Controller
         $fpdf->SetTitle('Template 2 - ' . session()->get('APP_NAME'));             
  
         if(empty($Company)) {
-            $fpdf->Image('../public/images/ltt-letter-head.png', 10, 0, 190);    
+            $fpdf->Image('../public/images/letter-head.png', 10, 0, 190);    
             $fpdf->Ln(30);     
             $fpdf->SetFont('Times', '', 11); 
             $fpdf->Cell(162.7, -10, 'Date: ' . date("j F, Y"), 0, 1, 'R'); 
         } else { 
             if($Company->Company === 'L.T.T') {
-                $fpdf->Image('../public/images/ltt-letter-head.png', 10, 0, 190);    
+                $fpdf->Image('../public/images/letter-head.png', 10, 0, 190);    
                 $fpdf->Ln(30);     
                 $fpdf->SetFont('Times', '', 11); 
                 if(date("j") < 9) {
@@ -961,13 +961,13 @@ class SeaServiceTestimonialPdf extends Controller
         $fpdf->SetTitle('Template 3 - ' . session()->get('APP_NAME'));             
  
         if(empty($Company)) {
-            $fpdf->Image('../public/images/ltt-letter-head.png', 10, 0, 190);    
+            $fpdf->Image('../public/images/letter-head.png', 10, 0, 190);    
             $fpdf->Ln(30);     
             $fpdf->SetFont('Times', '', 11); 
             $fpdf->Cell(162.7, -10, 'Date: ' . date("j F, Y"), 0, 1, 'R'); 
         } else { 
             if($Company->Company === 'L.T.T') {
-                $fpdf->Image('../public/images/ltt-letter-head.png', 10, 0, 190);    
+                $fpdf->Image('../public/images/letter-head.png', 10, 0, 190);    
                 $fpdf->Ln(30);     
                 $fpdf->SetFont('Times', '', 11); 
                 if(date("j") < 9) {
@@ -1389,13 +1389,13 @@ class SeaServiceTestimonialPdf extends Controller
         $fpdf->SetTitle('Template 4 - ' . session()->get('APP_NAME'));         
 
         if(empty($Company)) {
-            $fpdf->Image('../public/images/ltt-letter-head.png', 10, 0, 190);    
+            $fpdf->Image('../public/images/letter-head.png', 10, 0, 190);    
             $fpdf->Ln(30);     
             $fpdf->SetFont('Times', '', 11); 
             $fpdf->Cell(162.7, -10, 'Date: ' . date("j F, Y"), 0, 1, 'R'); 
         } else { 
             if($Company->Company === 'L.T.T') {
-                $fpdf->Image('../public/images/ltt-letter-head.png', 10, 0, 190);    
+                $fpdf->Image('../public/images/letter-head.png', 10, 0, 190);    
                 $fpdf->Ln(30);     
                 $fpdf->SetFont('Times', '', 11); 
                 if(date("j") < 9) {
@@ -1758,13 +1758,13 @@ class SeaServiceTestimonialPdf extends Controller
         $fpdf->SetTitle('Template 5 - ' . session()->get('APP_NAME'));         
 
         if(empty($Company)) {
-            $fpdf->Image('../public/images/ltt-letter-head.png', 10, 0, 190);    
+            $fpdf->Image('../public/images/letter-head.png', 10, 0, 190);    
             $fpdf->Ln(30);     
             $fpdf->SetFont('Times', '', 11); 
             $fpdf->Cell(162.7, -10, 'Date: ' . date("j F, Y"), 0, 1, 'R'); 
         } else { 
             if($Company->Company === 'L.T.T') {
-                $fpdf->Image('../public/images/ltt-letter-head.png', 10, 0, 190);    
+                $fpdf->Image('../public/images/letter-head.png', 10, 0, 190);    
                 $fpdf->Ln(30);     
                 $fpdf->SetFont('Times', '', 11); 
                 if(date("j") < 9) {
@@ -2053,7 +2053,7 @@ class SeaServiceTestimonialPdf extends Controller
         $fpdf->SetAutoPageBreak(false);
         $fpdf->SetTitle('Template 4 - ' . session()->get('APP_NAME'));   
         
-        $fpdf->Image('../public/images/ltt-letter-head.png', 10, 0, 190);    
+        $fpdf->Image('../public/images/letter-head.png', 10, 0, 190);    
         $fpdf->Ln(30);     
         $fpdf->SetFont('Times', '', 11); 
         $fpdf->Cell(162.7, -10, 'Date: ' . date("j F, Y"), 0, 1, 'R');  
@@ -2162,7 +2162,7 @@ class SeaServiceTestimonialPdf extends Controller
         $fpdf->SetAutoPageBreak(false);
         $fpdf->SetTitle('Template 2 - ' . session()->get('APP_NAME'));             
   
-        $fpdf->Image('../public/images/ltt-letter-head.png', 10, 0, 190);    
+        $fpdf->Image('../public/images/letter-head.png', 10, 0, 190);    
         $fpdf->Ln(30);     
         $fpdf->SetFont('Times', '', 11); 
         $fpdf->Cell(162.7, -10, 'Date: ' . date("j F, Y"), 0, 1, 'R');  
@@ -2269,7 +2269,7 @@ class SeaServiceTestimonialPdf extends Controller
         $fpdf->SetAutoPageBreak(false);
         $fpdf->SetTitle('Template 3 - ' . session()->get('APP_NAME'));             
   
-        $fpdf->Image('../public/images/ltt-letter-head.png', 10, 0, 190);    
+        $fpdf->Image('../public/images/letter-head.png', 10, 0, 190);    
         $fpdf->Ln(30);     
         $fpdf->SetFont('Times', '', 11); 
         $fpdf->Cell(162.7, -10, 'Date: ' . date("j F, Y"), 0, 1, 'R');  
@@ -2387,13 +2387,13 @@ class SeaServiceTestimonialPdf extends Controller
         $fpdf->SetTitle('Template 4 - ' . session()->get('APP_NAME'));         
 
         if(empty($Company)) {
-            $fpdf->Image('../public/images/ltt-letter-head.png', 10, 0, 190);    
+            $fpdf->Image('../public/images/letter-head.png', 10, 0, 190);    
             $fpdf->Ln(30);     
             $fpdf->SetFont('Times', '', 11); 
             $fpdf->Cell(162.7, -10, 'Date: ' . date("j F, Y"), 0, 1, 'R'); 
         } else { 
             if($Company->Company === 'L.T.T') {
-                $fpdf->Image('../public/images/ltt-letter-head.png', 10, 0, 190);    
+                $fpdf->Image('../public/images/letter-head.png', 10, 0, 190);    
                 $fpdf->Ln(30);     
                 $fpdf->SetFont('Times', '', 11); 
                 if(date("j") < 9) {
@@ -2507,13 +2507,13 @@ class SeaServiceTestimonialPdf extends Controller
         $fpdf->SetTitle('Template 5 - ' . session()->get('APP_NAME'));         
 
         if(empty($Company)) {
-            $fpdf->Image('../public/images/ltt-letter-head.png', 10, 0, 190);    
+            $fpdf->Image('../public/images/letter-head.png', 10, 0, 190);    
             $fpdf->Ln(30);     
             $fpdf->SetFont('Times', '', 11); 
             $fpdf->Cell(162.7, -10, 'Date: ' . date("j F, Y"), 0, 1, 'R'); 
         } else { 
             if($Company->Company === 'L.T.T') {
-                $fpdf->Image('../public/images/ltt-letter-head.png', 10, 0, 190);    
+                $fpdf->Image('../public/images/letter-head.png', 10, 0, 190);    
                 $fpdf->Ln(30);     
                 $fpdf->SetFont('Times', '', 11); 
                 if(date("j") < 9) {
