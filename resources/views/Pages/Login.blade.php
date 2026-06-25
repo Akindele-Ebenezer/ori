@@ -4,7 +4,7 @@
 
 @section('Content')
     <div class="company-logo">
-        <img src="{{ asset('Images/company-logo.png') }}" alt="">
+        <img src="{{ asset('Images/company-logo.jpeg') }}" alt="">
     </div>
     <div class="loader-2" style="visibility: hidden;">
         <div class="x">
