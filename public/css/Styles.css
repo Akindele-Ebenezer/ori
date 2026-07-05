@@ -52,6 +52,7 @@
   height: 8px;
   border-radius: 50%;
   margin: 10px;
+  translate: 0em -0.5em;
 }
 .status-x.docking, .status-x.docking:before {
   background: #03AED2;
@@ -1793,16 +1794,21 @@ main .left-navigation ul li .total {
   z-index: 2;
 }
 .vessel-content h3 {
-  background-color: rgb(255, 249.35, 249.35);
+  background-color: #eef4f7;
   color: #ff6868;
   font-weight: 500;
   padding: 0.5em;
   width: fit-content;
+  margin: 0.2em 1em 0;
+  border-radius: 0.5em;
+  font-size: smaller;
 }
-.vessel-content h3 .report-summary {
-  cursor: pointer;
-  margin-left: 1em;
-  translate: 0 0.5em;
+.vessel-content h3.report-summary {
+  display: flex;
+  translate: 0;
+  gap: 1em;
+}
+.vessel-content h3.report-summary img {
   width: 1.5em;
 }
 .vessel-content h3 + span {
@@ -1831,7 +1837,6 @@ main .left-navigation ul li .total {
 }
 .vessel-content .list, .vessel-content .empty-data {
   align-items: center;
-  border-bottom: 1px solid rgb(219.6226415094, 236.8867924528, 245.3773584906);
   border-left: 8px solid #fff;
   color: #225f7d;
   padding: 0.5em 0;
@@ -1872,6 +1877,7 @@ main .left-navigation ul li .total {
 .vessel-content .list .inner img:first-of-type, .vessel-content .empty-data .inner img:first-of-type {
   margin: unset !important;
   width: 3em;
+  translate: 0em -0.5em;
 }
 .vessel-content .list .inner img, .vessel-content .empty-data .inner img {
   margin-inline: 0.5em;
@@ -1903,7 +1909,7 @@ main .left-navigation ul li .total {
 }
 .vessel-content .list .inner strong .imo.availability-status.status-1, .vessel-content .empty-data .inner strong .imo.availability-status.status-1 {
   color: #fff !important;
-  font-size: smaller;
+  font-size: x-small;
   translate: -3.5em -0.3em;
 }
 .vessel-content .list .inner strong .imo.availability-status.status-1.idle, .vessel-content .empty-data .inner strong .imo.availability-status.status-1.idle {
@@ -2634,7 +2640,7 @@ main .left-navigation ul li .total {
   height: 8em;
   position: sticky;
   text-align: center;
-  translate: 0 -1em;
+  translate: 0 -3.6em;
   width: 100%;
   z-index: 100;
 }
@@ -2669,6 +2675,11 @@ main .left-navigation ul li .total {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  translate: 0em -0.5em;
+  font-weight: 900;
+  color: #225f7d;
+  font-family: poppins;
+  border-bottom: 1px solid;
 }
 .availability .list .-x .notification-wrapper .captain-- {
   bottom: 0.2em;
@@ -2677,10 +2688,10 @@ main .left-navigation ul li .total {
   left: 2.5em;
   width: 2em;
   display: inline-block;
+  translate: -2em 0.4em;
 }
 .availability .list .-x .notification-wrapper .vessel-captain--, .availability .list .-x .notification-wrapper .vessel-night-duty-captain-- {
   background: #f4f4f4;
-  border: 1px solid #ddd;
   bottom: 0;
   font-style: italic;
   padding: 0.4em;
@@ -2698,7 +2709,7 @@ main .left-navigation ul li .total {
   bottom: 0;
 }
 .availability .list .-x .notification-wrapper .vessel-area-- {
-  font-size: 0.9em;
+  font-size: smaller;
   font-weight: 500;
   color: #2d3748;
   background: #f7fafc;
@@ -2706,7 +2717,7 @@ main .left-navigation ul li .total {
   border-radius: 20px;
   display: inline-block;
   position: absolute;
-  right: 10em;
+  right: 11em;
   bottom: 1.5em;
 }
 .availability .list .-x .notification-wrapper .vessel-area--::before {
@@ -2811,7 +2822,7 @@ main .left-navigation ul li .total {
 }
 
 .report-summary.-x {
-  background-color: rgb(134, 127, 240);
+  background-color: #225f7d;
   color: #fff;
   display: flex;
   align-items: center;

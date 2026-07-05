@@ -1229,8 +1229,7 @@
                         $Companies = \DB::table('companies_')->get();
                     @endphp
                     @foreach ($Companies as $Company)
-                        {{-- {{ $Company->Organization }}/ --}}
-                        DredgeMaster Prime MARINE LTD/
+                        {{ $Company->Organization }}/ 
                     @endforeach
                     FLEET
                 </h2>

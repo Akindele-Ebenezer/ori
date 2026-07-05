@@ -57,6 +57,7 @@ $blue: #42e5ff;
   height: $size;
   border-radius: 50%;
   margin: $border;
+  translate: 0em -0.5em;
 
   &.docking, &.docking:before {
     background: #03AED2;
