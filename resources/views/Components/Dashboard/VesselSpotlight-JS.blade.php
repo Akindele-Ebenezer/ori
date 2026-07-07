@@ -6,52 +6,53 @@
 const vessels = [
         @foreach ($iVessels as $Vessel)
 
-        @php
-        $capacity = ((float) ($Vessel->TankCapacity ?? 0)) / 1000;
-        $rob = (float) ($Vessel->ROB ?? 0) / 1000; // litres -> m³
+            @php
+            $capacity = ((float) ($Vessel->TankCapacity ?? 0)) / 1000;
+            $rob = (float) ($Vessel->ROB ?? 0);
+            $rob = $rob > 1000 ? $rob / 1000 : $rob;
 
-        $fuelLevel = $capacity > 0
-            ? round(($rob / $capacity) * 100, 1)
-            : 0;
-        // Fuel Status + Tank Color
-        if ($fuelLevel >= 70) {
-                $fuelStatus = 'HIGH';
-                $tankColor = 'bg-green-500';
-        } elseif ($fuelLevel >= 40) {
-                $fuelStatus = 'MEDIUM';
-                $tankColor = 'bg-yellow-500';
-        } else {
-                $fuelStatus = 'LOW';
-                $tankColor = 'bg-red-500';
-        }
-        $statusColor = match(strtoupper($Vessel->Status)) {
-                'IDLE' => '#22c55e',
-                'BREAKDOWN' => '#ef4444',
-                'MAINTENANCE' => '#ffffff',
-                'BUNKERY' => '#8a3ffc',
-                'INSPECTION' => '#ff832b',
-                'DOCKING' => '#03AED2',
-                default => '#6b7280',
-        }; 
-        @endphp
+            $fuelLevel = $capacity > 0
+                ? round(($rob / $capacity) * 100, 1)
+                : 0;
+            // Fuel Status + Tank Color
+            if ($fuelLevel >= 70) {
+                    $fuelStatus = 'HIGH';
+                    $tankColor = 'bg-green-500';
+            } elseif ($fuelLevel >= 40) {
+                    $fuelStatus = 'MEDIUM';
+                    $tankColor = 'bg-yellow-500';
+            } else {
+                    $fuelStatus = 'LOW';
+                    $tankColor = 'bg-red-500';
+            }
+            $statusColor = match(strtoupper($Vessel->Status)) {
+                    'IDLE' => '#22c55e',
+                    'BREAKDOWN' => '#ef4444',
+                    'MAINTENANCE' => '#ffffff',
+                    'BUNKERY' => '#8a3ffc',
+                    'INSPECTION' => '#ff832b',
+                    'DOCKING' => '#03AED2',
+                    default => '#6b7280',
+            }; 
+            @endphp
 
-        {
-        name: "{{ $Vessel->VesselName }}",
-        status: "{{ strtoupper($Vessel->Status) == 'IDLE' ? 'READY' : strtoupper($Vessel->Status) }}",
-        location: "{{ $Vessel->Area }}",
-        captain: "{{ $Vessel->Captain }}",
-        nightCaptain: "{{ $Vessel->NightDutyCaptain }}",
+            {
+            name: "{{ $Vessel->VesselName }}",
+            status: "{{ strtoupper($Vessel->Status) == 'IDLE' ? 'READY' : strtoupper($Vessel->Status) }}",
+            location: "{{ $Vessel->Area }}",
+            captain: "{{ $Vessel->Captain }}",
+            nightCaptain: "{{ $Vessel->NightDutyCaptain }}",
 
-        // Fuel Data
-        fuelLevel: {{ $fuelLevel > 100 ? 100 : $fuelLevel }}, // Cap at 100%
-        capacity: "{{ number_format($capacity, 2) }} M³",
-        currentQty: "{{ number_format($rob, 2) }} M³",
-        fuelStatus: "{{ $fuelStatus }}",
+            // Fuel Data
+            fuelLevel: {{ $fuelLevel > 100 ? 100 : $fuelLevel }}, // Cap at 100%
+            capacity: "{{ number_format($capacity, 2) }} M³",
+            currentQty: "{{ number_format($rob, 2) }} M³",
+            fuelStatus: "{{ $fuelStatus }}",
 
-        // Colors
-        statusColor: "{{ $statusColor }}",
-        tankColor: "{{ $tankColor }}"
-        }@if(!$loop->last),@endif
+            // Colors
+            statusColor: "{{ $statusColor }}",
+            tankColor: "{{ $tankColor }}"
+            }@if(!$loop->last),@endif
 
         @endforeach
 ];
