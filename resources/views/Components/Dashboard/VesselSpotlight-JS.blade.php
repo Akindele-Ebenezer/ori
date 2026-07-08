@@ -9,7 +9,9 @@ const vessels = [
             @php
             $capacity = ((float) ($Vessel->TankCapacity ?? 0)) / 1000;
             $rob = (float) ($Vessel->ROB ?? 0);
-            $rob = $rob > 1000 ? $rob / 1000 : $rob;
+            if ($rob >= 100 || floor($rob) == $rob) {
+                $rob /= 1000;
+            }
 
             $fuelLevel = $capacity > 0
                 ? round(($rob / $capacity) * 100, 1)
