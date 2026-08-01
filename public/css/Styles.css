@@ -1048,17 +1048,17 @@
 .form-1.AddVessel, .form-1.FilterChart4ForVesselData {
   z-index: 300;
 }
-.form-1.AddSmallBoats_Checklist .inner, .form-1.AddSpeedBoats_Checklist .inner, .form-1.EditSmallBoats_Checklist .inner, .form-1.EditSpeedBoats_Checklist .inner, .form-1.Tanks .inner {
+.form-1.AddSmallBoats_Checklist .inner, .form-1.AddSpeedBoats_Checklist .inner, .form-1.AddVessel_Checklist3 .inner, .form-1.EditSmallBoats_Checklist .inner, .form-1.EditSpeedBoats_Checklist .inner, .form-1.Tanks .inner {
   height: 85%;
   overflow-y: scroll;
   width: 80em;
 }
-.form-1.AddSmallBoats_Checklist .inner .button, .form-1.AddSpeedBoats_Checklist .inner .button, .form-1.EditSmallBoats_Checklist .inner .button, .form-1.EditSpeedBoats_Checklist .inner .button, .form-1.Tanks .inner .button {
+.form-1.AddSmallBoats_Checklist .inner .button, .form-1.AddSpeedBoats_Checklist .inner .button, .form-1.AddVessel_Checklist3 .inner .button, .form-1.EditSmallBoats_Checklist .inner .button, .form-1.EditSpeedBoats_Checklist .inner .button, .form-1.Tanks .inner .button {
   display: flex;
   justify-content: right;
   translate: 0 5em;
 }
-.form-1.AddSmallBoats_Checklist .inner .button button, .form-1.AddSpeedBoats_Checklist .inner .button button, .form-1.EditSmallBoats_Checklist .inner .button button, .form-1.EditSpeedBoats_Checklist .inner .button button, .form-1.Tanks .inner .button button {
+.form-1.AddSmallBoats_Checklist .inner .button button, .form-1.AddSpeedBoats_Checklist .inner .button button, .form-1.AddVessel_Checklist3 .inner .button button, .form-1.EditSmallBoats_Checklist .inner .button button, .form-1.EditSpeedBoats_Checklist .inner .button button, .form-1.Tanks .inner .button button {
   background: #225f7d;
   border: none;
   border-radius: 0.3em;
@@ -1067,20 +1067,20 @@
   margin-block: 0.5em;
   padding: 1em 2em;
 }
-.form-1.AddSmallBoats_Checklist .inner input[type=radio], .form-1.AddSpeedBoats_Checklist .inner input[type=radio], .form-1.EditSmallBoats_Checklist .inner input[type=radio], .form-1.EditSpeedBoats_Checklist .inner input[type=radio], .form-1.Tanks .inner input[type=radio] {
-  width: 2em;
+.form-1.AddSmallBoats_Checklist .inner input[type=radio], .form-1.AddSpeedBoats_Checklist .inner input[type=radio], .form-1.AddVessel_Checklist3 .inner input[type=radio], .form-1.EditSmallBoats_Checklist .inner input[type=radio], .form-1.EditSpeedBoats_Checklist .inner input[type=radio], .form-1.Tanks .inner input[type=radio] {
+  width: 5em;
 }
-.form-1.AddSmallBoats_Checklist form .input .comment, .form-1.AddSpeedBoats_Checklist form .input .comment, .form-1.EditSmallBoats_Checklist form .input .comment, .form-1.EditSpeedBoats_Checklist form .input .comment, .form-1.Tanks form .input .comment {
+.form-1.AddSmallBoats_Checklist form .input .comment, .form-1.AddSpeedBoats_Checklist form .input .comment, .form-1.AddVessel_Checklist3 form .input .comment, .form-1.EditSmallBoats_Checklist form .input .comment, .form-1.EditSpeedBoats_Checklist form .input .comment, .form-1.Tanks form .input .comment {
   font-size: smaller;
   width: 11em;
   translate: 3em;
 }
-.form-1.AddSmallBoats_Checklist form .input label, .form-1.AddSpeedBoats_Checklist form .input label, .form-1.EditSmallBoats_Checklist form .input label, .form-1.EditSpeedBoats_Checklist form .input label, .form-1.Tanks form .input label {
+.form-1.AddSmallBoats_Checklist form .input label, .form-1.AddSpeedBoats_Checklist form .input label, .form-1.AddVessel_Checklist3 form .input label, .form-1.EditSmallBoats_Checklist form .input label, .form-1.EditSpeedBoats_Checklist form .input label, .form-1.Tanks form .input label {
   color: #888;
   font-weight: 400;
   width: 15em;
 }
-.form-1.AddSmallBoats_Checklist form .input textarea, .form-1.AddSpeedBoats_Checklist form .input textarea, .form-1.EditSmallBoats_Checklist form .input textarea, .form-1.EditSpeedBoats_Checklist form .input textarea, .form-1.Tanks form .input textarea {
+.form-1.AddSmallBoats_Checklist form .input textarea, .form-1.AddSpeedBoats_Checklist form .input textarea, .form-1.AddVessel_Checklist3 form .input textarea, .form-1.EditSmallBoats_Checklist form .input textarea, .form-1.EditSpeedBoats_Checklist form .input textarea, .form-1.Tanks form .input textarea {
   height: 5em;
   outline: none;
   resize: none;
@@ -1164,22 +1164,38 @@
 .form-1 form .input .th-2, .form-1 form td .th-2 {
   font-size: x-small;
   color: #43be43;
-  width: 3em;
+  width: 7em;
+  text-align: center;
 }
 .form-1 form .input .th-2.x, .form-1 form td .th-2.x {
-  width: 2.5em;
+  width: 7em;
 }
 .form-1 form .input .th-3, .form-1 form td .th-3 {
   font-size: x-small;
   color: red;
-  width: 6em;
+  width: 7em;
+  text-align: center;
 }
 .form-1 form .input .th-3.x, .form-1 form td .th-3.x {
-  width: 5.5em;
+  width: 7em;
 }
 .form-1 form .input .th-4, .form-1 form td .th-4 {
   font-size: x-small;
   color: rgb(101, 78, 204);
+  width: 7em;
+  text-align: center;
+}
+.form-1 form .input .th-4.x, .form-1 form td .th-4.x {
+  width: 7em;
+}
+.form-1 form .input .th-5, .form-1 form td .th-5 {
+  font-size: x-small;
+  color: red;
+  width: 7em;
+  text-align: center;
+}
+.form-1 form .input .th-5.x, .form-1 form td .th-5.x {
+  width: 7em;
 }
 .form-1 form .input label, .form-1 form td label {
   color: #888;

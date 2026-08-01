@@ -5,6 +5,8 @@
 @include('Components.Forms.Delete.Checklists.Checklist1')
 @include('Components.Forms.Add.Checklists.Checklist2')
 @include('Components.Forms.Edit.Checklists.Checklist2') 
+@include('Components.Forms.Add.Checklists.Checklist3')
+{{-- @include('Components.Forms.Edit.Checklists.Checklist3')  --}}
 @include('Components.Forms.Add.Availability')
 @include('Components.Forms.Edit.Availability')
 @include('Components.Forms.Delete.Availability')

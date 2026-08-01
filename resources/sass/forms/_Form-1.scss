@@ -14,7 +14,7 @@
     width: 100vw;
     z-index: 200; 
     &.AddVessel, &.FilterChart4ForVesselData { z-index: 300; }
-    &.AddSmallBoats_Checklist, &.AddSpeedBoats_Checklist, &.EditSmallBoats_Checklist, &.EditSpeedBoats_Checklist, &.Tanks {
+    &.AddSmallBoats_Checklist, &.AddSpeedBoats_Checklist, &.AddVessel_Checklist3, &.EditSmallBoats_Checklist, &.EditSpeedBoats_Checklist, &.Tanks {
         // display: flex;
         .inner {
             height: 85%;
@@ -38,7 +38,7 @@
             }
 
             input[type=radio] {
-                width: 2em;
+                width: 5em;
             }
         }
         form {
@@ -162,24 +162,42 @@
             .th-2 {
                 font-size: x-small;
                 color: #43be43;
-                width: 3em;
+                width: 7em;
+                text-align: center;
 
                 &.x {
-                    width: 2.5em;
+                    width: 7em;
                 }
             }
             .th-3 {
                 font-size: x-small;
                 color: red; 
-                width: 6em;
+                width: 7em;
+                text-align: center;
 
                 &.x {
-                    width: 5.5em;
+                    width: 7em;
                 }
             }
             .th-4 {
                 font-size: x-small;
                 color: rgb(101, 78, 204); 
+                width: 7em;
+                text-align: center;
+
+                &.x {
+                    width: 7em;
+                }
+            }
+            .th-5 {
+                font-size: x-small;
+                color: red; 
+                width: 7em;
+                text-align: center;
+
+                &.x {
+                    width: 7em;
+                }
             }
 
             label { 
