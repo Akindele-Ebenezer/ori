@@ -3339,6 +3339,11 @@ main .left-navigation ul li .total {
     width: 18em !important;
   }
 }
+@media (max-width: 1440px) {
+  .board-1 {
+    display: none !important;
+  }
+}
 .list-component {
   background: rgba(0, 0, 0, 0.6);
   display: none;

@@ -425,3 +425,10 @@
         }
     }
 }
+
+
+@media (max-width: 1440px) {
+    .board-1 {
+        display: none !important;
+    }
+}
