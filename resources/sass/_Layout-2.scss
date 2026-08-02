@@ -204,6 +204,14 @@ main {
     }
 }
 
+@media (max-width: 1440px) {
+    .left-navigation {
+        &.one {
+            display: none;
+        }
+    } 
+}
+
 @media (max-width: 1215px) {
     .left-navigation {
         &.one {

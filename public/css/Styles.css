@@ -16,7 +16,7 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: rgb(44.9056603774, 125.4716981132, 165.0943396226);
+  background-color: rgb(17.6100628931%, 49.2045874954%, 64.7428782834%);
 }
 
 .Hide {
@@ -432,7 +432,7 @@
 .filter-list-wrapper-3 .empty center svg,
 .filter-list-wrapper-4 .empty center svg,
 .filter-list-wrapper-5 .empty center svg {
-  background: rgb(255, 236.6, 236.6);
+  background: rgb(100%, 92.7843137255%, 92.7843137255%);
   border-radius: 5em;
   fill: #ff6868;
   height: 5em;
@@ -460,7 +460,7 @@
 .filter-list-wrapper-5 .filter-value-3,
 .filter-list-wrapper-5 .filter-value-4,
 .filter-list-wrapper-5 .filter-value-5 {
-  border-bottom: 1px solid rgb(255, 231.5, 231.5);
+  border-bottom: 1px solid rgb(100%, 90.7843137255%, 90.7843137255%);
   cursor: pointer;
   padding: 0.2em;
 }
@@ -505,7 +505,7 @@
 .filter-list-wrapper-5 .filter-value-4:hover div,
 .filter-list-wrapper-5 .filter-value-5:hover h1,
 .filter-list-wrapper-5 .filter-value-5:hover div {
-  background-color: rgb(243.679245283, 249.2037735849, 251.920754717) !important;
+  background-color: rgb(95.5604883463%, 97.7269700333%, 98.7924528302%) !important;
 }
 .filter-list-wrapper .filter-value div, .filter-list-wrapper .filter-value-2 div, .filter-list-wrapper .filter-value-3 div, .filter-list-wrapper .filter-value-4 div, .filter-list-wrapper .filter-value-5 div,
 .filter-list-wrapper-2 .filter-value div,
@@ -1205,7 +1205,7 @@
   width: 9em;
 }
 .form-1 form .input select, .form-1 form .input input, .form-1 form .input textarea, .form-1 form td select, .form-1 form td input, .form-1 form td textarea {
-  background-color: rgb(239.6698113208, 247.1509433962, 250.8301886792);
+  background-color: rgb(93.9881613023%, 96.9219385868%, 98.3647798742%);
   border: none;
   border-radius: 0.1em;
   color: #225f7d;
@@ -1330,7 +1330,7 @@
   position: relative;
 }
 .form-1 .inner::-webkit-scrollbar-thumb {
-  background-color: rgb(255, 195.8, 195.8);
+  background-color: rgb(100%, 76.7843137255%, 76.7843137255%);
 }
 .form-1 .inner section .footer {
   align-items: center;
@@ -1405,7 +1405,7 @@
   font-size: unset;
 }
 .DeleteModal .inner center svg {
-  background: rgb(255, 236.6, 236.6);
+  background: rgb(100%, 92.7843137255%, 92.7843137255%);
   border-radius: 5em;
   fill: #ff6868;
   height: 5em;
@@ -1450,12 +1450,12 @@
   width: 1.5em;
 }
 .no-data-selected center h1, .no-data center h1 {
-  color: rgb(255, 129.5, 129.5);
+  color: rgb(100%, 50.7843137255%, 50.7843137255%);
   font-size: 2em;
   font-weight: 900;
 }
 .no-data-selected center svg, .no-data center svg {
-  background: rgb(243.679245283, 249.2037735849, 251.920754717);
+  background: rgb(95.5604883463%, 97.7269700333%, 98.7924528302%);
   border-radius: 11em;
   fill: #225f7d;
   margin-bottom: 2em;
@@ -1520,7 +1520,7 @@ nav[role] span svg {
   justify-content: center;
 }
 .Login .error {
-  background: rgb(255, 78.5, 78.5);
+  background: rgb(100%, 30.7843137255%, 30.7843137255%);
   border-radius: 0.25em;
   color: #fff;
   display: none;
@@ -1566,7 +1566,7 @@ nav[role] span svg {
 .Login .inner input {
   background-color: unset;
   border: none;
-  border-bottom: 1px solid rgb(157.25, 157.25, 157.25);
+  border-bottom: 1px solid rgb(61.6666666667%, 61.6666666667%, 61.6666666667%);
   color: #fff;
   height: 3em;
   margin-block: 1em;
@@ -1600,7 +1600,7 @@ nav[role] span svg {
 }
 
 main {
-  background-color: rgb(22.0037735849, 61.4811320755, 80.8962264151);
+  background-color: rgb(8.6289308176%, 24.1102478727%, 31.7240103589%);
   display: flex;
   height: 100vh;
   overflow-x: hidden;
@@ -1608,7 +1608,7 @@ main {
 }
 main .left-navigation {
   background-color: #fff;
-  border-right: 1px solid rgb(199.5754716981, 226.6226415094, 239.9245283019);
+  border-right: 1px solid rgb(78.264890862%, 88.8716241213%, 94.0880503145%);
   overflow-y: scroll;
   scrollbar-width: none;
   padding: 1.5em;
@@ -1616,8 +1616,8 @@ main .left-navigation {
   width: 20em;
 }
 main .left-navigation-x {
-  background: rgb(28.5471698113, 79.7641509434, 104.9528301887);
-  border-right: 10px solid rgb(199.5754716981, 226.6226415094, 239.9245283019);
+  background: rgb(11.1949685535%, 31.2800591935%, 41.157972623%);
+  border-right: 10px solid rgb(78.264890862%, 88.8716241213%, 94.0880503145%);
   margin-right: unset;
   overflow: hidden;
   padding: 0em;
@@ -1625,7 +1625,7 @@ main .left-navigation-x {
   width: 5em;
 }
 main .left-navigation-x ul h1 {
-  background: rgb(255, 78.5, 78.5);
+  background: rgb(100%, 30.7843137255%, 30.7843137255%);
   border-radius: 50%;
   color: #fff !important;
   height: 2em;
@@ -1650,7 +1650,7 @@ main .left-navigation-x ul li:hover svg {
   fill: #225f7d !important;
 }
 main .left-navigation-x ul li svg {
-  fill: rgb(59.2452830189, 154.7735849057, 201.7547169811) !important;
+  fill: rgb(23.2334443211%, 60.6955234924%, 79.1194968553%) !important;
   width: 1.25em !important;
 }
 main .left-navigation ul {
@@ -1669,7 +1669,7 @@ main .left-navigation .user {
   position: absolute;
 }
 main .left-navigation .user div {
-  color: rgb(39.4528301887, 110.2358490566, 145.0471698113);
+  color: rgb(15.4716981132%, 43.2297447281%, 56.8812430633%);
   cursor: pointer;
 }
 main .left-navigation .user div img {
@@ -1677,7 +1677,7 @@ main .left-navigation .user div img {
   width: 3em;
 }
 main .left-navigation .user div span {
-  background: rgb(255, 78.5, 78.5);
+  background: rgb(100%, 30.7843137255%, 30.7843137255%);
   border-radius: 0.3em;
   color: #fff;
   font-size: smaller;
@@ -1695,7 +1695,7 @@ main .left-navigation ul h2 {
   margin-bottom: 1em;
 }
 main .left-navigation ul span {
-  border-bottom: 1px solid rgb(199.5754716981, 226.6226415094, 239.9245283019);
+  border-bottom: 1px solid rgb(78.264890862%, 88.8716241213%, 94.0880503145%);
   display: block;
 }
 main .left-navigation ul img {
@@ -1707,7 +1707,7 @@ main .left-navigation ul img:first-child {
   width: 3.5em;
 }
 main .left-navigation ul input {
-  background: rgb(246.5, 246.5, 246.5);
+  background: rgb(96.6666666667%, 96.6666666667%, 96.6666666667%);
   border-radius: 0.5em;
   color: #777;
   border: none;
@@ -1738,7 +1738,7 @@ main .left-navigation ul li.active svg {
   fill: #fff;
 }
 main .left-navigation ul li.active-x {
-  background: rgb(50.358490566, 140.7075471698, 185.141509434) !important;
+  background: rgb(19.748427673%, 55.1794302627%, 72.6045135035%) !important;
   border-left: 8px solid #ff6868;
   justify-content: center;
 }
@@ -1746,7 +1746,7 @@ main .left-navigation ul li.active-x svg {
   fill: #225f7d !important;
 }
 main .left-navigation ul li:hover {
-  background: rgb(50.358490566, 140.7075471698, 185.141509434);
+  background: rgb(19.748427673%, 55.1794302627%, 72.6045135035%);
   color: #fff;
   cursor: pointer;
   font-weight: bold;
@@ -1755,12 +1755,12 @@ main .left-navigation ul li:hover svg {
   fill: #fff;
 }
 main .left-navigation ul li svg {
-  fill: rgb(50.358490566, 140.7075471698, 185.141509434);
+  fill: rgb(19.748427673%, 55.1794302627%, 72.6045135035%);
   margin-right: 1em;
   width: 1.5em;
 }
 main .left-navigation ul li .total {
-  background: rgb(255, 78.5, 78.5);
+  background: rgb(100%, 30.7843137255%, 30.7843137255%);
   border-radius: 0.5em;
   border-bottom: unset;
   color: #fff;
@@ -1772,6 +1772,11 @@ main .left-navigation ul li .total {
   width: fit-content;
 }
 
+@media (max-width: 1440px) {
+  .left-navigation.one {
+    display: none;
+  }
+}
 @media (max-width: 1215px) {
   .left-navigation.one {
     display: none;
@@ -1785,12 +1790,12 @@ main .left-navigation ul li .total {
 }
 .vessel-content {
   background: #fff;
-  border-right: 1px solid rgb(199.5754716981, 226.6226415094, 239.9245283019);
+  border-right: 1px solid rgb(78.264890862%, 88.8716241213%, 94.0880503145%);
   overflow-y: scroll;
   width: 25%;
 }
 .vessel-content.notifications {
-  border-right: 1px solid rgb(199.5754716981, 226.6226415094, 239.9245283019);
+  border-right: 1px solid rgb(78.264890862%, 88.8716241213%, 94.0880503145%);
   scrollbar-width: none;
 }
 .vessel-content.notifications .imo {
@@ -1798,7 +1803,7 @@ main .left-navigation ul li .total {
   text-decoration: unset !important;
 }
 .vessel-content h2 {
-  background: rgb(28.5471698113, 79.7641509434, 104.9528301887);
+  background: rgb(11.1949685535%, 31.2800591935%, 41.157972623%);
   background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
   color: #fff;
   font-size: xx-large;
@@ -1842,7 +1847,7 @@ main .left-navigation ul li .total {
   z-index: 20;
 }
 .vessel-content h3.company-heading span {
-  background: rgb(250.75, 250.75, 250.75);
+  background: rgb(98.3333333333%, 98.3333333333%, 98.3333333333%);
   color: #aaa;
   border-left: 7px solid #ff6868;
   display: block;
@@ -1859,12 +1864,12 @@ main .left-navigation ul li .total {
   position: relative;
 }
 .vessel-content .list:hover, .vessel-content .empty-data:hover {
-  background: rgb(239.6698113208, 247.1509433962, 250.8301886792);
+  background: rgb(93.9881613023%, 96.9219385868%, 98.3647798742%);
   border-left: 8px solid #225f7d;
   cursor: pointer;
 }
 .vessel-content .list:hover .inner.-x strong .vessel-name-span, .vessel-content .empty-data:hover .inner.-x strong .vessel-name-span {
-  background: rgb(219.6226415094, 236.8867924528, 245.3773584906);
+  background: rgb(86.1265260821%, 92.8967813541%, 96.2264150943%);
   color: #225f7d;
   font-weight: bolder;
 }
@@ -1879,7 +1884,7 @@ main .left-navigation ul li .total {
   width: 100%;
 }
 .vessel-content .list .inner.-x .company, .vessel-content .empty-data .inner.-x .company {
-  background-color: rgb(227.641509434, 240.9924528302, 247.558490566);
+  background-color: rgb(89.2711801702%, 94.5068442471%, 97.0817610063%);
   display: none;
   padding: 0.2em;
   text-transform: lowercase;
@@ -1936,19 +1941,19 @@ main .left-navigation ul li .total {
   color: #aaa !important;
 }
 .vessel-content .list .inner strong .notification-bg-create, .vessel-content .empty-data .inner strong .notification-bg-create {
-  background-color: rgb(239.6698113208, 247.1509433962, 250.8301886792);
+  background-color: rgb(93.9881613023%, 96.9219385868%, 98.3647798742%);
   color: #329bf5;
   font-weight: 500;
   font-size: 1.25em;
 }
 .vessel-content .list .inner strong .notification-bg-update, .vessel-content .empty-data .inner strong .notification-bg-update {
-  background-color: rgb(244.511627907, 249.8837209302, 254.488372093);
+  background-color: rgb(95.8869129047%, 97.9936160511%, 99.7993616051%);
   color: #3db75d;
   font-weight: 500;
   font-size: 1.25em;
 }
 .vessel-content .list .inner strong .notification-bg-delete, .vessel-content .empty-data .inner strong .notification-bg-delete {
-  background-color: rgb(255, 249.35, 249.35);
+  background-color: rgb(100%, 97.7843137255%, 97.7843137255%);
   font-weight: 500;
   font-size: 1.25em;
 }
@@ -1973,7 +1978,7 @@ main .left-navigation ul li .total {
   width: 15em;
 }
 .vessel-content .list .inner strong .vessel-name-span, .vessel-content .empty-data .inner strong .vessel-name-span {
-  background-color: rgb(255, 249.35, 249.35);
+  background-color: rgb(100%, 97.7843137255%, 97.7843137255%);
   color: #ff6868;
   display: block;
   font-size: 1.25em;
@@ -2009,7 +2014,7 @@ main .left-navigation ul li .total {
 }
 .content-data .add-testimonial-wrapper .AddTestimonial .inner form h1, .content-data .add-testimonial-wrapper .AddAvailability .inner form h1, .content-data .add-availabilty-wrapper .AddTestimonial .inner form h1, .content-data .add-availabilty-wrapper .AddAvailability .inner form h1 {
   background-color: #fff;
-  border-bottom: 1px solid rgb(179.5283018868, 216.358490566, 234.4716981132);
+  border-bottom: 1px solid rgb(70.4032556419%, 84.8464668886%, 91.9496855346%);
   color: #333;
   font-size: unset;
 }
@@ -2107,7 +2112,7 @@ main .left-navigation ul li .total {
   top: 0;
 }
 .content-data .inner-x .data ul li {
-  border-bottom: 1px solid rgb(39.4528301887, 110.2358490566, 145.0471698113);
+  border-bottom: 1px solid rgb(15.4716981132%, 43.2297447281%, 56.8812430633%);
   display: flex;
   justify-content: space-between;
   padding-block: 1em;
@@ -2120,7 +2125,7 @@ main .left-navigation ul li .total {
   font-weight: 500;
 }
 .content-data .inner.vessel-information {
-  background-color: rgb(30.7283018868, 85.858490566, 112.9716981132);
+  background-color: rgb(12.0503144654%, 33.6699963004%, 44.3026267111%);
 }
 
 @media (max-width: 1785px) {
@@ -2879,7 +2884,7 @@ main .left-navigation ul li .total {
   padding-bottom: 0.075em;
 }
 .testimonial-content header div.h-2, .table-1 header div.h-2 {
-  background: rgb(9.35, 9.35, 9.35);
+  background: rgb(3.6666666667%, 3.6666666667%, 3.6666666667%);
   display: none;
   padding: 1em;
 }
@@ -2907,7 +2912,7 @@ main .left-navigation ul li .total {
   width: 2em;
 }
 .testimonial-content header div.h-3, .table-1 header div.h-3 {
-  background-color: rgb(22.0037735849, 61.4811320755, 80.8962264151);
+  background-color: rgb(8.6289308176%, 24.1102478727%, 31.7240103589%);
   justify-content: start;
 }
 .testimonial-content header div.h-3 h2, .table-1 header div.h-3 h2 {
@@ -2919,11 +2924,11 @@ main .left-navigation ul li .total {
 }
 .testimonial-content header div.h-3 h2.active, .table-1 header div.h-3 h2.active {
   background-color: #fff;
-  border-bottom: 2px solid rgb(255, 78.5, 78.5);
+  border-bottom: 2px solid rgb(100%, 30.7843137255%, 30.7843137255%);
   padding: 1em;
 }
 .testimonial-content header div.h-3 h2.inactive, .table-1 header div.h-3 h2.inactive {
-  background-color: rgb(22.0037735849, 61.4811320755, 80.8962264151);
+  background-color: rgb(8.6289308176%, 24.1102478727%, 31.7240103589%);
   color: #fff;
   padding: 1em;
 }
@@ -2941,29 +2946,29 @@ main .left-navigation ul li .total {
   width: 100%;
 }
 .testimonial-content .table table td, .testimonial-content .table table th, .table-1 .table table td, .table-1 .table table th {
-  background-color: rgb(23.0943396226, 64.5283018868, 84.9056603774);
+  background-color: rgb(9.0566037736%, 25.3052164262%, 33.2963374029%);
   color: #fff;
   padding: 1em;
   text-transform: uppercase;
 }
 .testimonial-content .table table td.empty-list, .testimonial-content .table table th.empty-list, .table-1 .table table td.empty-list, .table-1 .table table th.empty-list {
-  background-color: rgb(26.3660377358, 73.6698113208, 96.9339622642) !important;
+  background-color: rgb(10.3396226415%, 28.8901220866%, 38.013318535%) !important;
 }
 .testimonial-content .table table td:hover, .testimonial-content .table table th:hover, .table-1 .table table td:hover, .table-1 .table table th:hover {
-  background-color: rgb(26.3660377358, 73.6698113208, 96.9339622642) !important;
+  background-color: rgb(10.3396226415%, 28.8901220866%, 38.013318535%) !important;
 }
 .testimonial-content .table table th, .table-1 .table table th {
-  background-color: rgb(28.5471698113, 79.7641509434, 104.9528301887);
+  background-color: rgb(11.1949685535%, 31.2800591935%, 41.157972623%);
   font-weight: unset;
   position: sticky;
   top: -2em;
 }
 .testimonial-content .table table tr, .table-1 .table table tr {
   border: 1px solid #fff;
-  border-bottom: 1px solid rgb(4.25, 4.25, 4.25);
+  border-bottom: 1px solid rgb(1.6666666667%, 1.6666666667%, 1.6666666667%);
 }
 .testimonial-content .table table tr td.data-x, .table-1 .table table tr td.data-x {
-  border-bottom: 1px solid rgb(37.2716981132, 104.141509434, 137.0283018868);
+  border-bottom: 1px solid rgb(14.6163522013%, 40.8398076212%, 53.7365889752%);
 }
 .testimonial-content .table table tr td.data-x .sub-x, .table-1 .table table tr td.data-x .sub-x {
   align-items: center;
@@ -2971,7 +2976,7 @@ main .left-navigation ul li .total {
   justify-content: space-between;
 }
 .testimonial-content .table table tr td.data-x .sub-x .\-1, .table-1 .table table tr td.data-x .sub-x .\-1 {
-  background-color: rgb(28.5471698113, 79.7641509434, 104.9528301887);
+  background-color: rgb(11.1949685535%, 31.2800591935%, 41.157972623%);
   border-radius: 0.3em;
   margin-block: 0.5em;
   margin-right: 1em;
@@ -2981,10 +2986,10 @@ main .left-navigation ul li .total {
   translate: 0 -0.6em;
 }
 .testimonial-content .table table tr td.action, .table-1 .table table tr td.action {
-  background-color: rgb(17.641509434, 49.2924528302, 64.858490566);
+  background-color: rgb(6.9182389937%, 19.3303736589%, 25.4347021828%);
 }
 .testimonial-content .table table tr td:not(.testimonial-content .table table tr td.action, .table-1 .table table tr td.action), .table-1 .table table tr td:not(.testimonial-content .table table tr td.action, .table-1 .table table tr td.action) {
-  background-color: rgb(22.0037735849, 61.4811320755, 80.8962264151);
+  background-color: rgb(8.6289308176%, 24.1102478727%, 31.7240103589%);
 }
 .testimonial-content .table table tr td img, .table-1 .table table tr td img {
   cursor: pointer;
@@ -3014,14 +3019,14 @@ main .left-navigation ul li .total {
 }
 
 .dashboard {
-  background-color: rgb(33.4547169811, 93.4764150943, 122.9952830189);
+  background-color: rgb(13.1194968553%, 36.6574176841%, 48.2334443211%);
 }
 .dashboard-inner .board-1:first-of-type table td, .dashboard-inner .board-1:first-of-type table th {
   padding-inline: 0.75em;
   color: #fff;
 }
 .dashboard-inner .board-1, .dashboard-inner .board-2, .dashboard-inner .board-3 {
-  background-color: rgb(35.6358490566, 99.570754717, 131.0141509434);
+  background-color: rgb(13.9748427673%, 39.047354791%, 51.3780984092%);
   color: #fff;
   display: flex;
   justify-content: space-between;
@@ -3029,7 +3034,7 @@ main .left-navigation ul li .total {
 }
 .dashboard-inner .board-1 .div, .dashboard-inner .board-2 .div, .dashboard-inner .board-3 .div {
   scrollbar-width: none; /* Hide scrollbar for Firefox */
-  background-color: rgb(30.7283018868, 85.858490566, 112.9716981132);
+  background-color: rgb(12.0503144654%, 33.6699963004%, 44.3026267111%);
   height: 20em;
   overflow-y: scroll;
   padding: 2em;
@@ -3053,14 +3058,14 @@ main .left-navigation ul li .total {
 .dashboard-inner .board-1 .div h1 span select, .dashboard-inner .board-2 .div h1 span select, .dashboard-inner .board-3 .div h1 span select {
   border: none;
   border-radius: 0.1em;
-  background-color: rgb(25.2754716981, 70.6226415094, 92.9245283019);
+  background-color: rgb(9.9119496855%, 27.6951535331%, 36.4409914909%);
   color: #fff;
   outline: none;
   padding: 0.2em 0.5em;
   width: 8em;
 }
 .dashboard-inner .board-1 .div h1 span button, .dashboard-inner .board-2 .div h1 span button, .dashboard-inner .board-3 .div h1 span button {
-  background-color: rgb(255, 78.5, 78.5);
+  background-color: rgb(100%, 30.7843137255%, 30.7843137255%);
   border: none;
   border-radius: 0.25em;
   color: #fff;
@@ -3084,14 +3089,14 @@ main .left-navigation ul li .total {
 }
 .dashboard-inner .board-1 .div h2 span:first-of-type, .dashboard-inner .board-2 .div h2 span:first-of-type, .dashboard-inner .board-3 .div h2 span:first-of-type {
   align-items: center;
-  color: rgb(0, 242, 29.4608695652);
+  color: rgb(0%, 94.9019607843%, 11.5532821824%);
   display: flex;
   font-weight: 500;
   margin-right: 2em;
   padding: 0.5em 1em 1em 1em;
 }
 .dashboard-inner .board-1 .div h2 span:first-of-type svg, .dashboard-inner .board-2 .div h2 span:first-of-type svg, .dashboard-inner .board-3 .div h2 span:first-of-type svg {
-  fill: rgb(63.5, 255, 86.8130434783);
+  fill: rgb(24.9019607843%, 100%, 34.0443307758%);
   margin-right: 0.5em;
   translate: 0 0.15em;
   width: 1.65em;
@@ -3110,14 +3115,14 @@ main .left-navigation ul li .total {
 }
 .dashboard-inner .board-1 .div .indicators-wrapper .indicators-inner-x, .dashboard-inner .board-2 .div .indicators-wrapper .indicators-inner-x, .dashboard-inner .board-3 .div .indicators-wrapper .indicators-inner-x {
   align-items: center;
-  border-bottom: 1px solid rgb(39.4528301887, 110.2358490566, 145.0471698113);
+  border-bottom: 1px solid rgb(15.4716981132%, 43.2297447281%, 56.8812430633%);
   cursor: pointer;
   display: flex;
   justify-content: space-between;
   padding-block: 0.5em;
 }
 .dashboard-inner .board-1 .div .indicators-wrapper .indicators-inner-x:hover, .dashboard-inner .board-2 .div .indicators-wrapper .indicators-inner-x:hover, .dashboard-inner .board-3 .div .indicators-wrapper .indicators-inner-x:hover {
-  background: rgb(39.4528301887, 110.2358490566, 145.0471698113);
+  background: rgb(15.4716981132%, 43.2297447281%, 56.8812430633%);
   color: #ddd;
 }
 .dashboard-inner .board-1 .div .indicators-wrapper .indicators-inner-x span:first-of-type, .dashboard-inner .board-2 .div .indicators-wrapper .indicators-inner-x span:first-of-type, .dashboard-inner .board-3 .div .indicators-wrapper .indicators-inner-x span:first-of-type {
@@ -3132,7 +3137,7 @@ main .left-navigation ul li .total {
   font-size: 5em;
 }
 .dashboard-inner .board-1 .div strong.total, .dashboard-inner .board-2 .div strong.total, .dashboard-inner .board-3 .div strong.total {
-  background: rgb(39.4528301887, 110.2358490566, 145.0471698113);
+  background: rgb(15.4716981132%, 43.2297447281%, 56.8812430633%);
   border-radius: 0.1em;
   padding-inline: 0.2em;
 }
@@ -3164,7 +3169,7 @@ main .left-navigation ul li .total {
   top: 0.2em;
 }
 .dashboard-inner .board-1 .div table.user-logins tr, .dashboard-inner .board-2 .div table.user-logins tr, .dashboard-inner .board-3 .div table.user-logins tr {
-  border-bottom: 1px solid rgb(39.4528301887, 110.2358490566, 145.0471698113);
+  border-bottom: 1px solid rgb(15.4716981132%, 43.2297447281%, 56.8812430633%);
 }
 .dashboard-inner .board-1 .div table.user-logins tr th, .dashboard-inner .board-2 .div table.user-logins tr th, .dashboard-inner .board-3 .div table.user-logins tr th {
   background: #225f7d;
@@ -3205,30 +3210,30 @@ main .left-navigation ul li .total {
   text-align: left;
 }
 .dashboard-inner .board-1 .div.tracking table td:first-of-type, .dashboard-inner .board-1 .div.tracking table th:first-of-type, .dashboard-inner .board-2 .div.tracking table td:first-of-type, .dashboard-inner .board-2 .div.tracking table th:first-of-type, .dashboard-inner .board-3 .div.tracking table td:first-of-type, .dashboard-inner .board-3 .div.tracking table th:first-of-type {
-  border-right: 1px solid rgb(39.4528301887, 110.2358490566, 145.0471698113);
+  border-right: 1px solid rgb(15.4716981132%, 43.2297447281%, 56.8812430633%);
   width: 12em;
 }
 .dashboard-inner .board-1 .div.tracking table th, .dashboard-inner .board-2 .div.tracking table th, .dashboard-inner .board-3 .div.tracking table th {
-  background-color: rgb(30.7283018868, 85.858490566, 112.9716981132);
+  background-color: rgb(12.0503144654%, 33.6699963004%, 44.3026267111%);
   position: sticky;
   top: -0.25em;
   z-index: 2;
 }
 .dashboard-inner .board-1 .div.tracking table th:first-of-type, .dashboard-inner .board-2 .div.tracking table th:first-of-type, .dashboard-inner .board-3 .div.tracking table th:first-of-type {
-  background-color: rgb(39.4528301887, 110.2358490566, 145.0471698113);
+  background-color: rgb(15.4716981132%, 43.2297447281%, 56.8812430633%);
 }
 .dashboard-inner .board-1 .div.tracking table tr, .dashboard-inner .board-2 .div.tracking table tr, .dashboard-inner .board-3 .div.tracking table tr {
-  border-bottom: 1px solid rgb(39.4528301887, 110.2358490566, 145.0471698113);
+  border-bottom: 1px solid rgb(15.4716981132%, 43.2297447281%, 56.8812430633%);
 }
 .dashboard-inner .board-1 .div.tracking table tr:hover, .dashboard-inner .board-2 .div.tracking table tr:hover, .dashboard-inner .board-3 .div.tracking table tr:hover {
-  background-color: rgb(39.4528301887, 110.2358490566, 145.0471698113);
+  background-color: rgb(15.4716981132%, 43.2297447281%, 56.8812430633%);
 }
 .dashboard-inner .board-2 .div {
   width: 49%;
 }
 .dashboard-inner .board-2 .div .canvas .inner-x {
-  background-color: rgb(28.5471698113, 79.7641509434, 104.9528301887);
-  border-bottom: 1px solid rgb(39.4528301887, 110.2358490566, 145.0471698113);
+  background-color: rgb(11.1949685535%, 31.2800591935%, 41.157972623%);
+  border-bottom: 1px solid rgb(15.4716981132%, 43.2297447281%, 56.8812430633%);
   justify-content: left;
 }
 .dashboard-inner .board-2 .div .canvas .inner-x span:first-of-type {
@@ -3253,7 +3258,7 @@ main .left-navigation ul li .total {
   padding: 0.2em;
 }
 .dashboard-inner .board-3 .div table td {
-  border-bottom: 1px solid rgb(45.9962264151, 128.5188679245, 169.1037735849);
+  border-bottom: 1px solid rgb(18.0377358491%, 50.3995560488%, 66.3152053274%);
   padding-block: 0.5em;
   color: #eee;
 }
@@ -3261,7 +3266,7 @@ main .left-navigation ul li .total {
   font-size: x-small;
 }
 .dashboard-inner .board-3 .div table td.action {
-  background-color: rgb(17.641509434, 49.2924528302, 64.858490566);
+  background-color: rgb(6.9182389937%, 19.3303736589%, 25.4347021828%);
   display: flex;
 }
 .dashboard-inner .board-3 .div table td img {
@@ -3278,10 +3283,10 @@ main .left-navigation ul li .total {
   top: -0.2em;
 }
 .dashboard-inner .board-3 .div table tr:hover {
-  background-color: rgb(28.5471698113, 79.7641509434, 104.9528301887);
+  background-color: rgb(11.1949685535%, 31.2800591935%, 41.157972623%);
 }
 .dashboard-inner .dashboard-heading {
-  background-color: rgb(28.5471698113, 79.7641509434, 104.9528301887);
+  background-color: rgb(11.1949685535%, 31.2800591935%, 41.157972623%);
   color: #fff;
   font-size: 2em;
   font-weight: 700;
@@ -3301,7 +3306,7 @@ main .left-navigation ul li .total {
   padding-left: 1em;
 }
 .dashboard-inner h1 svg {
-  background-color: rgb(39.4528301887, 110.2358490566, 145.0471698113);
+  background-color: rgb(15.4716981132%, 43.2297447281%, 56.8812430633%);
   border-radius: 0.4em;
   fill: #111;
   padding: 0.5em;
@@ -3899,7 +3904,7 @@ main .left-navigation ul li .total {
 }
 
 .video h1 {
-  background-color: rgb(28.5471698113, 79.7641509434, 104.9528301887);
+  background-color: rgb(11.1949685535%, 31.2800591935%, 41.157972623%);
   color: #fff;
   font-size: 2em;
   font-weight: 700;
