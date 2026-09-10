@@ -32,6 +32,20 @@
                             <input type="text" name="FreshWater">
                         </div> 
                     </section>
+                    <section>
+                        <div class="input">
+                            <label for="">CCTV</label>
+                            <label><input type="radio" name="CCTV" value="Yes"> Yes</label>
+                            <label><input type="radio" name="CCTV" value="No"> No</label>
+                        </div>
+                    </section>
+                    <section>
+                        <div class="input">
+                            <label for="">Internet</label>
+                            <label><input type="radio" name="Internet" value="Yes"> Yes</label>
+                            <label><input type="radio" name="Internet" value="No"> No</label>
+                        </div>
+                    </section>
                 </div>
                 <br>
             </div>

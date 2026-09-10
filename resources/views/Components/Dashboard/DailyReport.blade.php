@@ -311,6 +311,8 @@
                             <div style="display: flex; gap: 0.5rem;">
                                 <span class="status-pill status-amber">ROB {{ $log->ROB }}</span>
                                 <span class="status-pill status-blue">FW {{ $log->FreshWater }}</span>
+                                <span class="status-pill status-teal">CCTV {{ $log->CCTV ?? 'No' }}</span>
+                                <span class="status-pill status-violet">Internet {{ $log->Internet ?? 'No' }}</span>
                             </div>
                         </li>
                     @endforeach

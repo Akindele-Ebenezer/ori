@@ -29,7 +29,27 @@ class RadioBroadcastReportController extends Controller
 
     public function add_radio_broadcast_report(Request $request, ?string $Id = null)
     {
-        DB::table('radio_broadcast_reports')->insert($this->attributes($request));
+        $rows = $request->input('vessels');
+        if (!is_array($rows)) {
+            $rows = [$request->all()];
+        }
+
+        $attributes = collect($rows)
+            ->filter(fn ($row) => is_array($row) && filled($row['Vessel'] ?? null))
+            ->map(function (array $row) use ($request) {
+                $rowRequest = Request::create('/', 'POST', array_merge($row, [
+                    'DoneBy' => $request->input('DoneBy'),
+                    'Remarks' => $request->input('Remarks'),
+                    'Date' => $request->input('Date'),
+                ]));
+                return $this->attributes($rowRequest);
+            })
+            ->values()
+            ->all();
+
+        if ($attributes) {
+            DB::table('radio_broadcast_reports')->insert($attributes);
+        }
         return back();
     }
 

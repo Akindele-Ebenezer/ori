@@ -23,22 +23,11 @@ if (AddRadioBroadcastButton && AddRadioBroadcastForm) {
     const submitRadioBroadcast = (event) => {
         event.preventDefault();
 
-        const vessel = AddRadioBroadcastForm.querySelector('[name=Vessel]').value.trim();
         const doneBy = AddRadioBroadcastForm.querySelector('[name=DoneBy]').value.trim();
         const date = AddRadioBroadcastForm.querySelector('[name=Date]').value;
-        const alertFields = [
-            'WatchKeepingAlert',
-            'RelatedDistress',
-            'FirstCallTime',
-            'SecondCallTime',
-            'Responders'
-        ];
-        const hasAlert = alertFields.some((name) =>
-            AddRadioBroadcastForm.querySelector(`[name=${name}]`).checked
-        );
+        const vesselRows = [...AddRadioBroadcastForm.querySelectorAll('select[name^="vessels["]')];
 
-        if (!vessel) return showError('Vessel is required.');
-        if (!hasAlert) return showError('Select at least one radio broadcast alert.');
+        if (!vesselRows.some((row) => row.value.trim())) return showError('Select at least one vessel.');
         if (!doneBy) return showError('Done by field is required.');
         if (!date) return showError('Date is required.');
 

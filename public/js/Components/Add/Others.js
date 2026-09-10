@@ -23,15 +23,11 @@ if (AddOthersButton && AddOthersForm) {
     const submitOthers = (event) => {
         event.preventDefault();
 
-        const vessel = AddOthersForm.querySelector('[name=Vessel]').value.trim();
-        const rob = AddOthersForm.querySelector('[name=ROB]').value.trim();
-        const freshWater = AddOthersForm.querySelector('[name=FreshWater]').value.trim();
         const doneBy = AddOthersForm.querySelector('[name=DoneBy]').value.trim();
         const date = AddOthersForm.querySelector('[name=Date]').value;
+        const vesselRows = [...AddOthersForm.querySelectorAll('select[name^="vessels["]')];
 
-        if (!vessel) return showError('Vessel is required.');
-        if (!rob) return showError('ROB is required.');
-        if (!freshWater) return showError('Fresh water is required.');
+        if (!vesselRows.some((row) => row.value.trim())) return showError('Select at least one vessel.');
         if (!doneBy) return showError('Done by field is required.');
         if (!date) return showError('Date is required.');
 

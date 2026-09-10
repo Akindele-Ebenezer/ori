@@ -1051,6 +1051,9 @@ body {
   width: 100vw;
   z-index: 2200;
 }
+.form-1 .AddRadioBroadcastForm, .form-1 .AddOthersForm {
+  display: unset !important;
+}
 .form-1 .FormWrapper {
   padding-top: 3.5em;
   height: 40em;
@@ -1127,6 +1130,7 @@ body {
 }
 .form-1.AddAvailability .inner {
   display: flex;
+  height: 53em;
 }
 .form-1.AddAvailability .inner .FormCloseButton {
   position: absolute;
@@ -1331,6 +1335,47 @@ body {
 }
 .form-1 form .input select:focus, .form-1 form .input input:focus, .form-1 form .input textarea:focus, .form-1 form td select:focus, .form-1 form td input:focus, .form-1 form td textarea:focus {
   border-bottom: 3px solid #225f7d;
+}
+.form-1 form .inner-1 .fields .fleet-report-table-wrapper {
+  max-height: 28em;
+  overflow-x: hidden;
+  width: 100%;
+}
+.form-1 form .inner-1 .fields .fleet-report-table {
+  border-collapse: collapse;
+  min-width: 58em;
+  width: 100%;
+}
+.form-1 form .inner-1 .fields .fleet-report-table th {
+  background: #225f7d;
+  color: #fff;
+  padding: 0.6em;
+  position: sticky;
+  text-align: center;
+  top: 0;
+  z-index: 1;
+}
+.form-1 form .inner-1 .fields .fleet-report-table td {
+  border-bottom: 1px solid rgb(78.264890862%, 88.8716241213%, 94.0880503145%);
+  display: table-cell;
+  padding: 0.35em;
+  text-align: center;
+  vertical-align: middle;
+  width: 10em;
+}
+.form-1 form .inner-1 .fields .fleet-report-table td select, .form-1 form .inner-1 .fields .fleet-report-table td input[type=text] {
+  width: 100%;
+}
+.form-1 form .inner-1 .fields .fleet-report-table td input[type=checkbox], .form-1 form .inner-1 .fields .fleet-report-table td input[type=radio] {
+  padding: 0;
+  width: auto;
+}
+.form-1 form .inner-1 .fields .fleet-report-table td label {
+  display: inline-flex;
+  gap: 0.25em;
+  justify-content: center;
+  padding: 0;
+  width: auto !important;
 }
 .form-1 form .permissions {
   height: 30em;

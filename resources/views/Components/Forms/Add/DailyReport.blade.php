@@ -7,24 +7,24 @@
                 <section>  
                     <div class="input">
                         <label for="">Vessel</label>
-                        <select name="Vessel" id="">
+                        <input type="text" name="Vessel" list="daily-report-vessels" autocomplete="off" placeholder="Type to filter vessels">
+                        <datalist id="daily-report-vessels">
                             @foreach ($Vessels as $Vessel)
                                 <option value="{{ $Vessel->VesselName }}">{{ $Vessel->VesselName }}</option>
                             @endforeach
-                            <option value=""></option>  
-                        </select>
+                        </datalist>
                     </div>     
                 </section> 
                 @foreach (range(1, 3) as $deployedVesselIndex)
                     <section>
                         <div class="input">
                             <label for="deployed-vessel-{{ $deployedVesselIndex }}">Deployed Vessel {{ $deployedVesselIndex }}</label>
-                            <select name="DeployedVessel{{ $deployedVesselIndex }}" id="deployed-vessel-{{ $deployedVesselIndex }}">
-                                <option value="">Select vessel</option>
+                            <input type="text" name="DeployedVessel{{ $deployedVesselIndex }}" id="deployed-vessel-{{ $deployedVesselIndex }}" list="daily-report-vessels" autocomplete="off" placeholder="Type to filter vessels">
+                            <datalist id="daily-report-vessels-{{ $deployedVesselIndex }}">
                                 @foreach ($Vessels as $Vessel)
                                     <option value="{{ $Vessel->VesselName }}">{{ $Vessel->VesselName }}</option>
                                 @endforeach
-                            </select>
+                            </datalist>
                         </div>
                     </section>
                 @endforeach

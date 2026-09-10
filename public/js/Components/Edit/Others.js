@@ -14,6 +14,10 @@ if (updateOthersButton && updateOthersForm) {
                 const input = updateOthersForm.querySelector(`[name="${name}"]`);
                 if (input) input.value = report[name] || '';
             });
+            ['CCTV', 'Internet'].forEach((name) => {
+                const input = updateOthersForm.querySelector(`[name="${name}"][value="${report[name] || 'No'}"]`);
+                if (input) input.checked = true;
+            });
             updateOthersButton.dataset.id = report.id;
             othersModal.style.display = 'flex';
         });
