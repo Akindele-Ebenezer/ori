@@ -7,7 +7,8 @@ use Illuminate\Support\Facades\DB;
 
 class RadioBroadcastReportController extends Controller
 {
-    private const ALERT_FIELDS = ['WatchKeepingAlert', 'RelatedDistress', 'FirstCallTime', 'SecondCallTime', 'Responders'];
+    private const BOOLEAN_ALERT_FIELDS = ['WatchKeepingAlert', 'RelatedDistress', 'Responders'];
+    private const CALL_TIME_FIELDS = ['FirstCallTime', 'SecondCallTime'];
 
     private function attributes(Request $request): array
     {
@@ -20,8 +21,13 @@ class RadioBroadcastReportController extends Controller
             'TimeIn' => now()->format('H:i'),
         ];
 
-        foreach (self::ALERT_FIELDS as $field) {
+        foreach (self::BOOLEAN_ALERT_FIELDS as $field) {
             $data[$field] = $request->boolean($field) ? 'Yes' : 'No';
+        }
+
+        foreach (self::CALL_TIME_FIELDS as $field) {
+            $value = $request->input($field);
+            $data[$field] = in_array($value, ['Yes', 'No'], true) ? null : ($value ?: null);
         }
 
         return $data;
@@ -38,6 +44,8 @@ class RadioBroadcastReportController extends Controller
             ->filter(fn ($row) => is_array($row) && filled($row['Vessel'] ?? null))
             ->map(function (array $row) use ($request) {
                 $rowRequest = Request::create('/', 'POST', array_merge($row, [
+                    'FirstCallTime' => $request->input('FirstCallTime'),
+                    'SecondCallTime' => $request->input('SecondCallTime'),
                     'DoneBy' => $request->input('DoneBy'),
                     'Remarks' => $request->input('Remarks'),
                     'Date' => $request->input('Date'),

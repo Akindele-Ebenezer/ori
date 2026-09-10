@@ -13,8 +13,6 @@
                                 <th>Vessel</th>
                                 <th>Watch Keeping Alert</th>
                                 <th>Related Distress</th>
-                                <th>1st Call Time</th>
-                                <th>2nd Call Time</th>
                                 <th>Responders</th>
                             </tr>
                         </thead>
@@ -29,9 +27,9 @@
                                             @endforeach
                                         </select>
                                     </td>
-                                    @foreach (['WatchKeepingAlert', 'RelatedDistress', 'FirstCallTime', 'SecondCallTime', 'Responders'] as $field)
-                                        <td><input type="checkbox" name="vessels[{{ $index }}][{{ $field }}]" value="Yes"></td>
-                                    @endforeach
+                                    <td><input type="checkbox" name="vessels[{{ $index }}][WatchKeepingAlert]" value="Yes"></td>
+                                    <td><input type="checkbox" name="vessels[{{ $index }}][RelatedDistress]" value="Yes"></td>
+                                    <td><input type="checkbox" name="vessels[{{ $index }}][Responders]" value="Yes"></td>
                                 </tr>
                             @endfor
                         </tbody>
@@ -41,6 +39,16 @@
             <br>
         </div>
         <div class="inner-2"> 
+            <section>
+                <div class="input">
+                    <label for="">1st Call Time</label>
+                    <input type="time" name="FirstCallTime">
+                </div>
+                <div class="input">
+                    <label for="">2nd Call Time</label>
+                    <input type="time" name="SecondCallTime">
+                </div>
+            </section>
             <section>
                 <div class="input">
                     <label for="">Done By</label>

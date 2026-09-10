@@ -219,7 +219,11 @@
                                 <span class="deck-sub-text">{{ $log->DoneBy }} · {{ $displayDate($log->Date) }}</span>
                             </div>
                             <span style="font-size: 0.8rem; color: var(--text-muted); font-family: 'DM Sans', sans-serif;">{{ $log->Remarks }}</span>
-                            <span class="status-pill status-teal">{{ $log->Responders }}</span>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <span class="status-pill status-teal">1st {{ $log->FirstCallTime ?: '--:--' }}</span>
+                                <span class="status-pill status-blue">2nd {{ $log->SecondCallTime ?: '--:--' }}</span>
+                                <span class="status-pill status-violet">Responders {{ $log->Responders }}</span>
+                            </div>
                         </li>
                     @endforeach
                 </ul>

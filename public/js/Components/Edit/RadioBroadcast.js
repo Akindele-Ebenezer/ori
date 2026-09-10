@@ -13,7 +13,11 @@ if (updateRadioBroadcastButton && updateRadioBroadcastForm) {
             if (!row) return;
             const report = JSON.parse(atob(row.dataset.report));
             ['Vessel', 'DoneBy', 'Remarks', 'Date'].forEach((name) => { field(name).value = report[name] || ''; });
-            radioAlertFields.forEach((name) => { field(name).checked = String(report[name]).toLowerCase() === 'yes'; });
+            ['FirstCallTime', 'SecondCallTime'].forEach((name) => {
+                const value = ['Yes', 'No'].includes(String(report[name])) ? '' : (report[name] || '');
+                field(name).value = value;
+            });
+            radioAlertFields.filter((name) => !['FirstCallTime', 'SecondCallTime'].includes(name)).forEach((name) => { field(name).checked = String(report[name]).toLowerCase() === 'yes'; });
             updateRadioBroadcastButton.dataset.id = report.id;
             radioBroadcastModal.style.display = 'flex';
         });

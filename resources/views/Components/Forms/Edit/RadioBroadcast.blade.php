@@ -21,7 +21,7 @@
                             </select>
                         </div>     
                     </section>
-                    <section> 
+                    <section>
                         <div class="input">
                             <label for="">Watch Keeping Alert</label>
                             <input type="checkbox" name="WatchKeepingAlert">
@@ -29,14 +29,6 @@
                         <div class="input">
                             <label for="">Related Distress</label>
                             <input type="checkbox" name="RelatedDistress">
-                        </div>    
-                        <div class="input">
-                            <label for="">1st Call Time</label>
-                            <input type="checkbox" name="FirstCallTime">
-                        </div>    
-                        <div class="input">
-                            <label for="">2nd Call Time</label>
-                            <input type="checkbox" name="SecondCallTime">
                         </div>    
                         <div class="input">
                             <label for="">Responders</label>
@@ -47,6 +39,16 @@
                 <br>
             </div>
             <div class="inner-2"> 
+                <section>
+                    <div class="input">
+                        <label for="">1st Call Time</label>
+                        <input type="time" name="FirstCallTime">
+                    </div>
+                    <div class="input">
+                        <label for="">2nd Call Time</label>
+                        <input type="time" name="SecondCallTime">
+                    </div>
+                </section>
                 <section>
                     <div class="input">
                         <label for="">Done By</label>
