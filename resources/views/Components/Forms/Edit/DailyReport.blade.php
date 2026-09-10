@@ -20,11 +20,25 @@
                             </select>
                         </div>     
                     </section> 
+                    @foreach (range(1, 3) as $deployedVesselIndex)
+                        <section>
+                            <div class="input">
+                                <label for="edit-deployed-vessel-{{ $deployedVesselIndex }}">Deployed Vessel {{ $deployedVesselIndex }}</label>
+                                <select name="DeployedVessel{{ $deployedVesselIndex }}" id="edit-deployed-vessel-{{ $deployedVesselIndex }}">
+                                    <option value="">Select vessel</option>
+                                    @foreach ($Vessels as $Vessel)
+                                        <option value="{{ $Vessel->VesselName }}">{{ $Vessel->VesselName }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </section>
+                    @endforeach
                     <section> 
                         <div class="input">
                             <label for="">Status</label>
                             <select name="Status" id=""> 
-                                <option value="DEPARTURE_ARRIVAL">DEPARTURE / ARRIVAL</option>  
+                                <option value="DEPARTURE">DEPARTURE</option>
+                                <option value="ARRIVAL">ARRIVAL</option>
                                 <option value="INSPECTION">INSPECTION</option> 
                                 <option value="DRILL">DRILL</option>  
                             </select>

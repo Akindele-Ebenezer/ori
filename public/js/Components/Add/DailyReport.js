@@ -40,7 +40,8 @@ if (AddDailyReportButton && AddDailyReportForm) {
         input.addEventListener('keyup', () => formatTime(input));
     });
 
-    AddDailyReportButton.addEventListener('click', () => {
+    const submitDailyReport = (event) => {
+        if (event) event.preventDefault();
 
     const el = {
         error: AddDailyReportForm.querySelector('.error-daily-report'),
@@ -124,15 +125,12 @@ if (AddDailyReportButton && AddDailyReportForm) {
 
     showProcessing();
 
-    const params = new URLSearchParams(data).toString();
-    AddDailyReportForm.setAttribute('action', `/Add/DailyReport`);
+    AddDailyReportForm.setAttribute('action', '/Add/DailyReport');
 
-    AddDailyReportForm.submit();
-    });
+    HTMLFormElement.prototype.submit.call(AddDailyReportForm);
+    };
 
-    AddDailyReportForm.addEventListener('submit', (event) => {
-        event.preventDefault();
-        AddDailyReportButton.click();
-    });
+    AddDailyReportButton.addEventListener('click', submitDailyReport);
+    AddDailyReportForm.addEventListener('submit', submitDailyReport);
 }
     

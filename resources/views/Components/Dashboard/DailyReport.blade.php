@@ -14,6 +14,7 @@
     $today = date('Y-m-d');
     $statusColors = [
         'DEPARTURE' => 'status-coral',
+        'ARRIVAL' => 'status-blue',
         'INSPECTION' => 'status-amber',
         'DRILL' => 'status-violet',
         'DOCKING' => 'status-blue',
@@ -137,10 +138,16 @@
                                         $status = strtoupper($report->Status ?? 'UNSPECIFIED');
                                         $statusClass = $statusColors[$status] ?? 'status-slate';
                                         $remarks = $report->Remarks ?? $report->Comment ?? '';
+                                        $deployedVessels = collect([
+                                            $report->DeployedVessel1 ?? null,
+                                            $report->DeployedVessel2 ?? null,
+                                            $report->DeployedVessel3 ?? null,
+                                        ])->filter()->implode(', ');
                                     @endphp
-                                    <tr data-report-row data-search-value="{{ strtolower(($report->Vessel ?? '') . ' ' . $status . ' ' . ($report->DoneBy ?? '') . ' ' . $remarks) }}">
+                                    <tr data-report-row data-search-value="{{ strtolower(($report->Vessel ?? '') . ' ' . ($report->DeployedVessel1 ?? '') . ' ' . ($report->DeployedVessel2 ?? '') . ' ' . ($report->DeployedVessel3 ?? '') . ' ' . $status . ' ' . ($report->DoneBy ?? '') . ' ' . $remarks) }}">
                                         <td>
                                             <span class="deck-vessel-title">{{ $report->Vessel ?? 'Unnamed Vessel' }}</span>
+                                            <span class="deck-sub-text">Deployed: {{ $deployedVessels ?: 'None' }}</span>
                                             <span class="deck-sub-text">{{ $report->TillNow === 'YES' ? '⚡ Ongoing Event' : 'Scheduled Entry' }}</span>
                                         </td>
                                         <td>

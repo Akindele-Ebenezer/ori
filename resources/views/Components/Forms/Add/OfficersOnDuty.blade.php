@@ -6,6 +6,17 @@
                 <p class="error-daily-report error"></p>  
                 <h1>Officers On Duty</h1>
                 <section>
+                    <div class="input">
+                        <label for="officers-supervisor">Supervisor</label>
+                        <select name="Supervisor" id="officers-supervisor">
+                            <option value="">Select supervisor</option>
+                            @foreach ($Employees as $Employee)
+                                <option value="{{ $Employee->FullName }}">{{ $Employee->FullName }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </section>
+                <section>
                     <div class="input OfficersOnDuty">
                         <label for="">Name</label> 
                         <label for="">Morning</label> 

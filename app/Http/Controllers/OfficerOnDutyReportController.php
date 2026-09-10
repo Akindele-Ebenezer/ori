@@ -9,7 +9,7 @@ class OfficerOnDutyReportController extends Controller
 {
     private function attributes(Request $request): array
     {
-        $data = ['Remarks' => $request->input('Remarks'), 'Date' => $request->input('Date'), 'DateIn' => now()->toDateString(), 'TimeIn' => now()->format('H:i')];
+        $data = ['Supervisor' => $request->input('Supervisor'), 'Remarks' => $request->input('Remarks'), 'Date' => $request->input('Date'), 'DateIn' => now()->toDateString(), 'TimeIn' => now()->format('H:i')];
         for ($index = 1; $index <= 7; $index++) {
             $suffix = $index === 1 ? '' : $index;
             foreach (['Name', 'Morning', 'Afternoon', 'Night'] as $field) {
@@ -43,7 +43,7 @@ class OfficerOnDutyReportController extends Controller
 
     private function validationRules(): array
     {
-        $rules = ['Date' => ['required', 'date']];
+        $rules = ['Supervisor' => ['nullable', 'string', 'max:255'], 'Date' => ['required', 'date']];
         foreach (range(1, 7) as $index) {
             $suffix = $index === 1 ? '' : $index;
             $rules['Signature' . $suffix] = ['nullable', 'image', 'max:5120'];

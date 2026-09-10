@@ -2123,6 +2123,7 @@
                     <tr>
                         <th class="Hide">ID</th>
                         <th>Vessel</th>
+                        <th>Deployed Vessels</th>
                         <th>Status</th>
                         <th>Done by</th>
                         <th>Start date</th>
@@ -2135,6 +2136,7 @@
                     <tr data-report="{{ base64_encode(json_encode($DailyReport)) }}">
                         <td class="Hide">{{ $DailyReport->id }}</td>
                         <td>{{ $DailyReport->Vessel }}</td>
+                        <td>{{ collect([$DailyReport->DeployedVessel1, $DailyReport->DeployedVessel2, $DailyReport->DeployedVessel3])->filter()->implode(', ') }}</td>
                         <td>{{ $DailyReport->Status }}</td>
                         <td>{{ $DailyReport->DoneBy }}</td>
                         <td>{{ $DailyReport->StartDate }}</td>
@@ -2147,7 +2149,7 @@
                         </td>
                     </tr>
                     @empty
-                    <tr><td class="action" colspan="9">System doesn't have any records yet.</td></tr>
+                    <tr><td class="action" colspan="10">System doesn't have any records yet.</td></tr>
                     @endforelse
                 </table>
             </div> 
@@ -2215,6 +2217,7 @@
                     <tr>
                         <th class="Hide">ID</th>
                         <th>Date</th>
+                        <th>Supervisor</th>
                         <th>Done by</th>  
                         <th>Remarks</th> 
                         <th>#</th>
@@ -2223,6 +2226,7 @@
                     <tr data-report="{{ base64_encode(json_encode($OfficersOnDuty)) }}">
                         <td class="Hide">{{ $OfficersOnDuty->id }}</td>
                         <td>{{ $OfficersOnDuty->Date }}</td>
+                        <td>{{ $OfficersOnDuty->Supervisor }}</td>
                         <td>{{ $OfficersOnDuty->Name }}</td>
                         <td>{{ $OfficersOnDuty->Remarks }}</td>
                         <td class="action">  
@@ -2231,7 +2235,7 @@
                         </td>
                     </tr>
                     @empty
-                    <tr><td class="action" colspan="5">System doesn't have any records yet.</td></tr>
+                    <tr><td class="action" colspan="6">System doesn't have any records yet.</td></tr>
                     @endforelse
                 </table>
             </div> 

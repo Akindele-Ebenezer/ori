@@ -20,7 +20,8 @@ if (updateDailyReportButton && updateDailyReportForm) {
             const row = button.closest('tr');
             if (!row) return;
             const report = JSON.parse(atob(row.dataset.report));
-            Object.entries({ Vessel: report.Vessel || '', Status: report.Status || '', DoneBy: report.DoneBy || '', Remarks: report.Remarks || '', StartTime: report.StartTime || '', EndTime: report.EndTime || '', StartDate: report.StartDate || '', EndDate: report.EndDate || '' }).forEach(([name, value]) => {
+            const status = report.Status === 'DEPARTURE_ARRIVAL' ? 'DEPARTURE' : (report.Status || '');
+            Object.entries({ Vessel: report.Vessel || '', DeployedVessel1: report.DeployedVessel1 || '', DeployedVessel2: report.DeployedVessel2 || '', DeployedVessel3: report.DeployedVessel3 || '', Status: status, DoneBy: report.DoneBy || '', Remarks: report.Remarks || '', StartTime: report.StartTime || '', EndTime: report.EndTime || '', StartDate: report.StartDate || '', EndDate: report.EndDate || '' }).forEach(([name, value]) => {
                 const input = field(name);
                 if (input) input.value = value;
             });
