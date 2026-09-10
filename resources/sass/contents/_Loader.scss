@@ -185,8 +185,8 @@
     }
 
     /* --- SHARED STYLES --- */
-    .logo-text { font-weight: 900; font-size: 75px; fill: white; }
-    .subtitle-text { font-weight: bold; font-size: 14px; fill: var(--marine-glow); letter-spacing: 4px; }
+    .logo-text { font-family: system-ui, -apple-system, sans-serif; font-weight: 900; font-size: 75px; fill: white; }
+    .subtitle-text { font-family: system-ui, -apple-system, sans-serif; font-weight: bold; font-size: 14px; fill: var(--marine-glow); letter-spacing: 4px; }
 
     /* --- 1. RADAR SWEEP --- */
     .radar-pulse { transform-origin: 60px 60px; animation: pulse 2s infinite; }

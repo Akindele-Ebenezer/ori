@@ -756,11 +756,13 @@ body {
   /* --- SHARED STYLES --- */
 }
 .loader-x .logo-text {
+  font-family: system-ui, -apple-system, sans-serif;
   font-weight: 900;
   font-size: 75px;
   fill: white;
 }
 .loader-x .subtitle-text {
+  font-family: system-ui, -apple-system, sans-serif;
   font-weight: bold;
   font-size: 14px;
   fill: var(--marine-glow);
