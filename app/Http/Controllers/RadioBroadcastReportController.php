@@ -49,18 +49,27 @@ class RadioBroadcastReportController extends Controller
 
         if ($attributes) {
             DB::table('radio_broadcast_reports')->insert($attributes);
+            foreach ($attributes as $report) {
+                $this->notifyReport($report['Vessel'], 'Create', 'Radio Broadcast Report Created!', $report['DoneBy'] . ' created a radio broadcast report for ' . $report['Vessel'] . ' dated ' . $report['Date'] . '.');
+            }
         }
         return back();
     }
 
     public function edit_radio_broadcast_report(Request $request, string $Id)
     {
-        DB::table('radio_broadcast_reports')->where('id', $Id)->update($this->attributes($request));
+        $attributes = $this->attributes($request);
+        DB::table('radio_broadcast_reports')->where('id', $Id)->update($attributes);
+        $this->notifyReport($attributes['Vessel'], 'Update', 'Radio Broadcast Report Updated!', $attributes['DoneBy'] . ' updated the radio broadcast report for ' . $attributes['Vessel'] . ' dated ' . $attributes['Date'] . '.');
         return back();
     }
 
     public function delete_radio_broadcast_report(string $Id)
     {
+        $report = DB::table('radio_broadcast_reports')->where('id', $Id)->first();
+        if ($report) {
+            $this->notifyReport($report->Vessel, 'Delete', 'Radio Broadcast Report Removed!', ($report->DoneBy ?: 'A user') . ' deleted the radio broadcast report for ' . $report->Vessel . '.');
+        }
         DB::table('radio_broadcast_reports')->where('id', $Id)->delete();
         return back();
     }

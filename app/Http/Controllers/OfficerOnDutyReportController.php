@@ -29,15 +29,17 @@ class OfficerOnDutyReportController extends Controller
 
     public function add_officer_on_duty_report(Request $request, ?string $Id = null)
     {
-        $request->validate($this->validationRules());
-        DB::table('officer_on_duty_reports')->insert($this->attributes($request));
+        $attributes = $this->attributes($request);
+        DB::table('officer_on_duty_reports')->insert($attributes);
+        $this->notifyReport($attributes['Supervisor'] ?: 'All vessels', 'Create', 'Officers On Duty Report Created!', 'A watchkeeping report was created by ' . ($attributes['Supervisor'] ?: $request->input('DoneBy', 'a user')) . ' for ' . $attributes['Date'] . '.');
         return back();
     }
 
     public function edit_officer_on_duty_report(Request $request, string $Id)
     {
-        $request->validate($this->validationRules());
-        DB::table('officer_on_duty_reports')->where('id', $Id)->update($this->attributes($request));
+        $attributes = $this->attributes($request);
+        DB::table('officer_on_duty_reports')->where('id', $Id)->update($attributes);
+        $this->notifyReport($attributes['Supervisor'] ?: 'All vessels', 'Update', 'Officers On Duty Report Updated!', 'A watchkeeping report was updated by ' . ($attributes['Supervisor'] ?: $request->input('DoneBy', 'a user')) . ' for ' . $attributes['Date'] . '.');
         return back();
     }
 
@@ -53,6 +55,10 @@ class OfficerOnDutyReportController extends Controller
 
     public function delete_officer_on_duty_report(string $Id)
     {
+        $report = DB::table('officer_on_duty_reports')->where('id', $Id)->first();
+        if ($report) {
+            $this->notifyReport($report->Supervisor ?: 'All vessels', 'Delete', 'Officers On Duty Report Removed!', 'A watchkeeping report for ' . $report->Date . ' was deleted.');
+        }
         DB::table('officer_on_duty_reports')->where('id', $Id)->delete();
         return back();
     }

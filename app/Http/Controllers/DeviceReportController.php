@@ -20,18 +20,26 @@ class DeviceReportController extends Controller
 
     public function add_device_report(Request $request, ?string $Id = null)
     {
-        DB::table('device_reports')->insert($this->attributes($request));
+        $attributes = $this->attributes($request);
+        DB::table('device_reports')->insert($attributes);
+        $this->notifyReport('MOC Office', 'Create', 'Devices Report Created!', $attributes['DoneBy'] . ' created a devices report for ' . $attributes['Date'] . '.');
         return back();
     }
 
     public function edit_device_report(Request $request, string $Id)
     {
-        DB::table('device_reports')->where('id', $Id)->update($this->attributes($request));
+        $attributes = $this->attributes($request);
+        DB::table('device_reports')->where('id', $Id)->update($attributes);
+        $this->notifyReport('MOC Office', 'Update', 'Devices Report Updated!', $attributes['DoneBy'] . ' updated a devices report for ' . $attributes['Date'] . '.');
         return back();
     }
 
     public function delete_device_report(string $Id)
     {
+        $report = DB::table('device_reports')->where('id', $Id)->first();
+        if ($report) {
+            $this->notifyReport('MOC Office', 'Delete', 'Devices Report Removed!', ($report->DoneBy ?: 'A user') . ' deleted the devices report dated ' . $report->Date . '.');
+        }
         DB::table('device_reports')->where('id', $Id)->delete();
         return back();
     }

@@ -34,18 +34,27 @@ class OtherReportController extends Controller
 
         if ($attributes) {
             DB::table('other_reports')->insert($attributes);
+            foreach ($attributes as $report) {
+                $this->notifyReport($report['Vessel'], 'Create', 'Others Report Created!', $report['DoneBy'] . ' created an Others report for ' . $report['Vessel'] . ' dated ' . $report['Date'] . '.');
+            }
         }
         return back();
     }
 
     public function edit_other_report(Request $request, string $Id)
     {
-        DB::table('other_reports')->where('id', $Id)->update($this->attributes($request));
+        $attributes = $this->attributes($request);
+        DB::table('other_reports')->where('id', $Id)->update($attributes);
+        $this->notifyReport($attributes['Vessel'], 'Update', 'Others Report Updated!', $attributes['DoneBy'] . ' updated the Others report for ' . $attributes['Vessel'] . ' dated ' . $attributes['Date'] . '.');
         return back();
     }
 
     public function delete_other_report(string $Id)
     {
+        $report = DB::table('other_reports')->where('id', $Id)->first();
+        if ($report) {
+            $this->notifyReport($report->Vessel, 'Delete', 'Others Report Removed!', ($report->DoneBy ?: 'A user') . ' deleted the Others report for ' . $report->Vessel . '.');
+        }
         DB::table('other_reports')->where('id', $Id)->delete();
         return back();
     }
