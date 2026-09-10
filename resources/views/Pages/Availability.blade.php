@@ -3,7 +3,11 @@
 
 @section('Content')
 @include('Components.Dashboard.VesselSpotlight')
+@include('Components.Dashboard.DailyReport')
 @include('Partials.Components1')
+<button class="DisplayDailyReportButton">
+    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M480-80q-106 0-173-33.5T240-200q0-24 14.5-44.5T295-280l63 59q-9 4-19.5 9T322-200q13 16 60 28t98 12q51 0 98.5-12t60.5-28q-7-8-18-13t-21-9l62-60q28 16 43 36.5t15 45.5q0 53-67 86.5T480-80Zm1-220q99-73 149-146.5T680-594q0-102-65-154t-135-52q-70 0-135 52t-65 154q0 67 49 139.5T481-300Zm-1 100Q339-304 269.5-402T200-594q0-71 25.5-124.5T291-808q40-36 90-54t99-18q49 0 99 18t9₀-54q40 36 65.5 89.5T760-594q0 94-69.5 192T480-200Zm0-320q33 0 56.5-23.5T560-600q0-33-23.5-56.5T480-680q-33 0-56.5 23.5T400-600q0 33 23.5 56.5T480-520Zm0-80Z"/></svg>
+</button>
 <button class="DisplayMapButton" title="Display Map">
     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M480-80q-106 0-173-33.5T240-200q0-24 14.5-44.5T295-280l63 59q-9 4-19.5 9T322-200q13 16 60 28t98 12q51 0 98.5-12t60.5-28q-7-8-18-13t-21-9l62-60q28 16 43 36.5t15 45.5q0 53-67 86.5T480-80Zm1-220q99-73 149-146.5T680-594q0-102-65-154t-135-52q-70 0-135 52t-65 154q0 67 49 139.5T481-300Zm-1 100Q339-304 269.5-402T200-594q0-71 25.5-124.5T291-808q40-36 90-54t99-18q49 0 99 18t90 54q40 36 65.5 89.5T760-594q0 94-69.5 192T480-200Zm0-320q33 0 56.5-23.5T560-600q0-33-23.5-56.5T480-680q-33 0-56.5 23.5T400-600q0 33 23.5 56.5T480-520Zm0-80Z"/></svg>
 </button>
@@ -2110,6 +2114,156 @@
                     @endforeach
                 </table>
                 {{ $VesselAvailability->appends(request()->query())->links() }}
+            </div> 
+        </div> 
+        <div class="board-3i">
+            <div class="div">
+                <h1>Daily Report</h1>
+                <table>
+                    <tr>
+                        <th class="Hide">ID</th>
+                        <th>Vessel</th>
+                        <th>Status</th>
+                        <th>Done by</th>
+                        <th>Start date</th>
+                        <th>Start time</th>
+                        <th>End date</th>
+                        <th>End time</th> 
+                        <th>#</th>
+                    </tr>
+                    @forelse ($DailyReports as $DailyReport)
+                    <tr data-report="{{ base64_encode(json_encode($DailyReport)) }}">
+                        <td class="Hide">{{ $DailyReport->id }}</td>
+                        <td>{{ $DailyReport->Vessel }}</td>
+                        <td>{{ $DailyReport->Status }}</td>
+                        <td>{{ $DailyReport->DoneBy }}</td>
+                        <td>{{ $DailyReport->StartDate }}</td>
+                        <td>{{ $DailyReport->StartTime }}</td>
+                        <td>{{ $DailyReport->EndDate }}</td>
+                        <td>{{ $DailyReport->EndTime }}</td>
+                        <td class="action">  
+                            <img class="EditDailyReportButton" src="{{ asset('images/write.png') }}" alt="Edit">
+                            <img class="DeleteDailyReportButton" src="{{ asset('images/delete.png') }}" alt="Delete">
+                        </td>
+                    </tr>
+                    @empty
+                    <tr><td class="action" colspan="9">System doesn't have any records yet.</td></tr>
+                    @endforelse
+                </table>
+            </div> 
+        </div> 
+        <div class="board-3i">
+            <div class="div">
+                <h1>Radio Broadcast</h1>
+                <table>
+                    <tr>
+                        <th class="Hide">ID</th>
+                        <th>Date</th> 
+                        <th>Remarks</th>
+                        <th>Done by</th>
+                        <th>#</th>
+                    </tr>
+                    @forelse ($RadioBroadcastReports as $RadioBroadcast)
+                    <tr data-report="{{ base64_encode(json_encode($RadioBroadcast)) }}">
+                        <td class="Hide">{{ $RadioBroadcast->id }}</td>
+                        <td>{{ $RadioBroadcast->Date }}</td>
+                        <td>{{ $RadioBroadcast->Remarks }}</td>
+                        <td>{{ $RadioBroadcast->DoneBy }}</td>
+                        <td class="action">  
+                            <img class="EditRadioBroadcastButton" src="{{ asset('images/write.png') }}" alt="Edit">
+                            <img class="DeleteRadioBroadcastButton" src="{{ asset('images/delete.png') }}" alt="Delete">
+                        </td>
+                    </tr>
+                    @empty
+                    <tr><td class="action" colspan="5">System doesn't have any records yet.</td></tr>
+                    @endforelse
+                </table>
+            </div> 
+        </div> 
+        <div class="board-3i">
+            <div class="div">
+                <h1>Devices</h1>
+                <table>
+                    <tr> 
+                        <th class="Hide">ID</th>
+                        <th>Date</th>
+                        <th>Done by</th>  
+                        <th>Remarks</th> 
+                        <th>#</th>
+                    </tr>
+                    @forelse ($DeviceReports as $Devices)
+                    <tr data-report="{{ base64_encode(json_encode($Devices)) }}">
+                        <td class="Hide">{{ $Devices->id }}</td>
+                        <td>{{ $Devices->Date }}</td>
+                        <td>{{ $Devices->DoneBy }}</td>
+                        <td>{{ $Devices->Remarks }}</td>
+                        <td class="action">  
+                            <img class="EditDevicesButton" src="{{ asset('images/write.png') }}" alt="Edit">
+                            <img class="DeleteDevicesButton" src="{{ asset('images/delete.png') }}" alt="Delete">
+                        </td>
+                    </tr>
+                    @empty
+                    <tr><td class="action" colspan="5">System doesn't have any records yet.</td></tr>
+                    @endforelse
+                </table>
+            </div> 
+        </div> 
+        <div class="board-3i">
+            <div class="div">
+                <h1>Officers On Duty</h1>
+                <table>
+                    <tr>
+                        <th class="Hide">ID</th>
+                        <th>Date</th>
+                        <th>Done by</th>  
+                        <th>Remarks</th> 
+                        <th>#</th>
+                    </tr>
+                    @forelse ($OfficerOnDutyReports as $OfficersOnDuty)
+                    <tr data-report="{{ base64_encode(json_encode($OfficersOnDuty)) }}">
+                        <td class="Hide">{{ $OfficersOnDuty->id }}</td>
+                        <td>{{ $OfficersOnDuty->Date }}</td>
+                        <td>{{ $OfficersOnDuty->Name }}</td>
+                        <td>{{ $OfficersOnDuty->Remarks }}</td>
+                        <td class="action">  
+                            <img class="EditOfficersOnDutyButton" src="{{ asset('images/write.png') }}" alt="Edit">
+                            <img class="DeleteOfficersOnDutyButton" src="{{ asset('images/delete.png') }}" alt="Delete">
+                        </td>
+                    </tr>
+                    @empty
+                    <tr><td class="action" colspan="5">System doesn't have any records yet.</td></tr>
+                    @endforelse
+                </table>
+            </div> 
+        </div> 
+        <div class="board-3i">
+            <div class="div">
+                <h1>Others</h1>
+                <table>
+                    <tr>
+                        <th class="Hide">ID</th>
+                        <th>Vessel</th>
+                        <th>ROB</th>
+                        <th>FRESH WATER</th>  
+                        <th>Date</th> 
+                        <th>#</th>
+                    </tr>
+                    @forelse ($OtherReports as $Others)
+                    <tr data-report="{{ base64_encode(json_encode($Others)) }}">
+                        <td class="Hide">{{ $Others->id }}</td>
+                        <td>{{ $Others->Vessel }}</td>
+                        <td>{{ $Others->ROB }}</td>
+                        <td>{{ $Others->FreshWater }}</td>
+                        <td>{{ $Others->Date }}</td>
+                        <td class="action">  
+                            <img class="EditOthersButton" src="{{ asset('images/write.png') }}" alt="Edit">
+                            <img class="DeleteOthersButton" src="{{ asset('images/delete.png') }}" alt="Delete">
+                        </td>
+                    </tr>
+                    @empty
+                    <tr><td class="action" colspan="6">System doesn't have any records yet.</td></tr>
+                    @endforelse
+                </table>
             </div> 
         </div>
         @php

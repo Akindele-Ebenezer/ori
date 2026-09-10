@@ -17,6 +17,11 @@ use App\Http\Controllers\SmallBoatsPdf;
 use App\Http\Controllers\Checklist1Controller;
 use App\Http\Controllers\GeneratorAvailabilityController;
 use App\Http\Controllers\GeneratorController;
+use App\Http\Controllers\DailyReportController;
+use App\Http\Controllers\RadioBroadcastReportController;
+use App\Http\Controllers\DeviceReportController;
+use App\Http\Controllers\OfficerOnDutyReportController;
+use App\Http\Controllers\OtherReportController;
 
 Route::get('/', [LoginController::class, 'login']);
 Route::post('/Auth', [LoginController::class, 'auth'])->name('Auth');
@@ -74,6 +79,43 @@ Route::get('/DeckRating', [EmployeeController::class, 'deck_rating'])->name('Dec
 Route::get('/Engineers', [EmployeeController::class, 'engineers'])->name('Engineers');
 Route::get('/Captains', [EmployeeController::class, 'captains'])->name('Captains');
 
+Route::get('/Availability/Report', [VesselAvailabilityPdf::class, 'vessel_availability_report'])->name('vessel_availability_report');
+
+Route::post('/Add/Checklist1', [Checklist1Controller::class, 'create'])->name('AddChecklist1');
+Route::post('/Edit/Checklist1/{Id}', [Checklist1Controller::class, 'update'])->name('EditChecklist1');
+Route::get('/Delete/Checklist1/{Id}', [Checklist1Controller::class, 'destroy'])->name('DeleteChecklist1');
+
+Route::get('/Availability/Report/Checklists/SpeedBoats', [SpeedBoatsPdf::class, 'speed_boat_report'])->name('speed_boat_report');
+Route::get('/Availability/Report/Checklists/SmallBoats', [SmallBoatsPdf::class, 'small_boat_report'])->name('small_boat_report');
+
+Route::get('/Portfolio', [VesselController::class, 'portfolio'])->name('Portfolio');  
+
+Route::post('/Add/DailyReport', [DailyReportController::class, 'add_daily_report'])->name('AddDailyReport');
+Route::post('/Edit/DailyReport/{Id}', [DailyReportController::class, 'edit_daily_report'])->name('EditDailyReport');
+Route::get('/Delete/DailyReport/{Id}', [DailyReportController::class, 'delete_daily_report'])->name('DeleteDailyReport');
+
+Route::post('/Add/RadioBroadcastReport', [RadioBroadcastReportController::class, 'add_radio_broadcast_report'])->name('AddRadioBroadcastReport');
+Route::post('/Edit/RadioBroadcastReport/{Id}', [RadioBroadcastReportController::class, 'edit_radio_broadcast_report'])->name('EditRadioBroadcastReport');
+Route::get('/Delete/RadioBroadcastReport/{Id}', [RadioBroadcastReportController::class, 'delete_radio_broadcast_report'])->name('DeleteRadioBroadcastReport');
+
+Route::post('/Add/DevicesReport', [DeviceReportController::class, 'add_device_report'])->name('AddDeviceReport');
+Route::post('/Edit/DevicesReport/{Id}', [DeviceReportController::class, 'edit_device_report'])->name('EditDeviceReport');
+Route::get('/Delete/DevicesReport/{Id}', [DeviceReportController::class, 'delete_device_report'])->name('DeleteDeviceReport');
+
+Route::post('/Add/OfficersOnDutyReport', [OfficerOnDutyReportController::class, 'add_officer_on_duty_report'])->name('AddOfficerOnDutyReport');
+Route::post('/Edit/OfficersOnDutyReport/{Id}', [OfficerOnDutyReportController::class, 'edit_officer_on_duty_report'])->name('EditOfficerOnDutyReport');
+Route::get('/Delete/OfficersOnDutyReport/{Id}', [OfficerOnDutyReportController::class, 'delete_officer_on_duty_report'])->name('DeleteOfficerOnDutyReport');
+
+Route::post('/Add/OthersReport', [OtherReportController::class, 'add_other_report'])->name('AddOtherReport');
+Route::post('/Edit/OthersReport/{Id}', [OtherReportController::class, 'edit_other_report'])->name('EditOtherReport');
+Route::get('/Delete/OthersReport/{Id}', [OtherReportController::class, 'delete_other_report'])->name('DeleteOtherReport');
+  
+
+
+
+
+
+
 // PDF 
 Route::get('/Testimonials/Template/1', [SeaServiceTestimonialPdf::class, 'template_1'])->name('template_1');
 Route::get('/Testimonials/Template/2', [SeaServiceTestimonialPdf::class, 'template_2'])->name('template_2');
@@ -85,14 +127,4 @@ Route::get('/Testimonials/Template/2_', [SeaServiceTestimonialPdf::class, 'templ
 Route::get('/Testimonials/Template/3_', [SeaServiceTestimonialPdf::class, 'template_3_'])->name('template_3_');
 Route::get('/Testimonials/Template/4_', [SeaServiceTestimonialPdf::class, 'template_4_'])->name('template_4_');
 Route::get('/Testimonials/Template/5_', [SeaServiceTestimonialPdf::class, 'template_5_'])->name('template_5_');
-
-Route::get('/Availability/Report', [VesselAvailabilityPdf::class, 'vessel_availability_report'])->name('vessel_availability_report');
-
-Route::post('/Add/Checklist1', [Checklist1Controller::class, 'create'])->name('AddChecklist1');
-Route::post('/Edit/Checklist1/{Id}', [Checklist1Controller::class, 'update'])->name('EditChecklist1');
-Route::get('/Delete/Checklist1/{Id}', [Checklist1Controller::class, 'destroy'])->name('DeleteChecklist1');
-
-Route::get('/Availability/Report/Checklists/SpeedBoats', [SpeedBoatsPdf::class, 'speed_boat_report'])->name('speed_boat_report');
-Route::get('/Availability/Report/Checklists/SmallBoats', [SmallBoatsPdf::class, 'small_boat_report'])->name('speed_boat_report');
-
-Route::get('/Portfolio', [VesselController::class, 'portfolio'])->name('Portfolio');    
+  

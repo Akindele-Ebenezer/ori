@@ -3,7 +3,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;600;900&display=swap");
 * {
   box-sizing: border-box;
-  font-family: "system-ui", sans-serif;
+  font-family: poppins, "DM Sans", system-ui, -apple-system, sans-serif;
   font-size: small;
   list-style-type: none;
   margin: 0;
@@ -17,6 +17,10 @@
 
 ::-webkit-scrollbar-thumb {
   background-color: rgb(17.6100628931%, 49.2045874954%, 64.7428782834%);
+}
+
+body {
+  overflow: hidden;
 }
 
 .Hide {
@@ -1043,7 +1047,116 @@
   padding: 1em;
   position: absolute;
   width: 100vw;
-  z-index: 200;
+  z-index: 2200;
+}
+.form-1 .FormWrapper {
+  padding-top: 3.5em;
+  height: 40em;
+  width: 60em;
+}
+.form-1 .FormWrapper input[type=file] {
+  background-color: rgb(78.264890862%, 88.8716241213%, 94.0880503145%);
+  border: none;
+  border-radius: 0.3em;
+  color: #225f7d;
+  cursor: pointer;
+}
+.form-1 .FormWrapper .AddDevicesForm .input, .form-1 .FormWrapper .AddOfficersOnDutyForm .input {
+  border-bottom: 1px solid rgb(78.264890862%, 88.8716241213%, 94.0880503145%);
+}
+.form-1 .FormWrapper .Devices label {
+  width: 5em !important;
+  translate: 3.5em;
+}
+.form-1 .FormWrapper .Devices label:nth-of-type(2) {
+  color: #2acf09;
+  width: 5em !important;
+}
+.form-1 .FormWrapper .Devices label:nth-of-type(3) {
+  color: red;
+}
+.form-1 .FormWrapper label {
+  text-align: center;
+  padding-right: unset !important;
+  width: 15em !important;
+}
+.form-1 .FormWrapper label:nth-of-type(2) {
+  color: #2acf09;
+  width: 7em !important;
+}
+.form-1 .FormWrapper label:nth-of-type(3) {
+  color: red;
+}
+.form-1 .FormWrapper .Devices.D2 label:nth-of-type(2) {
+  width: 10em !important;
+  translate: 7em;
+}
+.form-1 .FormWrapper .Devices.D2 label:nth-of-type(3) {
+  translate: 7em;
+}
+.form-1 .FormWrapper .OfficersOnDuty label {
+  width: 8em !important;
+}
+.form-1 .FormWrapper .OfficersOnDuty label:nth-of-type(2), .form-1 .FormWrapper .OfficersOnDuty label:nth-of-type(3), .form-1 .FormWrapper .OfficersOnDuty label:nth-of-type(4) {
+  text-align: center;
+}
+.form-1.UpdateDevices .input, .form-1.UpdateOfficersOnDuty .input {
+  border-bottom: 1px solid rgb(78.264890862%, 88.8716241213%, 94.0880503145%);
+}
+.form-1.UpdateDevices .input label, .form-1.UpdateOfficersOnDuty .input label {
+  width: 12em;
+}
+.form-1.UpdateDevices .Devices label:nth-of-type(2), .form-1.UpdateDevices .OfficersOnDuty label:nth-of-type(2), .form-1.UpdateOfficersOnDuty .Devices label:nth-of-type(2), .form-1.UpdateOfficersOnDuty .OfficersOnDuty label:nth-of-type(2) {
+  color: #2acf09;
+  width: 7em !important;
+}
+.form-1.UpdateDevices .Devices label:nth-of-type(3), .form-1.UpdateDevices .OfficersOnDuty label:nth-of-type(3), .form-1.UpdateOfficersOnDuty .Devices label:nth-of-type(3), .form-1.UpdateOfficersOnDuty .OfficersOnDuty label:nth-of-type(3) {
+  color: red;
+  translate: 3.5em;
+}
+.form-1.UpdateDevices .OfficersOnDuty label:nth-of-type(2), .form-1.UpdateOfficersOnDuty .OfficersOnDuty label:nth-of-type(2) {
+  translate: 3.5em;
+}
+.form-1.UpdateDevices .OfficersOnDuty label:nth-of-type(3), .form-1.UpdateOfficersOnDuty .OfficersOnDuty label:nth-of-type(3) {
+  translate: 6.5em;
+}
+.form-1.UpdateDevices .OfficersOnDuty label:nth-of-type(4), .form-1.UpdateOfficersOnDuty .OfficersOnDuty label:nth-of-type(4) {
+  translate: 6em;
+}
+.form-1.AddAvailability .inner {
+  display: flex;
+}
+.form-1.AddAvailability .inner .FormCloseButton {
+  position: absolute;
+  top: 1em;
+  right: 2em;
+}
+.form-1.AddAvailability .inner .nav {
+  padding-top: 3.5em;
+}
+.form-1.AddAvailability .inner .nav ul li {
+  border-radius: 0.3em;
+  color: #225f7d;
+  cursor: pointer;
+  margin-right: 0.5em;
+  padding: 1em;
+  display: flex;
+}
+.form-1.AddAvailability .inner .nav ul li svg {
+  width: 2em;
+  margin-right: 1em;
+  fill: #225f7d;
+}
+.form-1.AddAvailability .inner .nav ul li.active {
+  background-color: #225f7d;
+  color: #fff;
+}
+.form-1.AddAvailability .inner .nav ul li.active svg {
+  fill: #fff;
+}
+.form-1.AddAvailability .inner .nav ul li:hover {
+  background-color: rgb(23.2334443211%, 60.6955234924%, 79.1194968553%);
+  color: #fff;
 }
 .form-1.AddVessel, .form-1.FilterChart4ForVesselData {
   z-index: 300;
@@ -2798,7 +2911,7 @@ main .left-navigation ul li .total {
     font-size: 0.75em;
   }
 }
-.DisplayChart5Button, .DisplayAddChecklist1Button, .DisplayMap1Button, .DisplayGeneratorAvailabilityFormButton, .AddGeneratorButton, .DisplayVesselsOnSiteButton, .DisplayTanksButton, .DisplayMapButton {
+.DisplayChart5Button, .DisplayAddChecklist1Button, .DisplayMap1Button, .DisplayGeneratorAvailabilityFormButton, .AddGeneratorButton, .DisplayVesselsOnSiteButton, .DisplayTanksButton, .DisplayMapButton, .DisplayDailyReportButton {
   cursor: pointer;
   position: absolute;
   top: unset;
@@ -2810,7 +2923,7 @@ main .left-navigation ul li .total {
   border-radius: 0.3em;
   padding: 0.3em;
 }
-.DisplayChart5Button svg, .DisplayAddChecklist1Button svg, .DisplayMap1Button svg, .DisplayGeneratorAvailabilityFormButton svg, .AddGeneratorButton svg, .DisplayVesselsOnSiteButton svg, .DisplayTanksButton svg, .DisplayMapButton svg {
+.DisplayChart5Button svg, .DisplayAddChecklist1Button svg, .DisplayMap1Button svg, .DisplayGeneratorAvailabilityFormButton svg, .AddGeneratorButton svg, .DisplayVesselsOnSiteButton svg, .DisplayTanksButton svg, .DisplayMapButton svg, .DisplayDailyReportButton svg {
   fill: #fff;
 }
 
@@ -2822,7 +2935,7 @@ main .left-navigation ul li .total {
   right: 7em;
 }
 
-.DisplayGeneratorAvailabilityFormButton, .AddGeneratorButton, .DisplayVesselsOnSiteButton, .DisplayTanksButton, .DisplayMapButton {
+.DisplayGeneratorAvailabilityFormButton, .AddGeneratorButton, .DisplayVesselsOnSiteButton, .DisplayTanksButton, .DisplayMapButton, .DisplayDailyReportButton {
   right: 10em;
 }
 
@@ -2840,6 +2953,10 @@ main .left-navigation ul li .total {
 
 .DisplayVesselsOnSiteButton {
   right: 19em;
+}
+
+.DisplayDailyReportButton {
+  right: 22em;
 }
 
 .report-summary.-x {
@@ -3025,14 +3142,14 @@ main .left-navigation ul li .total {
   padding-inline: 0.75em;
   color: #fff;
 }
-.dashboard-inner .board-1, .dashboard-inner .board-2, .dashboard-inner .board-3 {
+.dashboard-inner .board-1, .dashboard-inner .board-2, .dashboard-inner .board-3, .dashboard-inner .board-3i {
   background-color: rgb(13.9748427673%, 39.047354791%, 51.3780984092%);
   color: #fff;
   display: flex;
   justify-content: space-between;
   margin: 1em;
 }
-.dashboard-inner .board-1 .div, .dashboard-inner .board-2 .div, .dashboard-inner .board-3 .div {
+.dashboard-inner .board-1 .div, .dashboard-inner .board-2 .div, .dashboard-inner .board-3 .div, .dashboard-inner .board-3i .div {
   scrollbar-width: none; /* Hide scrollbar for Firefox */
   background-color: rgb(12.0503144654%, 33.6699963004%, 44.3026267111%);
   height: 20em;
@@ -3041,21 +3158,21 @@ main .left-navigation ul li .total {
   position: relative;
   width: 32%;
 }
-.dashboard-inner .board-1 .div.indicators, .dashboard-inner .board-2 .div.indicators, .dashboard-inner .board-3 .div.indicators {
+.dashboard-inner .board-1 .div.indicators, .dashboard-inner .board-2 .div.indicators, .dashboard-inner .board-3 .div.indicators, .dashboard-inner .board-3i .div.indicators {
   overflow-y: scroll;
   width: 32%;
 }
-.dashboard-inner .board-1 .div br, .dashboard-inner .board-2 .div br, .dashboard-inner .board-3 .div br {
+.dashboard-inner .board-1 .div br, .dashboard-inner .board-2 .div br, .dashboard-inner .board-3 .div br, .dashboard-inner .board-3i .div br {
   clear: both;
 }
-.dashboard-inner .board-1 .div h1, .dashboard-inner .board-2 .div h1, .dashboard-inner .board-3 .div h1 {
+.dashboard-inner .board-1 .div h1, .dashboard-inner .board-2 .div h1, .dashboard-inner .board-3 .div h1, .dashboard-inner .board-3i .div h1 {
   color: #fff;
   font-size: 1.5em;
   font-weight: 500;
   justify-content: space-between;
   padding-inline: unset;
 }
-.dashboard-inner .board-1 .div h1 span select, .dashboard-inner .board-2 .div h1 span select, .dashboard-inner .board-3 .div h1 span select {
+.dashboard-inner .board-1 .div h1 span select, .dashboard-inner .board-2 .div h1 span select, .dashboard-inner .board-3 .div h1 span select, .dashboard-inner .board-3i .div h1 span select {
   border: none;
   border-radius: 0.1em;
   background-color: rgb(9.9119496855%, 27.6951535331%, 36.4409914909%);
@@ -3064,7 +3181,7 @@ main .left-navigation ul li .total {
   padding: 0.2em 0.5em;
   width: 8em;
 }
-.dashboard-inner .board-1 .div h1 span button, .dashboard-inner .board-2 .div h1 span button, .dashboard-inner .board-3 .div h1 span button {
+.dashboard-inner .board-1 .div h1 span button, .dashboard-inner .board-2 .div h1 span button, .dashboard-inner .board-3 .div h1 span button, .dashboard-inner .board-3i .div h1 span button {
   background-color: rgb(100%, 30.7843137255%, 30.7843137255%);
   border: none;
   border-radius: 0.25em;
@@ -3073,21 +3190,21 @@ main .left-navigation ul li .total {
   padding: 0.2em;
   width: 4em;
 }
-.dashboard-inner .board-1 .div h1 span button:hover, .dashboard-inner .board-2 .div h1 span button:hover, .dashboard-inner .board-3 .div h1 span button:hover {
+.dashboard-inner .board-1 .div h1 span button:hover, .dashboard-inner .board-2 .div h1 span button:hover, .dashboard-inner .board-3 .div h1 span button:hover, .dashboard-inner .board-3i .div h1 span button:hover {
   background-color: #000;
 }
-.dashboard-inner .board-1 .div h2, .dashboard-inner .board-2 .div h2, .dashboard-inner .board-3 .div h2 {
+.dashboard-inner .board-1 .div h2, .dashboard-inner .board-2 .div h2, .dashboard-inner .board-3 .div h2, .dashboard-inner .board-3i .div h2 {
   align-items: center;
   display: flex;
   font-weight: 100;
   justify-content: space-between;
 }
-.dashboard-inner .board-1 .div h2 span, .dashboard-inner .board-2 .div h2 span, .dashboard-inner .board-3 .div h2 span {
+.dashboard-inner .board-1 .div h2 span, .dashboard-inner .board-2 .div h2 span, .dashboard-inner .board-3 .div h2 span, .dashboard-inner .board-3i .div h2 span {
   border-radius: 0.3em;
   display: block;
   padding: 0.35em;
 }
-.dashboard-inner .board-1 .div h2 span:first-of-type, .dashboard-inner .board-2 .div h2 span:first-of-type, .dashboard-inner .board-3 .div h2 span:first-of-type {
+.dashboard-inner .board-1 .div h2 span:first-of-type, .dashboard-inner .board-2 .div h2 span:first-of-type, .dashboard-inner .board-3 .div h2 span:first-of-type, .dashboard-inner .board-3i .div h2 span:first-of-type {
   align-items: center;
   color: rgb(0%, 94.9019607843%, 11.5532821824%);
   display: flex;
@@ -3095,25 +3212,25 @@ main .left-navigation ul li .total {
   margin-right: 2em;
   padding: 0.5em 1em 1em 1em;
 }
-.dashboard-inner .board-1 .div h2 span:first-of-type svg, .dashboard-inner .board-2 .div h2 span:first-of-type svg, .dashboard-inner .board-3 .div h2 span:first-of-type svg {
+.dashboard-inner .board-1 .div h2 span:first-of-type svg, .dashboard-inner .board-2 .div h2 span:first-of-type svg, .dashboard-inner .board-3 .div h2 span:first-of-type svg, .dashboard-inner .board-3i .div h2 span:first-of-type svg {
   fill: rgb(24.9019607843%, 100%, 34.0443307758%);
   margin-right: 0.5em;
   translate: 0 0.15em;
   width: 1.65em;
 }
-.dashboard-inner .board-1 .div h2 span:last-of-type, .dashboard-inner .board-2 .div h2 span:last-of-type, .dashboard-inner .board-3 .div h2 span:last-of-type {
+.dashboard-inner .board-1 .div h2 span:last-of-type, .dashboard-inner .board-2 .div h2 span:last-of-type, .dashboard-inner .board-3 .div h2 span:last-of-type, .dashboard-inner .board-3i .div h2 span:last-of-type {
   background-color: #225f7d;
   color: #fff;
   font-weight: 500;
 }
-.dashboard-inner .board-1 .div .indicators-wrapper, .dashboard-inner .board-2 .div .indicators-wrapper, .dashboard-inner .board-3 .div .indicators-wrapper {
+.dashboard-inner .board-1 .div .indicators-wrapper, .dashboard-inner .board-2 .div .indicators-wrapper, .dashboard-inner .board-3 .div .indicators-wrapper, .dashboard-inner .board-3i .div .indicators-wrapper {
   display: flex;
   justify-content: space-between;
 }
-.dashboard-inner .board-1 .div .indicators-wrapper .indicators-inner, .dashboard-inner .board-2 .div .indicators-wrapper .indicators-inner, .dashboard-inner .board-3 .div .indicators-wrapper .indicators-inner {
+.dashboard-inner .board-1 .div .indicators-wrapper .indicators-inner, .dashboard-inner .board-2 .div .indicators-wrapper .indicators-inner, .dashboard-inner .board-3 .div .indicators-wrapper .indicators-inner, .dashboard-inner .board-3i .div .indicators-wrapper .indicators-inner {
   width: 44%;
 }
-.dashboard-inner .board-1 .div .indicators-wrapper .indicators-inner-x, .dashboard-inner .board-2 .div .indicators-wrapper .indicators-inner-x, .dashboard-inner .board-3 .div .indicators-wrapper .indicators-inner-x {
+.dashboard-inner .board-1 .div .indicators-wrapper .indicators-inner-x, .dashboard-inner .board-2 .div .indicators-wrapper .indicators-inner-x, .dashboard-inner .board-3 .div .indicators-wrapper .indicators-inner-x, .dashboard-inner .board-3i .div .indicators-wrapper .indicators-inner-x {
   align-items: center;
   border-bottom: 1px solid rgb(15.4716981132%, 43.2297447281%, 56.8812430633%);
   cursor: pointer;
@@ -3121,27 +3238,27 @@ main .left-navigation ul li .total {
   justify-content: space-between;
   padding-block: 0.5em;
 }
-.dashboard-inner .board-1 .div .indicators-wrapper .indicators-inner-x:hover, .dashboard-inner .board-2 .div .indicators-wrapper .indicators-inner-x:hover, .dashboard-inner .board-3 .div .indicators-wrapper .indicators-inner-x:hover {
+.dashboard-inner .board-1 .div .indicators-wrapper .indicators-inner-x:hover, .dashboard-inner .board-2 .div .indicators-wrapper .indicators-inner-x:hover, .dashboard-inner .board-3 .div .indicators-wrapper .indicators-inner-x:hover, .dashboard-inner .board-3i .div .indicators-wrapper .indicators-inner-x:hover {
   background: rgb(15.4716981132%, 43.2297447281%, 56.8812430633%);
   color: #ddd;
 }
-.dashboard-inner .board-1 .div .indicators-wrapper .indicators-inner-x span:first-of-type, .dashboard-inner .board-2 .div .indicators-wrapper .indicators-inner-x span:first-of-type, .dashboard-inner .board-3 .div .indicators-wrapper .indicators-inner-x span:first-of-type {
+.dashboard-inner .board-1 .div .indicators-wrapper .indicators-inner-x span:first-of-type, .dashboard-inner .board-2 .div .indicators-wrapper .indicators-inner-x span:first-of-type, .dashboard-inner .board-3 .div .indicators-wrapper .indicators-inner-x span:first-of-type, .dashboard-inner .board-3i .div .indicators-wrapper .indicators-inner-x span:first-of-type {
   height: 2em;
   width: 2em;
 }
-.dashboard-inner .board-1 .div.recent-workflow, .dashboard-inner .board-2 .div.recent-workflow, .dashboard-inner .board-3 .div.recent-workflow {
+.dashboard-inner .board-1 .div.recent-workflow, .dashboard-inner .board-2 .div.recent-workflow, .dashboard-inner .board-3 .div.recent-workflow, .dashboard-inner .board-3i .div.recent-workflow {
   overflow-y: scroll;
 }
-.dashboard-inner .board-1 .div strong, .dashboard-inner .board-2 .div strong, .dashboard-inner .board-3 .div strong {
+.dashboard-inner .board-1 .div strong, .dashboard-inner .board-2 .div strong, .dashboard-inner .board-3 .div strong, .dashboard-inner .board-3i .div strong {
   float: left;
   font-size: 5em;
 }
-.dashboard-inner .board-1 .div strong.total, .dashboard-inner .board-2 .div strong.total, .dashboard-inner .board-3 .div strong.total {
+.dashboard-inner .board-1 .div strong.total, .dashboard-inner .board-2 .div strong.total, .dashboard-inner .board-3 .div strong.total, .dashboard-inner .board-3i .div strong.total {
   background: rgb(15.4716981132%, 43.2297447281%, 56.8812430633%);
   border-radius: 0.1em;
   padding-inline: 0.2em;
 }
-.dashboard-inner .board-1 .div .sub-heading, .dashboard-inner .board-2 .div .sub-heading, .dashboard-inner .board-3 .div .sub-heading {
+.dashboard-inner .board-1 .div .sub-heading, .dashboard-inner .board-2 .div .sub-heading, .dashboard-inner .board-3 .div .sub-heading, .dashboard-inner .board-3i .div .sub-heading {
   color: #eee;
   display: block;
   font-weight: 500;
@@ -3150,82 +3267,82 @@ main .left-navigation ul li .total {
   text-align: left;
   width: 100%;
 }
-.dashboard-inner .board-1 .div svg, .dashboard-inner .board-2 .div svg, .dashboard-inner .board-3 .div svg {
+.dashboard-inner .board-1 .div svg, .dashboard-inner .board-2 .div svg, .dashboard-inner .board-3 .div svg, .dashboard-inner .board-3i .div svg {
   fill: #eee;
   width: 2.5em;
 }
-.dashboard-inner .board-1 .div table, .dashboard-inner .board-2 .div table, .dashboard-inner .board-3 .div table {
+.dashboard-inner .board-1 .div table, .dashboard-inner .board-2 .div table, .dashboard-inner .board-3 .div table, .dashboard-inner .board-3i .div table {
   position: absolute;
   top: 10em;
   right: 0.5em;
 }
-.dashboard-inner .board-1 .div table.user-logins, .dashboard-inner .board-2 .div table.user-logins, .dashboard-inner .board-3 .div table.user-logins {
+.dashboard-inner .board-1 .div table.user-logins, .dashboard-inner .board-2 .div table.user-logins, .dashboard-inner .board-3 .div table.user-logins, .dashboard-inner .board-3i .div table.user-logins {
   border-collapse: collapse;
   text-align: left;
   position: unset;
   width: 100%;
 }
-.dashboard-inner .board-1 .div table.user-logins tr.history, .dashboard-inner .board-2 .div table.user-logins tr.history, .dashboard-inner .board-3 .div table.user-logins tr.history {
+.dashboard-inner .board-1 .div table.user-logins tr.history, .dashboard-inner .board-2 .div table.user-logins tr.history, .dashboard-inner .board-3 .div table.user-logins tr.history, .dashboard-inner .board-3i .div table.user-logins tr.history {
   top: 0.2em;
 }
-.dashboard-inner .board-1 .div table.user-logins tr, .dashboard-inner .board-2 .div table.user-logins tr, .dashboard-inner .board-3 .div table.user-logins tr {
+.dashboard-inner .board-1 .div table.user-logins tr, .dashboard-inner .board-2 .div table.user-logins tr, .dashboard-inner .board-3 .div table.user-logins tr, .dashboard-inner .board-3i .div table.user-logins tr {
   border-bottom: 1px solid rgb(15.4716981132%, 43.2297447281%, 56.8812430633%);
 }
-.dashboard-inner .board-1 .div table.user-logins tr th, .dashboard-inner .board-2 .div table.user-logins tr th, .dashboard-inner .board-3 .div table.user-logins tr th {
+.dashboard-inner .board-1 .div table.user-logins tr th, .dashboard-inner .board-2 .div table.user-logins tr th, .dashboard-inner .board-3 .div table.user-logins tr th, .dashboard-inner .board-3i .div table.user-logins tr th {
   background: #225f7d;
   position: sticky;
   top: -2.1em;
 }
-.dashboard-inner .board-1 .div table.user-logins tr td, .dashboard-inner .board-1 .div table.user-logins tr th, .dashboard-inner .board-2 .div table.user-logins tr td, .dashboard-inner .board-2 .div table.user-logins tr th, .dashboard-inner .board-3 .div table.user-logins tr td, .dashboard-inner .board-3 .div table.user-logins tr th {
+.dashboard-inner .board-1 .div table.user-logins tr td, .dashboard-inner .board-1 .div table.user-logins tr th, .dashboard-inner .board-2 .div table.user-logins tr td, .dashboard-inner .board-2 .div table.user-logins tr th, .dashboard-inner .board-3 .div table.user-logins tr td, .dashboard-inner .board-3 .div table.user-logins tr th, .dashboard-inner .board-3i .div table.user-logins tr td, .dashboard-inner .board-3i .div table.user-logins tr th {
   padding: 0.5em;
 }
-.dashboard-inner .board-1 .div table td, .dashboard-inner .board-1 .div table th, .dashboard-inner .board-2 .div table td, .dashboard-inner .board-2 .div table th, .dashboard-inner .board-3 .div table td, .dashboard-inner .board-3 .div table th {
+.dashboard-inner .board-1 .div table td, .dashboard-inner .board-1 .div table th, .dashboard-inner .board-2 .div table td, .dashboard-inner .board-2 .div table th, .dashboard-inner .board-3 .div table td, .dashboard-inner .board-3 .div table th, .dashboard-inner .board-3i .div table td, .dashboard-inner .board-3i .div table th {
   border-right: 1px solid #225f7d;
   padding-right: 1em;
 }
-.dashboard-inner .board-1 .div.tracking, .dashboard-inner .board-2 .div.tracking, .dashboard-inner .board-3 .div.tracking {
+.dashboard-inner .board-1 .div.tracking, .dashboard-inner .board-2 .div.tracking, .dashboard-inner .board-3 .div.tracking, .dashboard-inner .board-3i .div.tracking {
   padding-top: 0;
   overflow-y: scroll;
   scroll-behavior: smooth;
   width: 66%;
 }
-.dashboard-inner .board-1 .div.tracking table, .dashboard-inner .board-2 .div.tracking table, .dashboard-inner .board-3 .div.tracking table {
+.dashboard-inner .board-1 .div.tracking table, .dashboard-inner .board-2 .div.tracking table, .dashboard-inner .board-3 .div.tracking table, .dashboard-inner .board-3i .div.tracking table {
   border-collapse: collapse;
   color: #fff;
   position: unset;
   width: 100%;
 }
-.dashboard-inner .board-1 .div.tracking table .status, .dashboard-inner .board-2 .div.tracking table .status, .dashboard-inner .board-3 .div.tracking table .status {
+.dashboard-inner .board-1 .div.tracking table .status, .dashboard-inner .board-2 .div.tracking table .status, .dashboard-inner .board-3 .div.tracking table .status, .dashboard-inner .board-3i .div.tracking table .status {
   height: 2em;
   position: relative;
   width: 100%;
 }
-.dashboard-inner .board-1 .div.tracking table td .flex, .dashboard-inner .board-2 .div.tracking table td .flex, .dashboard-inner .board-3 .div.tracking table td .flex {
+.dashboard-inner .board-1 .div.tracking table td .flex, .dashboard-inner .board-2 .div.tracking table td .flex, .dashboard-inner .board-3 .div.tracking table td .flex, .dashboard-inner .board-3i .div.tracking table td .flex {
   display: flex;
 }
-.dashboard-inner .board-1 .div.tracking table td, .dashboard-inner .board-1 .div.tracking table th, .dashboard-inner .board-2 .div.tracking table td, .dashboard-inner .board-2 .div.tracking table th, .dashboard-inner .board-3 .div.tracking table td, .dashboard-inner .board-3 .div.tracking table th {
+.dashboard-inner .board-1 .div.tracking table td, .dashboard-inner .board-1 .div.tracking table th, .dashboard-inner .board-2 .div.tracking table td, .dashboard-inner .board-2 .div.tracking table th, .dashboard-inner .board-3 .div.tracking table td, .dashboard-inner .board-3 .div.tracking table th, .dashboard-inner .board-3i .div.tracking table td, .dashboard-inner .board-3i .div.tracking table th {
   font-size: smaller;
   font-weight: 500;
   padding-block: 0.52em;
   text-align: left;
 }
-.dashboard-inner .board-1 .div.tracking table td:first-of-type, .dashboard-inner .board-1 .div.tracking table th:first-of-type, .dashboard-inner .board-2 .div.tracking table td:first-of-type, .dashboard-inner .board-2 .div.tracking table th:first-of-type, .dashboard-inner .board-3 .div.tracking table td:first-of-type, .dashboard-inner .board-3 .div.tracking table th:first-of-type {
+.dashboard-inner .board-1 .div.tracking table td:first-of-type, .dashboard-inner .board-1 .div.tracking table th:first-of-type, .dashboard-inner .board-2 .div.tracking table td:first-of-type, .dashboard-inner .board-2 .div.tracking table th:first-of-type, .dashboard-inner .board-3 .div.tracking table td:first-of-type, .dashboard-inner .board-3 .div.tracking table th:first-of-type, .dashboard-inner .board-3i .div.tracking table td:first-of-type, .dashboard-inner .board-3i .div.tracking table th:first-of-type {
   border-right: 1px solid rgb(15.4716981132%, 43.2297447281%, 56.8812430633%);
   width: 12em;
 }
-.dashboard-inner .board-1 .div.tracking table th, .dashboard-inner .board-2 .div.tracking table th, .dashboard-inner .board-3 .div.tracking table th {
+.dashboard-inner .board-1 .div.tracking table th, .dashboard-inner .board-2 .div.tracking table th, .dashboard-inner .board-3 .div.tracking table th, .dashboard-inner .board-3i .div.tracking table th {
   background-color: rgb(12.0503144654%, 33.6699963004%, 44.3026267111%);
   position: sticky;
   top: -0.25em;
   z-index: 2;
 }
-.dashboard-inner .board-1 .div.tracking table th:first-of-type, .dashboard-inner .board-2 .div.tracking table th:first-of-type, .dashboard-inner .board-3 .div.tracking table th:first-of-type {
+.dashboard-inner .board-1 .div.tracking table th:first-of-type, .dashboard-inner .board-2 .div.tracking table th:first-of-type, .dashboard-inner .board-3 .div.tracking table th:first-of-type, .dashboard-inner .board-3i .div.tracking table th:first-of-type {
   background-color: rgb(15.4716981132%, 43.2297447281%, 56.8812430633%);
 }
-.dashboard-inner .board-1 .div.tracking table tr, .dashboard-inner .board-2 .div.tracking table tr, .dashboard-inner .board-3 .div.tracking table tr {
+.dashboard-inner .board-1 .div.tracking table tr, .dashboard-inner .board-2 .div.tracking table tr, .dashboard-inner .board-3 .div.tracking table tr, .dashboard-inner .board-3i .div.tracking table tr {
   border-bottom: 1px solid rgb(15.4716981132%, 43.2297447281%, 56.8812430633%);
 }
-.dashboard-inner .board-1 .div.tracking table tr:hover, .dashboard-inner .board-2 .div.tracking table tr:hover, .dashboard-inner .board-3 .div.tracking table tr:hover {
+.dashboard-inner .board-1 .div.tracking table tr:hover, .dashboard-inner .board-2 .div.tracking table tr:hover, .dashboard-inner .board-3 .div.tracking table tr:hover, .dashboard-inner .board-3i .div.tracking table tr:hover {
   background-color: rgb(15.4716981132%, 43.2297447281%, 56.8812430633%);
 }
 .dashboard-inner .board-2 .div {
@@ -3240,41 +3357,41 @@ main .left-navigation ul li .total {
   margin-right: 1em;
   width: 9em;
 }
-.dashboard-inner .board-3 .div {
+.dashboard-inner .board-3 .div, .dashboard-inner .board-3i .div {
   background: unset;
   height: 20em;
   overflow-y: scroll;
   padding-top: 0;
   width: 100%;
 }
-.dashboard-inner .board-3 .div table {
+.dashboard-inner .board-3 .div table, .dashboard-inner .board-3i .div table {
   border-collapse: collapse;
   position: unset;
   color: #fff;
   text-align: left;
   width: 100%;
 }
-.dashboard-inner .board-3 .div table td, .dashboard-inner .board-3 .div table th {
+.dashboard-inner .board-3 .div table td, .dashboard-inner .board-3 .div table th, .dashboard-inner .board-3i .div table td, .dashboard-inner .board-3i .div table th {
   padding: 0.2em;
 }
-.dashboard-inner .board-3 .div table td {
+.dashboard-inner .board-3 .div table td, .dashboard-inner .board-3i .div table td {
   border-bottom: 1px solid rgb(18.0377358491%, 50.3995560488%, 66.3152053274%);
   padding-block: 0.5em;
   color: #eee;
 }
-.dashboard-inner .board-3 .div table td small {
+.dashboard-inner .board-3 .div table td small, .dashboard-inner .board-3i .div table td small {
   font-size: x-small;
 }
-.dashboard-inner .board-3 .div table td.action {
+.dashboard-inner .board-3 .div table td.action, .dashboard-inner .board-3i .div table td.action {
   background-color: rgb(6.9182389937%, 19.3303736589%, 25.4347021828%);
   display: flex;
 }
-.dashboard-inner .board-3 .div table td img {
+.dashboard-inner .board-3 .div table td img, .dashboard-inner .board-3i .div table td img {
   cursor: pointer;
   margin-right: 1em;
   width: 1.2em;
 }
-.dashboard-inner .board-3 .div table th {
+.dashboard-inner .board-3 .div table th, .dashboard-inner .board-3i .div table th {
   background-color: #225f7d;
   font-weight: 500;
   padding: 0.5em 0;
@@ -3282,7 +3399,7 @@ main .left-navigation ul li .total {
   text-transform: uppercase;
   top: -0.2em;
 }
-.dashboard-inner .board-3 .div table tr:hover {
+.dashboard-inner .board-3 .div table tr:hover, .dashboard-inner .board-3i .div table tr:hover {
   background-color: rgb(11.1949685535%, 31.2800591935%, 41.157972623%);
 }
 .dashboard-inner .dashboard-heading {
@@ -3322,10 +3439,10 @@ main .left-navigation ul li .total {
 }
 
 @media (max-width: 1785px) {
-  .dashboard .board-3 table tr td, .dashboard .board-3 table tr th, .dashboard .board-x table tr td, .dashboard .board-x table tr th {
+  .dashboard .board-3 table tr td, .dashboard .board-3 table tr th, .dashboard .board-3i table tr td, .dashboard .board-3i table tr th, .dashboard .board-x table tr td, .dashboard .board-x table tr th {
     font-size: 0.75em !important;
   }
-  .dashboard .board-3 table tr td.action, .dashboard .board-3 table tr th.action, .dashboard .board-x table tr td.action, .dashboard .board-x table tr th.action {
+  .dashboard .board-3 table tr td.action, .dashboard .board-3 table tr th.action, .dashboard .board-3i table tr td.action, .dashboard .board-3i table tr th.action, .dashboard .board-x table tr td.action, .dashboard .board-x table tr th.action {
     width: 7em;
   }
   .dashboard-inner h1 svg.-x {
@@ -4082,6 +4199,621 @@ main .left-navigation ul li .total {
 .vessel-item.active {
   background: rgba(59, 130, 246, 0.2);
   border-left: 4px solid #3b82f6;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(23.2334443211%, 60.6955234924%, 79.1194968553%);
+  border-radius: 10px;
+}
+
+.DailyVesselOperations {
+  overflow-y: scroll;
+  position: fixed;
+  height: 100%;
+  z-index: 2000;
+  width: 100%;
+  display: none;
+  background: rgba(0, 0, 0, 0.5);
+  translate: 0 -1em;
+}
+
+.ori-deck {
+  --bg-deep: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-surface-hover: #f1f5f9;
+  --border-dim: #e2e8f0;
+  --border-bright: #cbd5e1;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --accent-cyan: #225f7d;
+  --accent-teal: #0d9488;
+  --accent-coral: #ea580c;
+  --accent-amber: #d97706;
+  --accent-violet: #9333ea;
+  --accent-blue: #225f7d;
+  --accent-green: #059669;
+  --accent-red: #dc2626;
+  width: 90%;
+  margin: 0 auto;
+  color: var(--text-main);
+  background-color: #fff;
+  overflow: scroll;
+  font-family: "JetBrains Mono", "DM Sans", system-ui, -apple-system, sans-serif;
+}
+.ori-deck .deck-close {
+  color: red;
+  cursor: pointer;
+  font-size: 1.3em;
+  font-weight: bold;
+  position: fixed;
+  right: 6.5em;
+  top: 1em;
+  background: #fff;
+  padding: 0.5em;
+  z-index: 1;
+}
+
+.ori-deck *, .ori-deck *::before, .ori-deck *::after {
+  box-sizing: border-box;
+}
+
+/* Hero Light Header */
+.deck-hero {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 2rem 2.5rem;
+  background: rgb(11.1949685535%, 31.2800591935%, 41.157972623%);
+  border: 1px solid #1f5661;
+  overflow: hidden;
+  position: fixed;
+  width: inherit;
+}
+.deck-hero .DailyReportFilterButton {
+  background-color: rgb(100%, 50.7843137255%, 50.7843137255%);
+  color: #fff;
+  border: none;
+  border-radius: 0.3em;
+  cursor: pointer;
+  margin-block: 0.5em;
+  padding: 1em 2em;
+}
+
+.deck-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #fff;
+  font-size: 1.1rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.deck-eyebrow::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  background: #67e8f9;
+}
+
+.deck-hero h1 {
+  display: inline-block;
+  margin: 0;
+  padding: 1.35rem 0.65rem;
+  font-size: 2em;
+  font-weight: 800;
+  line-height: 1;
+  color: #f8fafc;
+  background: rgb(15.4716981132%, 43.2297447281%, 56.8812430633%);
+  text-transform: uppercase;
+  margin-bottom: 0.5em;
+}
+
+.deck-hero p {
+  margin: 0.75rem 0 0;
+  color: #c7e5e7;
+  max-width: 42rem;
+  font-family: "DM Sans", sans-serif;
+  font-size: large;
+}
+
+.deck-date-pill {
+  padding: 0.85rem 1.25rem;
+  background: #ff6868;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.deck-date-pill small {
+  display: block;
+  color: #fff;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.deck-date-pill strong {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 1.05rem;
+  color: #f8fafc;
+}
+
+/* Metric Grid */
+.deck-metrics {
+  padding-inline: 3em;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin: 1.5rem 0;
+  margin-top: 16em;
+  position: fixed;
+  width: inherit;
+}
+
+.deck-card-metric {
+  padding: 1.25rem 1.5rem;
+  background: rgb(93.9881613023%, 96.9219385868%, 98.3647798742%);
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.deck-card-metric:hover {
+  border-color: rgb(93.9881613023%, 96.9219385868%, 98.3647798742%);
+  transform: translateY(-1px);
+}
+
+.deck-card-metric-label {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.deck-card-metric-value {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--text-main);
+  line-height: 1;
+}
+
+.deck-card-metric-note {
+  display: block;
+  margin-top: 0.4rem;
+  color: var(--accent-cyan);
+  font-size: 1rem;
+  font-family: "DM Sans", sans-serif;
+}
+
+/* Layout Grid */
+.deck-main-layout {
+  padding-inline: 3em;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 20rem;
+  gap: 1.5rem;
+  align-items: start;
+  margin-top: 26em;
+}
+
+.deck-panel {
+  background: var(--bg-surface);
+  overflow: hidden;
+}
+
+.deck-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.2rem 1.5rem;
+  background: #f8fafc;
+}
+
+.deck-panel-head h2 {
+  margin: 0;
+  color: var(--text-main);
+}
+
+.deck-panel-head span {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+}
+
+.deck-search {
+  width: 16rem;
+  padding: 0.6rem 0.9rem;
+  color: var(--text-main);
+  background: var(--bg-surface);
+  font-size: 0.8rem;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.deck-search:focus {
+  border-color: rgb(93.9881613023%, 96.9219385868%, 98.3647798742%);
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+}
+
+/* Primary Data Table */
+.deck-table-wrap {
+  overflow-x: auto;
+  height: 30em;
+  overflow: scroll;
+}
+
+.deck-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.deck-table th {
+  padding: 0.85rem 1.25rem;
+  color: var(--text-muted);
+  background: #f1f5f9;
+  font-weight: 100;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.deck-table td {
+  padding: 1rem 1.25rem;
+  font-size: 0.85rem;
+  vertical-align: middle;
+}
+
+.deck-table tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+.deck-table tbody tr:hover {
+  background: var(--bg-surface-hover);
+}
+
+/* Status Pills */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.35rem 0.7rem;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  border: 1px solid transparent;
+}
+
+.status-pill::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  background: currentColor;
+}
+
+.status-coral {
+  color: var(--accent-coral);
+  background: #fff7ed;
+}
+
+.status-amber {
+  color: var(--accent-amber);
+  background: #fffbeb;
+}
+
+.status-violet {
+  color: var(--accent-violet);
+  background: #faf5ff;
+}
+
+.status-blue {
+  color: #225f7d;
+  background: #edf5f8;
+}
+
+.status-green {
+  color: var(--accent-green);
+  background: #ecfdf5;
+}
+
+.status-red {
+  color: var(--accent-red);
+  background: #fef2f2;
+}
+
+.status-teal {
+  color: var(--accent-teal);
+  background: #f0fdfa;
+}
+
+.status-slate {
+  color: var(--text-muted);
+  background: #f8fafc;
+}
+
+/* Secondary Grid Modules */
+.deck-log-grid {
+  padding-bottom: 5rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+  margin-right: 2em;
+}
+
+.deck-log-panel {
+  background: var(--bg-surface);
+  overflow: scroll;
+  height: 30em;
+}
+
+.deck-log-panel.full-width {
+  grid-column: 1/-1;
+  padding-inline: 3em;
+}
+
+.deck-log-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.deck-log-item {
+  display: grid;
+  grid-template-columns: 10rem 1fr auto;
+  gap: 1.25rem;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid rgb(86.1265260821%, 92.8967813541%, 96.2264150943%);
+}
+
+.deck-log-item:last-child {
+  border-bottom: none;
+}
+
+.deck-vessel-title {
+  color: var(--text-main);
+  display: block;
+}
+
+.deck-sub-text {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  display: block;
+  margin-top: 0.2rem;
+}
+
+/* Device Check Matrix Badge */
+.check-matrix {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 0.5rem;
+  padding: 1rem 1.25rem;
+  background: #f8fafc;
+}
+
+.check-badge {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.35rem 0.6rem;
+  background: var(--bg-surface);
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+.check-badge strong {
+  font-weight: 800;
+  font-size: 0.68rem;
+}
+
+.check-badge strong.pass {
+  color: var(--accent-green);
+}
+
+.check-badge strong.fail {
+  color: var(--accent-red);
+}
+
+/* Shift Matrix */
+.shift-header {
+  display: grid;
+  grid-template-columns: 1fr repeat(4, 6.5rem);
+  padding: 0.75rem 1.25rem;
+  background: #f1f5f9;
+  border-bottom: 1px solid rgb(86.1265260821%, 92.8967813541%, 96.2264150943%);
+  font-size: unset !important;
+  color: var(--text-muted);
+  font-weight: unset !important;
+  text-transform: uppercase;
+}
+
+.shift-row {
+  display: grid;
+  grid-template-columns: 1fr repeat(4, 6.5rem);
+  align-items: center;
+  padding: 0.85rem 1.25rem;
+  border-bottom: 1px solid rgb(86.1265260821%, 92.8967813541%, 96.2264150943%);
+}
+
+.shift-pill {
+  justify-self: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: grid;
+  place-items: center;
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.shift-pill.active {
+  color: var(--accent-green);
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+}
+
+.shift-pill.inactive {
+  color: var(--border-bright);
+  background: #f8fafc;
+}
+
+/* Breakdown Sidebar */
+.breakdown-row {
+  margin-bottom: 1rem;
+}
+
+.breakdown-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-bottom: 0.4rem;
+}
+
+.breakdown-bar {
+  height: 6px;
+  background: #f1f5f9;
+  overflow: hidden;
+}
+
+/* Strong, lightly tinted heading bands improve section scanning. */
+.deck-date-pill small {
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.deck-card-metric-note {
+  font-weight: 700;
+}
+
+.deck-panel-head,
+.deck-log-panel > .deck-panel-head {
+  background: rgb(97.1328153903%, 98.5320014798%, 99.2201257862%);
+  border-left: 4px solid #225f7d;
+}
+
+.deck-panel-head h2 {
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #225f7d;
+}
+
+.deck-panel-head span {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.deck-search {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.deck-table th {
+  color: #225f7d;
+  background: rgb(86.1265260821%, 92.8967813541%, 96.2264150943%);
+}
+
+.deck-table td {
+  font-size: 0.92rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status-pill {
+  font-size: 1rem;
+  font-weight: 900;
+}
+
+.deck-vessel-title {
+  text-transform: uppercase;
+}
+
+.deck-sub-text {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.check-matrix {
+  background: rgb(93.9881613023%, 96.9219385868%, 98.3647798742%);
+}
+
+.check-badge {
+  font-size: 0.76rem;
+  font-weight: 600;
+}
+
+.check-badge strong {
+  font-size: 0.76rem;
+  font-weight: 900;
+}
+
+.shift-header {
+  background: rgb(86.1265260821%, 92.8967813541%, 96.2264150943%);
+  color: #225f7d;
+  font-size: 0.76rem;
+  font-weight: 900;
+}
+
+.shift-pill {
+  font-size: 0.8rem;
+  font-weight: 900;
+}
+
+.breakdown-meta {
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.deck-log-item {
+  font-size: 0.9rem;
+}
+.deck-log-item span:first-of-type {
+  font-size: 1rem !important;
+}
+
+.deck-main-layout > aside .deck-panel > h2 {
+  margin: -1.5rem -1.5rem 1.25rem;
+  padding: 1rem 1.25rem;
+  color: #225f7d;
+  background: #eaf6f8;
+  border-bottom: 1px solid #b9d2de;
+  font-size: 1.05rem;
+  text-transform: uppercase;
+}
+
+.breakdown-fill {
+  height: 100%;
+}
+
+@media (max-width: 1024px) {
+  .deck-main-layout {
+    grid-template-columns: 1fr;
+  }
+  .deck-metrics {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .deck-log-grid {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 640px) {
+  .deck-hero {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .deck-metrics {
+    grid-template-columns: 1fr;
+  }
+  .deck-log-item {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
 }
 
 /*# sourceMappingURL=Styles.css.map */

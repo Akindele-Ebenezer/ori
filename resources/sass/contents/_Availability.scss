@@ -214,7 +214,7 @@
     }
   }
 
-  .DisplayChart5Button, .DisplayAddChecklist1Button, .DisplayMap1Button, .DisplayGeneratorAvailabilityFormButton, .AddGeneratorButton, .DisplayVesselsOnSiteButton, .DisplayTanksButton, .DisplayMapButton {
+  .DisplayChart5Button, .DisplayAddChecklist1Button, .DisplayMap1Button, .DisplayGeneratorAvailabilityFormButton, .AddGeneratorButton, .DisplayVesselsOnSiteButton, .DisplayTanksButton, .DisplayMapButton, .DisplayDailyReportButton {
     cursor: pointer;
     position: absolute;
     top: unset;
@@ -236,7 +236,7 @@
   .DisplayMap1Button {
     right: 7em;
   }
-  .DisplayGeneratorAvailabilityFormButton, .AddGeneratorButton, .DisplayVesselsOnSiteButton, .DisplayTanksButton, .DisplayMapButton {
+  .DisplayGeneratorAvailabilityFormButton, .AddGeneratorButton, .DisplayVesselsOnSiteButton, .DisplayTanksButton, .DisplayMapButton, .DisplayDailyReportButton {
     right: 10em;
   }
   .AddGeneratorButton {
@@ -250,6 +250,9 @@
   }
   .DisplayVesselsOnSiteButton {
     right: 19em;
+  }
+  .DisplayDailyReportButton {
+    right: 22em;
   }
   .report-summary.-x {
     background-color: #225f7d;

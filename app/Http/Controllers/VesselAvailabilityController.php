@@ -34,6 +34,30 @@ class VesselAvailabilityController extends Controller
         $Vessels = \DB::table('vessels_vessel_information')->select(['VesselName', 'ImoNumber', 'CallSign'])->get();
         $STARTDATE = date('Y-m-d'); 
         $NumberOfVessels = \DB::table('vessels_vessel_information')->get();
+        $DailyReportsQuery = \DB::table('daily_reports');
+        if ($Request->filled('DailyReportFilter_SpecificDay')) {
+            $DailyReportsQuery->whereDate('StartDate', $Request->DailyReportFilter_SpecificDay);
+        } elseif ($Request->filled('FromDate_DAILYREPORTFILTER') && $Request->filled('EndDate_DAILYREPORTFILTER')) {
+            $DailyReportsQuery->whereBetween('StartDate', [$Request->FromDate_DAILYREPORTFILTER, $Request->EndDate_DAILYREPORTFILTER]);
+        }
+
+        $ReportDateFilter = function ($query, string $column = 'Date') use ($Request) {
+            if ($Request->filled('DailyReportFilter_SpecificDay')) {
+                $query->whereDate($column, $Request->DailyReportFilter_SpecificDay);
+            } elseif ($Request->filled('FromDate_DAILYREPORTFILTER') && $Request->filled('EndDate_DAILYREPORTFILTER')) {
+                $query->whereBetween($column, [$Request->FromDate_DAILYREPORTFILTER, $Request->EndDate_DAILYREPORTFILTER]);
+            }
+
+            return $query;
+        };
+
+        $ReportData = [
+            'DailyReports' => $DailyReportsQuery->orderByDesc('StartDate')->orderByDesc('StartTime')->get(),
+            'RadioBroadcastReports' => $ReportDateFilter(\DB::table('radio_broadcast_reports'))->orderByDesc('Date')->orderByDesc('id')->get(),
+            'DeviceReports' => $ReportDateFilter(\DB::table('device_reports'))->orderByDesc('Date')->orderByDesc('id')->get(),
+            'OfficerOnDutyReports' => $ReportDateFilter(\DB::table('officer_on_duty_reports'))->orderByDesc('Date')->orderByDesc('id')->get(),
+            'OtherReports' => $ReportDateFilter(\DB::table('other_reports'))->orderByDesc('Date')->orderByDesc('id')->get(),
+        ];
         $NumberOfVessels_IDLE = VesselAvailability::select('Vessel')->where('Status', 'IDLE')
                                 ->where(function($query) {
                                     $query->where('StartDate', '>=', date('Y-m-d'))
@@ -105,7 +129,7 @@ class VesselAvailabilityController extends Controller
                 $VesselAvailability = VesselAvailability::where('Vessel', $Request->Vessel_FILTER)->whereBetween('EndDate', [$STARTDATE, $ENDDATE])->orderBy('StartDate', 'DESC')->orderBy('StartTime', 'DESC')->orderBy('EndTime', 'DESC')->paginate(20); 
             }
             
-            return view('Pages.Availability', [ 
+            return view('Pages.Availability', array_merge([ 
                 'Employees' => $Employees,
                 'Vessels' => $Vessels,
                 'Ranks' => $Ranks,
@@ -121,7 +145,7 @@ class VesselAvailabilityController extends Controller
                 'NumberOfVessels_OPERATION' => count($NumberOfVessels_OPERATION),
                 'NumberOfVessels_BREAKDOWN' => count($NumberOfVessels_BREAKDOWN),
                 'NumberOfVessels_DOCKING' => count($NumberOfVessels_DOCKING),
-            ]);
+            ], $ReportData));
         } 
 
         if(isset($Request->FilterValue)) {
@@ -147,7 +171,7 @@ class VesselAvailabilityController extends Controller
                 if ($Request->FilterValue == 'Ready') {
                     $VesselAvailability = VesselAvailability::where('Status', 'IDLE')->orderBy('StartDate', 'DESC')->orderBy('StartTime', 'DESC')->orderBy('EndTime', 'DESC')->paginate(20);  
                 }
-            return view('Pages.Availability', [ 
+            return view('Pages.Availability', array_merge([ 
                 'Employees' => $Employees,
                 'Vessels' => $Vessels,
                 'Ranks' => $Ranks,
@@ -164,10 +188,10 @@ class VesselAvailabilityController extends Controller
                 'NumberOfVessels_OPERATION' => count($NumberOfVessels_OPERATION),
                 'NumberOfVessels_BREAKDOWN' => count($NumberOfVessels_BREAKDOWN),
                 'NumberOfVessels_DOCKING' => count($NumberOfVessels_DOCKING),
-            ]);
+            ], $ReportData));
         }
 
-        return view('Pages.Availability', [
+        return view('Pages.Availability', array_merge([
             'Employees' => $Employees,
             'Vessels' => $Vessels,
             'Ranks' => $Ranks,
@@ -183,7 +207,7 @@ class VesselAvailabilityController extends Controller
             'NumberOfVessels_OPERATION' => count($NumberOfVessels_OPERATION),
             'NumberOfVessels_BREAKDOWN' => count($NumberOfVessels_BREAKDOWN),
             'NumberOfVessels_DOCKING' => count($NumberOfVessels_DOCKING),
-        ]);
+        ], $ReportData));
     }
 
     /**

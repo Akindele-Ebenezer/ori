@@ -102,6 +102,8 @@
     ">
         <button class="AddVesselButton">+ Add Vessel</button>
     </div>
+    <center class="add-availabilty-wrapper"> 
+    </center>
     {{-- @if (parse_url(url()->current())['host'] == 'vesseltracker.lttcoastalmarine.com' || parse_url(url()->current())['host'] == '192.168.20.252')
         <center class="add-availabilty-wrapper">
             @include('Components.Forms.Add.Availability') 

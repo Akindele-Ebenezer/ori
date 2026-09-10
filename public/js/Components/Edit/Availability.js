@@ -69,12 +69,15 @@ editButtons.forEach(button => {
     });
 });
  
-attachTimeFormatter(document.querySelector('[name=EditStartTime]'));
-attachTimeFormatter(document.querySelector('[name=EditEndTime]'));
+if (updateButton && updateForm) {
+    attachTimeFormatter(updateForm.querySelector('[name=EditStartTime]'));
+    attachTimeFormatter(updateForm.querySelector('[name=EditEndTime]'));
+}
  
-updateButton.addEventListener('click', () => {
+const validateAvailabilityUpdate = (event) => {
+    event.preventDefault();
 
-    const errorBox = document.querySelector('.error-availability.update');
+    const errorBox = updateForm.querySelector('.error-availability.update');
 
     const data = {
         vessel: updateForm.querySelector('[name=EditVessel]').value.trim(),
@@ -86,30 +89,44 @@ updateButton.addEventListener('click', () => {
         endDate: updateForm.querySelector('[name=EditEndDate]').value
     };
 
-    const showError = msg => errorBox.textContent = msg;
+    const showError = (message) => {
+        errorBox.style.background = '';
+        errorBox.style.color = '';
+        errorBox.style.padding = '';
+        errorBox.textContent = message;
+    };
 
     if (!data.vessel) return showError('Vessel field cannot be empty.');
-    if (!data.status) return showError('Status is required.');
     if (!data.doneBy) return showError('Done by field is required.');
     if (!data.startTime || !data.endTime)
         return showError('Start and End time cannot be empty.');
-    if (data.startDate > data.endDate)
-        return showError('Start date cannot be greater than End date.');
     if (!data.startDate || !data.endDate)
         return showError('Start and End date are required.');
+    if (data.startDate > data.endDate)
+        return showError('Start date cannot be greater than End date.');
 
-    if (!/^(\d{2}:\d{2} HRS)$/i.test(data.startTime) ||
-        !/^(\d{2}:\d{2} HRS)$/i.test(data.endTime)) {
+    if (!/^(?:[01]\d|2[0-3]):[0-5]\d(?: HRS)?$/i.test(data.startTime) ||
+        !/^(?:[01]\d|2[0-3]):[0-5]\d(?: HRS)?$/i.test(data.endTime)) {
         return showError('Time must be in HH:MM HRS format.');
     }
+
+    if (!updateButton.dataset.id)
+        return showError('Unable to identify the availability record.');
 
     updateButton.style.backgroundColor = '#1fb95e';
     updateButton.textContent = '+ Processing..';
 
     updateForm.action = `/Edit/Availability/${updateButton.dataset.id}`;
-    updateForm.submit();
-});
+    HTMLFormElement.prototype.submit.call(updateForm);
+};
+
+if (updateButton && updateForm) {
+    updateButton.addEventListener('click', validateAvailabilityUpdate);
+    updateForm.addEventListener('submit', validateAvailabilityUpdate);
+}
  
-cancelButton.addEventListener('click', () => {
-    modal.style.display = 'none';
-});
+if (cancelButton && modal) {
+    cancelButton.addEventListener('click', () => {
+        modal.style.display = 'none';
+    });
+}

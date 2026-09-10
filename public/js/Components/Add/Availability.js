@@ -2,9 +2,10 @@ let CreateAvailabilityButton = document.querySelector('.RecordAvailabilityButton
 let AddAvailabilityModal = document.querySelector('.AddAvailability');
 let CancelButton_Availability = document.querySelector('.cancel-button-availability');
 let NoDataSelectedModal_Availability = document.querySelector('.no-data-selected.moc');
+let NoDataSelectedModal_HR = document.querySelector('.no-data-selected.hr');
 let ContentData_Availability = document.querySelector('.content-data');
+let AddAvailabilityWrapper = document.querySelector('.add-availabilty-wrapper');
 if (window.location.pathname === '/Availability' || window.location.pathname === '/Vessels') { 
-    let AddAvailabilityWrapper = document.querySelector('.add-availabilty-wrapper');
     if (CreateAvailabilityButton !== null) {
         CreateAvailabilityButton.addEventListener('click', () => { 
             AddAvailabilityModal.style.display = 'flex';  
@@ -53,11 +54,13 @@ if (window.location.pathname === '/Availability' || window.location.pathname ===
 
             CancelButton_Availability.addEventListener('click', () => {
                 AddAvailabilityModal.style.display = 'none';
-                NoDataSelectedModal_Availability.style.display = 'flex';
+                if (NoDataSelectedModal_Availability !== null) {
+                    NoDataSelectedModal_Availability.style.display = 'flex';
+                }
                 if (NoDataSelectedModal_HR !== null) {
                     NoDataSelectedModal_HR.style.display = 'flex'; 
                 }
-                if (window.location.pathname === '/Availability' || window.location.pathname === '/Vessels') { 
+                if (AddAvailabilityWrapper !== null && (window.location.pathname === '/Availability' || window.location.pathname === '/Vessels')) { 
                     AddAvailabilityWrapper.style.height = 'unset'; 
                 }
             }) 
@@ -67,13 +70,15 @@ if (window.location.pathname === '/Availability' || window.location.pathname ===
  
 if (CreateAvailabilityButton !== null) {
     CreateAvailabilityButton.addEventListener('click', () => { 
-        if (window.location.pathname === '/Availability' || window.location.pathname === '/Vessels') { 
+        if (AddAvailabilityWrapper !== null && (window.location.pathname === '/Availability' || window.location.pathname === '/Vessels')) { 
             AddAvailabilityWrapper.style.height = '100%';
             AddAvailabilityWrapper.style.display = 'flex'; 
         }
         AddAvailabilityModal.style.display = 'flex';  
-        if (window.location.pathname === '/Availability' || window.location.pathname === '/Vessels') { 
+        if ((window.location.pathname === '/Availability' || window.location.pathname === '/Vessels') && NoDataSelectedModal_Availability !== null) { 
             NoDataSelectedModal_Availability.style.display = 'none'; 
+        }
+        if ((window.location.pathname === '/Vessels') && ContentData_Availability !== null) { 
             ContentData_Availability.style.background = 'linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab)'; 
         }
         if (NoDataSelectedModal_HR !== null) {
@@ -82,8 +87,10 @@ if (CreateAvailabilityButton !== null) {
         
         CancelButton_Availability.addEventListener('click', () => {
             AddAvailabilityModal.style.display = 'none';
-            if (window.location.pathname === '/Availability' || window.location.pathname === '/Vessels') { 
+            if (NoDataSelectedModal_Availability !== null && (window.location.pathname === '/Availability' || window.location.pathname === '/Vessels')) { 
                 NoDataSelectedModal_Availability.style.display = 'flex';
+            }
+            if (AddAvailabilityWrapper !== null && (window.location.pathname === '/Availability' || window.location.pathname === '/Vessels')) { 
                 AddAvailabilityWrapper.style.height = 'unset'; 
             }
             if (NoDataSelectedModal_HR !== null) {
@@ -101,15 +108,15 @@ const AddAvailabilityForm   = document.querySelector('.AddAvailabilityForm');
 AddAvailabilityButton.addEventListener('click', () => {
 
     const el = {
-        error: document.querySelector('.error-availability'),
-        vessel: document.querySelector('[name=Vessel]'),
-        status: document.querySelector('[name=Status]'),
-        doneBy: document.querySelector('[name=DoneBy]'),
-        attachment: document.querySelector('[name=Attachment]'),
-        startTime: document.querySelector('[name=StartTime]'),
-        endTime: document.querySelector('[name=EndTime]'),
-        startDate: document.querySelector('[name=StartDate]'),
-        endDate: document.querySelector('[name=EndDate]')
+        error: AddAvailabilityForm.querySelector('.error-availability'),
+        vessel: AddAvailabilityForm.querySelector('[name=Vessel]'),
+        status: AddAvailabilityForm.querySelector('[name=Status]'),
+        doneBy: AddAvailabilityForm.querySelector('[name=DoneBy]'),
+        attachment: AddAvailabilityForm.querySelector('[name=Attachment]'),
+        startTime: AddAvailabilityForm.querySelector('[name=StartTime]'),
+        endTime: AddAvailabilityForm.querySelector('[name=EndTime]'),
+        startDate: AddAvailabilityForm.querySelector('[name=StartDate]'),
+        endDate: AddAvailabilityForm.querySelector('[name=EndDate]')
     };
 
     const showError = (message) => {
@@ -144,7 +151,7 @@ AddAvailabilityButton.addEventListener('click', () => {
         vessel: el.vessel.value.trim(),
         status: el.status.value.trim(),
         doneBy: el.doneBy.value.trim(),
-        attachment: el.attachment.value.trim(),
+        attachment: el.attachment.files.length > 0 ? el.attachment.files[0].name : '',
         startTime: el.startTime.value.trim(),
         endTime: el.endTime.value.trim(),
         startDate: el.startDate.value,
@@ -155,30 +162,23 @@ AddAvailabilityButton.addEventListener('click', () => {
     // =============== VALIDATION SECTION ==================
     // =====================================================
 
-    // Attachment required only if manual entry empty
-    if (!data.vessel && !data.attachment) {
-        return showError('Attachment is required or fill other fields manually.');
-    }
+    // ---------- Manual Entry Validation ----------
+    if (!data.vessel) return showError('Vessel is required.');
+    if (!data.doneBy) return showError('Done by field is required.');
+    if (!data.startTime) return showError('Start time cannot be empty.');
+    if (!data.endTime) return showError('End time cannot be empty.');
+    if (!data.startDate) return showError('Start date cannot be empty.');
+    if (!data.endDate) return showError('End date cannot be empty.');
+    if (!data.status) return showError('Status is required.');
 
-    // ---------- Manual Entry Mode ----------
-    if (data.vessel) {
+    if (data.startDate > data.endDate)
+        return showError('Start date cannot be greater than End date.');
 
-        if (!data.startTime) return showError('Start time cannot be empty.');
-        if (!data.endTime)   return showError('End time cannot be empty.');
-        if (!data.status)    return showError('Status is required.');
-        if (!data.doneBy)    return showError('Done by field is required.');
-        if (!data.startDate) return showError('Start date cannot be empty.');
-        if (!data.endDate)   return showError('End date cannot be empty.');
+    if (data.startTime.length < 5 || data.endTime.length < 5)
+        return showError('Start/End Time format is invalid.');
 
-        if (data.startDate > data.endDate)
-            return showError('Start date cannot be greater than End date.');
-
-        if (data.startTime.length < 5 || data.endTime.length < 5)
-            return showError('Start/End Time format is invalid.');
-
-        if (containsLetters(data.startTime) || containsLetters(data.endTime))
-            return showError('Time cannot include alphabets.');
-    }
+    if (containsLetters(data.startTime) || containsLetters(data.endTime))
+        return showError('Time cannot include alphabets.');
 
     // ---------- File Upload Mode ----------
     if (!data.vessel && data.attachment) {

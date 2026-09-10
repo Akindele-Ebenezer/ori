@@ -10,7 +10,7 @@
             }
         }
 
-        .board-1, .board-2, .board-3 {
+        .board-1, .board-2, .board-3, .board-3i {
             background-color: lighten($color: $Color-2, $amount: 1.5);
             color: #fff;
             display: flex;
@@ -285,7 +285,7 @@
             }
         }
 
-        .board-3 {
+        .board-3, .board-3i {
             .div {
                 background: unset;
                 height: 20em;
@@ -387,7 +387,7 @@
 
 @media (max-width: 1785px) {
     .dashboard {
-        .board-3, .board-x {
+        .board-3, .board-3i, .board-x {
             table {
                 tr {
                     td, th {

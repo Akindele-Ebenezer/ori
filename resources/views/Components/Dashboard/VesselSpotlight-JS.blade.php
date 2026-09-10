@@ -1,6 +1,13 @@
 <script>
 @php
-        $iVessels = \DB::table('vessels_vessel_information as v')->select(['v.VesselName', 'v.Captain', 'v.NightDutyCaptain', 'v.VesselType', 'v.Company', 'v.ImoNumber', 's4.TankCapacity', 's4.ROB', 'va.Status', 's4.Area'])->join('vessels_section_4 as s4', 'v.VesselName', '=', 's4.VesselName')->join('vessel_availabilities as va', 'v.VesselName', '=', 'va.Vessel')->where('va.TillNow', 'YES')->get();
+        $iVessels = \DB::table('vessels_vessel_information as v')
+            ->select(['v.VesselName', 'v.Captain', 'v.NightDutyCaptain', 'v.VesselType', 'v.Company', 'v.ImoNumber', 's4.TankCapacity', 's4.ROB', 'va.Status', 's4.Area'])
+            ->leftJoin('vessels_section_4 as s4', 'v.VesselName', '=', 's4.VesselName')
+            ->leftJoin('vessel_availabilities as va', function ($join) {
+                $join->on('v.VesselName', '=', 'va.Vessel')->where('va.TillNow', 'YES');
+            })
+            ->orderBy('v.VesselName')
+            ->get();
 
 @endphp
 const vessels = [
@@ -27,7 +34,8 @@ const vessels = [
                     $fuelStatus = 'LOW';
                     $tankColor = 'bg-red-500';
             }
-            $statusColor = match(strtoupper($Vessel->Status)) {
+            $status = strtoupper((string) ($Vessel->Status ?? 'IDLE'));
+            $statusColor = match($status) {
                     'IDLE' => '#22c55e',
                     'BREAKDOWN' => '#ef4444',
                     'MAINTENANCE' => '#ffffff',
@@ -39,21 +47,21 @@ const vessels = [
             @endphp
 
             {
-            name: "{{ $Vessel->VesselName }}",
-            status: "{{ strtoupper($Vessel->Status) == 'IDLE' ? 'READY' : strtoupper($Vessel->Status) }}",
-            location: "{{ $Vessel->Area }}",
-            captain: "{{ $Vessel->Captain }}",
-            nightCaptain: "{{ $Vessel->NightDutyCaptain }}",
+            name: @json($Vessel->VesselName),
+            status: @json($status == 'IDLE' ? 'READY' : $status),
+            location: @json($Vessel->Area ?? 'Not assigned'),
+            captain: @json($Vessel->Captain ?? 'Not assigned'),
+            nightCaptain: @json($Vessel->NightDutyCaptain ?? 'Not assigned'),
 
             // Fuel Data
             fuelLevel: {{ $fuelLevel > 100 ? 100 : $fuelLevel }}, // Cap at 100%
-            capacity: "{{ number_format($capacity, 2) }} M³",
-            currentQty: "{{ number_format($rob, 2) }} M³",
-            fuelStatus: "{{ $fuelStatus }}",
+            capacity: @json(number_format($capacity, 2) . ' M3'),
+            currentQty: @json(number_format($rob, 2) . ' M3'),
+            fuelStatus: @json($fuelStatus),
 
             // Colors
-            statusColor: "{{ $statusColor }}",
-            tankColor: "{{ $tankColor }}"
+            statusColor: @json($statusColor),
+            tankColor: @json($tankColor)
             }@if(!$loop->last),@endif
 
         @endforeach
@@ -73,7 +81,7 @@ function renderVesselList() {
 
     listEl.innerHTML = vessels.map((v, i) => `
         <div onclick="jumpToVessel(${i})"
-            class="vessel-item p-3 rounded cursor-pointer transition-all hover:bg-white/10 flex items-center justify-between ${i === currentIndex ? 'active' : ''}">
+            class="vessel-item p-3 rounded cursor-pointer transition-all hover:bg-white/10 flex items-center justify-between ${i === icurrentIndex ? 'active' : ''}">
 
             <div>
                 <p class="text-xs font-bold"  style="font-weight: 900; font-size: 1.2rem;">
@@ -95,6 +103,13 @@ function renderVesselList() {
 }
 
 function renderVessel(index) {
+    if (!vessels.length) {
+        document.getElementById('vessel-list').innerHTML = '<p class="text-slate-400">No vessels available.</p>';
+        document.getElementById('content-area').innerHTML = '<p class="text-slate-400">No vessel data available.</p>';
+        document.getElementById('vessel-count').innerText = 'NO VESSELS';
+        document.getElementById('next-vessel-name').innerText = '';
+        return;
+    }
     icurrentIndex = index;
     const v = vessels[index];
     const nextV = vessels[(index + 1) % vessels.length];
@@ -191,7 +206,9 @@ renderVessel(0);
 updateProgress();
 
 let icancel_button = document.querySelector('.icancel-button');
-icancel_button.addEventListener('click', () => {
-    document.querySelector('.VesselSpotlight').style.display = 'none';
-});
+if (icancel_button) {
+    icancel_button.addEventListener('click', () => {
+        document.querySelector('.VesselSpotlight').style.display = 'none';
+    });
+}
 </script>
