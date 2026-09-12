@@ -43,10 +43,14 @@
                     <div class="input">
                         <label for="edit-radio-first-call-time">1st Call Time</label>
                         <input type="time" id="edit-radio-first-call-time" name="FirstCallTime">
+                        <label for="edit-radio-first-call-enabled">Call completed</label>
+                        <input type="checkbox" id="edit-radio-first-call-enabled" name="FirstCallTimeEnabled" value="Yes">
                     </div>
                     <div class="input">
                         <label for="edit-radio-second-call-time">2nd Call Time</label>
                         <input type="time" id="edit-radio-second-call-time" name="SecondCallTime">
+                        <label for="edit-radio-second-call-enabled">Call completed</label>
+                        <input type="checkbox" id="edit-radio-second-call-enabled" name="SecondCallTimeEnabled" value="Yes">
                     </div>
                 </section>
                 <section>

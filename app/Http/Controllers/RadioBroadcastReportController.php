@@ -27,7 +27,7 @@ class RadioBroadcastReportController extends Controller
 
         foreach (self::CALL_TIME_FIELDS as $field) {
             $value = $request->input($field);
-            $data[$field] = in_array($value, ['Yes', 'No'], true) ? null : ($value ?: null);
+            $data[$field] = in_array($value, ['Yes', 'No'], true) ? 'No' : ($value ?: 'No');
         }
 
         return $data;

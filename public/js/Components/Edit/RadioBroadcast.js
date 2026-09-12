@@ -17,6 +17,7 @@ if (updateRadioBroadcastButton && updateRadioBroadcastForm) {
             ['FirstCallTime', 'SecondCallTime'].forEach((name) => {
                 const value = ['Yes', 'No'].includes(String(report[name])) ? '' : (report[name] || '');
                 field(name).value = value;
+                field(`${name}Enabled`).checked = Boolean(value);
             });
             updateRadioBroadcastButton.dataset.id = report.id;
             radioBroadcastModal.style.display = 'flex';
@@ -24,6 +25,9 @@ if (updateRadioBroadcastButton && updateRadioBroadcastForm) {
     });
     updateRadioBroadcastButton.addEventListener('click', (event) => {
         event.preventDefault();
+        ['FirstCallTime', 'SecondCallTime'].forEach((name) => {
+            if (!field(`${name}Enabled`).checked) field(name).value = '';
+        });
         updateRadioBroadcastForm.action = `/Edit/RadioBroadcastReport/${updateRadioBroadcastButton.dataset.id}`;
         HTMLFormElement.prototype.submit.call(updateRadioBroadcastForm);
     });

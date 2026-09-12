@@ -341,6 +341,9 @@
                 padding-right: 1em;
                 text-align: left;
                 width: 9em; 
+                &[for=edit-radio-first-call-enabled], &[for=edit-radio-second-call-enabled] {
+                    padding-left: 1em;
+                }   
             }
 
             select, input, textarea {

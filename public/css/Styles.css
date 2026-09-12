@@ -1323,6 +1323,9 @@ body {
   text-align: left;
   width: 9em;
 }
+.form-1 form .input label[for=edit-radio-first-call-enabled], .form-1 form .input label[for=edit-radio-second-call-enabled], .form-1 form td label[for=edit-radio-first-call-enabled], .form-1 form td label[for=edit-radio-second-call-enabled] {
+  padding-left: 1em;
+}
 .form-1 form .input select, .form-1 form .input input, .form-1 form .input textarea, .form-1 form td select, .form-1 form td input, .form-1 form td textarea {
   background-color: rgb(93.9881613023%, 96.9219385868%, 98.3647798742%);
   border: none;
