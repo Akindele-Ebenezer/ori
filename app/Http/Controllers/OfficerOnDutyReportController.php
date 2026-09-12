@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class OfficerOnDutyReportController extends Controller
 {
@@ -29,6 +30,7 @@ class OfficerOnDutyReportController extends Controller
 
     public function add_officer_on_duty_report(Request $request, ?string $Id = null)
     {
+        $request->validate($this->validationRules());
         $attributes = $this->attributes($request);
         DB::table('officer_on_duty_reports')->insert($attributes);
         $this->notifyReport($attributes['Supervisor'] ?: 'All vessels', 'Create', 'Officers On Duty Report Created!', 'A watchkeeping report was created by ' . ($attributes['Supervisor'] ?: $request->input('DoneBy', 'a user')) . ' for ' . $attributes['Date'] . '.');
@@ -37,7 +39,16 @@ class OfficerOnDutyReportController extends Controller
 
     public function edit_officer_on_duty_report(Request $request, string $Id)
     {
+        $request->validate($this->validationRules());
         $attributes = $this->attributes($request);
+        $existing = DB::table('officer_on_duty_reports')->where('id', $Id)->first();
+        foreach (range(1, 7) as $index) {
+            $suffix = $index === 1 ? '' : $index;
+            $field = 'Signature' . $suffix;
+            if (!array_key_exists($field, $attributes) && $existing?->{$field}) {
+                $attributes[$field] = $existing->{$field};
+            }
+        }
         DB::table('officer_on_duty_reports')->where('id', $Id)->update($attributes);
         $this->notifyReport($attributes['Supervisor'] ?: 'All vessels', 'Update', 'Officers On Duty Report Updated!', 'A watchkeeping report was updated by ' . ($attributes['Supervisor'] ?: $request->input('DoneBy', 'a user')) . ' for ' . $attributes['Date'] . '.');
         return back();
@@ -58,6 +69,15 @@ class OfficerOnDutyReportController extends Controller
         $report = DB::table('officer_on_duty_reports')->where('id', $Id)->first();
         if ($report) {
             $this->notifyReport($report->Supervisor ?: 'All vessels', 'Delete', 'Officers On Duty Report Removed!', 'A watchkeeping report for ' . $report->Date . ' was deleted.');
+        }
+        if ($report) {
+            foreach (range(1, 7) as $index) {
+                $suffix = $index === 1 ? '' : $index;
+                $signature = $report->{'Signature' . $suffix};
+                if ($signature) {
+                    Storage::disk('public')->delete($signature);
+                }
+            }
         }
         DB::table('officer_on_duty_reports')->where('id', $Id)->delete();
         return back();

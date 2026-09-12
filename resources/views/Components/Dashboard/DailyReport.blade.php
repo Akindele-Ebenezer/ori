@@ -50,6 +50,10 @@
             return $time;
         }
     };
+
+    $displayCall = function ($value) {
+        return $value === 'Yes' ? 'Done' : ($value === 'No' || !$value ? '--:--' : $value);
+    };
 @endphp
 
 <div class="DailyVesselOperations">
@@ -73,7 +77,7 @@
                     @elseif(request()->filled('DailyReportFilter_SpecificDay'))
                         {{ 'For ' . request('DailyReportFilter_SpecificDay') }}
                     @else
-                        GENERAL REPORT
+                        TODAY · {{ $today }}
                     @endif
                 </strong>
                 <button class="DailyReportFilterButton">+ Filter Daily Reports</button>
@@ -220,8 +224,8 @@
                             </div>
                             <span style="font-size: 0.8rem; color: var(--text-muted); font-family: 'DM Sans', sans-serif;">{{ $log->Remarks }}</span>
                             <div style="display: flex; gap: 0.5rem;">
-                                <span class="status-pill status-teal">1st {{ $log->FirstCallTime ?: '--:--' }}</span>
-                                <span class="status-pill status-blue">2nd {{ $log->SecondCallTime ?: '--:--' }}</span>
+                                <span class="status-pill status-teal">1st {{ $displayCall($log->FirstCallTime) }}</span>
+                                <span class="status-pill status-blue">2nd {{ $displayCall($log->SecondCallTime) }}</span>
                                 <span class="status-pill status-violet">Responders {{ $log->Responders }}</span>
                             </div>
                         </li>
@@ -252,7 +256,7 @@
                                     <span class="deck-sub-text">{{ $displayDate($log->Date) }}</span>
                                 </div>
                                 @if ($log->{'Signature' . $suffix})
-                                    <img src="{{ asset('storage/' . $log->{'Signature' . $suffix}) }}" alt="{{ $officerName }} signature" style="display: block; width: 8rem; height: 2.5rem; object-fit: contain; background: #fff; border-radius: 0.25rem;">
+                                    <img src="{{ route('public.storage', ['path' => $log->{'Signature' . $suffix}]) }}" alt="{{ $officerName }} signature" style="display: block; width: 8rem; height: 2.5rem; object-fit: contain; background: #fff; border-radius: 0.25rem;">
                                 @else
                                     <span class="deck-sub-text">No signature uploaded</span>
                                 @endif

@@ -26,8 +26,7 @@ class RadioBroadcastReportController extends Controller
         }
 
         foreach (self::CALL_TIME_FIELDS as $field) {
-            $value = $request->input($field);
-            $data[$field] = in_array($value, ['Yes', 'No'], true) ? null : ($value ?: null);
+            $data[$field] = $request->boolean($field) ? 'Yes' : 'No';
         }
 
         return $data;
@@ -44,8 +43,6 @@ class RadioBroadcastReportController extends Controller
             ->filter(fn ($row) => is_array($row) && filled($row['Vessel'] ?? null))
             ->map(function (array $row) use ($request) {
                 $rowRequest = Request::create('/', 'POST', array_merge($row, [
-                    'FirstCallTime' => $request->input('FirstCallTime'),
-                    'SecondCallTime' => $request->input('SecondCallTime'),
                     'DoneBy' => $request->input('DoneBy'),
                     'Remarks' => $request->input('Remarks'),
                     'Date' => $request->input('Date'),

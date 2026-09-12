@@ -71,7 +71,7 @@ class DailyReportController extends Controller
     private function validationRules(): array
     {
         return [
-            'Vessel' => ['nullable', 'string', 'max:255'],
+            'Vessel' => ['required', 'string', 'max:255'],
             'DeployedVessel1' => ['nullable', 'string', 'max:255'],
             'DeployedVessel2' => ['nullable', 'string', 'max:255'],
             'DeployedVessel3' => ['nullable', 'string', 'max:255'],

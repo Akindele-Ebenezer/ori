@@ -98,10 +98,7 @@ if (AddDailyReportButton && AddDailyReportForm) {
     // =============== VALIDATION SECTION ==================
     // =====================================================
 
-    // ---------- Manual Entry Mode ----------
-    // if (!data.vessel) {
-    //     return showError('Vessel is required.');
-    // }
+    if (!data.vessel) return showError('Vessel is required.');
 
     if (!data.startTime) return showError('Start time cannot be empty.');
     if (!data.endTime)   return showError('End time cannot be empty.');

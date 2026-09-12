@@ -39,6 +39,8 @@ class VesselAvailabilityController extends Controller
             $DailyReportsQuery->whereDate('StartDate', $Request->DailyReportFilter_SpecificDay);
         } elseif ($Request->filled('FromDate_DAILYREPORTFILTER') && $Request->filled('EndDate_DAILYREPORTFILTER')) {
             $DailyReportsQuery->whereBetween('StartDate', [$Request->FromDate_DAILYREPORTFILTER, $Request->EndDate_DAILYREPORTFILTER]);
+        } else {
+            $DailyReportsQuery->whereDate('StartDate', now()->toDateString());
         }
 
         $ReportDateFilter = function ($query, string $column = 'Date') use ($Request) {
@@ -46,6 +48,8 @@ class VesselAvailabilityController extends Controller
                 $query->whereDate($column, $Request->DailyReportFilter_SpecificDay);
             } elseif ($Request->filled('FromDate_DAILYREPORTFILTER') && $Request->filled('EndDate_DAILYREPORTFILTER')) {
                 $query->whereBetween($column, [$Request->FromDate_DAILYREPORTFILTER, $Request->EndDate_DAILYREPORTFILTER]);
+            } else {
+                $query->whereDate($column, now()->toDateString());
             }
 
             return $query;

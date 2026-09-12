@@ -7,7 +7,7 @@
                 <section>  
                     <div class="input">
                         <label for="">Vessel</label>
-                        <input type="text" name="Vessel" list="daily-report-vessels" autocomplete="off" placeholder="Type to filter vessels">
+                        <input type="text" name="Vessel" list="daily-report-vessels" autocomplete="off" required placeholder="Type to filter vessels">
                         <datalist id="daily-report-vessels">
                             @foreach ($Vessels as $Vessel)
                                 <option value="{{ $Vessel->VesselName }}">{{ $Vessel->VesselName }}</option>

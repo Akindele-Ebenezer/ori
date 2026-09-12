@@ -34,21 +34,19 @@
                             <label for="">Responders</label>
                             <input type="checkbox" name="Responders">
                         </div>    
+                        <div class="input">
+                            <label for="">1st Call Time</label>
+                            <input type="checkbox" name="FirstCallTime" value="Yes">
+                        </div>
+                        <div class="input">
+                            <label for="">2nd Call Time</label>
+                            <input type="checkbox" name="SecondCallTime" value="Yes">
+                        </div>
                     </section>
                 </div>
                 <br>
             </div>
             <div class="inner-2"> 
-                <section>
-                    <div class="input">
-                        <label for="">1st Call Time</label>
-                        <input type="time" name="FirstCallTime">
-                    </div>
-                    <div class="input">
-                        <label for="">2nd Call Time</label>
-                        <input type="time" name="SecondCallTime">
-                    </div>
-                </section>
                 <section>
                     <div class="input">
                         <label for="">Done By</label>

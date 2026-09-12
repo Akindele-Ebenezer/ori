@@ -134,6 +134,10 @@ chmod -R 755 /var/www/ori/bootstrap/cache
 php artisan storage:link
 ```
 
+Officer signature uploads are stored on the public disk under `storage/app/public/officer-signatures`.
+Ensure the web-server user can read `storage/app/public`, and run `storage:link` after every fresh deployment.
+The application also has a Laravel fallback route for signature files when the symbolic link is unavailable.
+
 ### 6. Caching and Optimization
 
 ```bash

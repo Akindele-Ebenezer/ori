@@ -2163,6 +2163,8 @@
                         <th>Date</th> 
                         <th>Remarks</th>
                         <th>Done by</th>
+                        <th>1st Call Time</th>
+                        <th>2nd Call Time</th>
                         <th>#</th>
                     </tr>
                     @forelse ($RadioBroadcastReports as $RadioBroadcast)
@@ -2171,13 +2173,15 @@
                         <td>{{ $RadioBroadcast->Date }}</td>
                         <td>{{ $RadioBroadcast->Remarks }}</td>
                         <td>{{ $RadioBroadcast->DoneBy }}</td>
+                        <td>{{ $RadioBroadcast->FirstCallTime === 'Yes' ? 'Done' : ($RadioBroadcast->FirstCallTime ?: '--:--') }}</td>
+                        <td>{{ $RadioBroadcast->SecondCallTime === 'Yes' ? 'Done' : ($RadioBroadcast->SecondCallTime ?: '--:--') }}</td>
                         <td class="action">  
                             <img class="EditRadioBroadcastButton" src="{{ asset('images/write.png') }}" alt="Edit">
                             <img class="DeleteRadioBroadcastButton" src="{{ asset('images/delete.png') }}" alt="Delete">
                         </td>
                     </tr>
                     @empty
-                    <tr><td class="action" colspan="5">System doesn't have any records yet.</td></tr>
+                    <tr><td class="action" colspan="7">System doesn't have any records yet.</td></tr>
                     @endforelse
                 </table>
             </div> 

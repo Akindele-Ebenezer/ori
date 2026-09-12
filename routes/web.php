@@ -22,10 +22,16 @@ use App\Http\Controllers\RadioBroadcastReportController;
 use App\Http\Controllers\DeviceReportController;
 use App\Http\Controllers\OfficerOnDutyReportController;
 use App\Http\Controllers\OtherReportController;
+use Illuminate\Support\Facades\Storage;
 
 Route::get('/', [LoginController::class, 'login']);
 Route::post('/Auth', [LoginController::class, 'auth'])->name('Auth');
 Route::get('/Logout', [LoginController::class, 'logout'])->name('Logout');
+
+Route::get('/storage/{path}', function (string $path) {
+	abort_unless(Storage::disk('public')->exists($path), 404);
+	return Storage::disk('public')->response($path);
+})->where('path', '.*')->name('public.storage');
 
 Route::get('/Generators', [GeneratorController::class, 'index'])->name('Generators');
 Route::post('/Add/Generator', [GeneratorController::class, 'create'])->name('AddGenerator');
