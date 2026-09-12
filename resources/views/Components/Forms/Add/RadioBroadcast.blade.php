@@ -31,8 +31,8 @@
                                     </td>
                                     <td><input type="checkbox" name="vessels[{{ $index }}][WatchKeepingAlert]" value="Yes"></td>
                                     <td><input type="checkbox" name="vessels[{{ $index }}][RelatedDistress]" value="Yes"></td>
-                                    <td><input type="checkbox" name="vessels[{{ $index }}][FirstCallTime]" value="Yes"></td>
-                                    <td><input type="checkbox" name="vessels[{{ $index }}][SecondCallTime]" value="Yes"></td>
+                                    <td><input type="checkbox" name="vessels[{{ $index }}][FirstCallTimeEnabled]" value="Yes" aria-label="1st call time completed for selected vessel"></td>
+                                    <td><input type="checkbox" name="vessels[{{ $index }}][SecondCallTimeEnabled]" value="Yes" aria-label="2nd call time completed for selected vessel"></td>
                                     <td><input type="checkbox" name="vessels[{{ $index }}][Responders]" value="Yes"></td>
                                 </tr>
                             @endfor
@@ -43,6 +43,16 @@
             <br>
         </div>
         <div class="inner-2"> 
+            <section>
+                <div class="input">
+                    <label for="radio-first-call-time">1st Call Time</label>
+                    <input type="time" id="radio-first-call-time" name="FirstCallTime">
+                </div>
+                <div class="input">
+                    <label for="radio-second-call-time">2nd Call Time</label>
+                    <input type="time" id="radio-second-call-time" name="SecondCallTime">
+                </div>
+            </section>
             <section>
                 <div class="input">
                     <label for="">Done By</label>

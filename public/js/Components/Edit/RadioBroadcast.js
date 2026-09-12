@@ -3,7 +3,7 @@ const updateRadioBroadcastButton = document.querySelector('.UpdateRadioBroadcast
 const updateRadioBroadcastForm = document.querySelector('.UpdateRadioBroadcastForm');
 const radioBroadcastModal = document.querySelector('.UpdateRadioBroadcast');
 const cancelRadioBroadcastButton = document.querySelector('.close-button-update-radio-broadcast');
-const radioAlertFields = ['WatchKeepingAlert', 'RelatedDistress', 'FirstCallTime', 'SecondCallTime', 'Responders'];
+const radioAlertFields = ['WatchKeepingAlert', 'RelatedDistress', 'Responders'];
 
 if (updateRadioBroadcastButton && updateRadioBroadcastForm) {
     const field = (name) => updateRadioBroadcastForm.querySelector(`[name="${name}"]`);
@@ -14,6 +14,10 @@ if (updateRadioBroadcastButton && updateRadioBroadcastForm) {
             const report = JSON.parse(atob(row.dataset.report));
             ['Vessel', 'DoneBy', 'Remarks', 'Date'].forEach((name) => { field(name).value = report[name] || ''; });
             radioAlertFields.forEach((name) => { field(name).checked = String(report[name]).toLowerCase() === 'yes'; });
+            ['FirstCallTime', 'SecondCallTime'].forEach((name) => {
+                const value = ['Yes', 'No'].includes(String(report[name])) ? '' : (report[name] || '');
+                field(name).value = value;
+            });
             updateRadioBroadcastButton.dataset.id = report.id;
             radioBroadcastModal.style.display = 'flex';
         });
