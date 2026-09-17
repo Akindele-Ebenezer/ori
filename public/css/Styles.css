@@ -3428,6 +3428,7 @@ main .left-navigation ul li .total {
   border-bottom: 1px solid rgb(18.0377358491%, 50.3995560488%, 66.3152053274%);
   padding-block: 0.5em;
   color: #eee;
+  text-transform: uppercase;
 }
 .dashboard-inner .board-3 .div table td small, .dashboard-inner .board-3i .div table td small {
   font-size: x-small;

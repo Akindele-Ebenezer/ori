@@ -170,10 +170,10 @@
                             <label for="">NET TONNAGE</label>
                             <input type="text" name="NetTonnage">
                         </div>  
-                        <div class="input">
+                        {{-- <div class="input">
                             <label for="">ROB</label>
                             <input type="number" name="ROB">
-                        </div>
+                        </div> --}}
                         <div class="input">
                             <label for="">TANK CAPACITY</label>
                             <input type="number" name="TankCapacity">

@@ -11,15 +11,17 @@
             @foreach ($VesselTypes as $Vessel) 
                 <h1 class="section-title">{{ $Vessel }}</h1>
                 @php
-                    $vessels = \DB::table('vessels_section_4 as s4')
-                        ->whereRaw("s4.id = ( SELECT MAX(id) FROM vessels_section_4 WHERE VesselName = s4.VesselName )")
-                        ->join('vessels_vessel_information as vi', 's4.VesselName', '=', 'vi.VesselName')
+                    $vessels = \DB::table('other_reports as tanks')
+                        ->whereRaw("tanks.id = ( SELECT MAX(id) FROM other_reports WHERE Vessel = tanks.Vessel )")
+                        ->join('vessels_vessel_information as vi', 'tanks.Vessel', '=', 'vi.VesselName')
+                        ->join('vessels_section_4 as s4', 'tanks.Vessel', '=', 's4.VesselName')
                         ->where('vi.VesselType', $Vessel)
                         ->select(
-                            's4.*',
+                            'tanks.*',
                             'vi.VesselType',
                             'vi.Captain',
-                            'vi.NightDutyCaptain'
+                            'vi.NightDutyCaptain',
+                            's4.TankCapacity', 
                         )
                         ->get();
                 @endphp
@@ -45,7 +47,7 @@
                                 default => ['Full', 'darkgreen'],
                             };
                             $vessel_status = \DB::table('vessel_availabilities')
-                                ->where('Vessel', $Tank->VesselName) 
+                                ->where('Vessel', $Tank->Vessel) 
                                 ->where('TillNow', 'YES')
                                 ->value('Status') ?? 'UNKNOWN';                          
                                 $vessel_status_colors = [
@@ -58,12 +60,16 @@
                                     'MAINTENANCE'  => '#AAA', // Grey
                                     'UNKNOWN'      => '#00FF7F', // Gray fallback
                                 ];
+                            $freshwater = $Tank->FreshWater ?? 0;
+                            $freshwater_percentage = $tugs_capacity > 0
+                                ? min(($freshwater / $tugs_capacity) * 100, 100)
+                                : 0;
                             $indicatorColor = $vessel_status_colors[$vessel_status] ?? $vessel_status_colors['UNKNOWN'];
                         @endphp
                         <div class="tank-section">
                             <div class="tank-header">
                                 <span class="bracket left"></span>
-                                <span class="tank-title">{{ $Tank->VesselName }}<span class="indicator" style="background-color: {{ $indicatorColor }};"></span></span>
+                                <span class="tank-title">{{ $Tank->Vessel }}<span class="indicator" style="background-color: {{ $indicatorColor }};"></span></span>
                                 <span class="bracket right"></span>
                             </div>
                             <div class="tank-row">
@@ -78,6 +84,10 @@
                                     <p class="tank-capacity"><strong>Capacity:</strong> {{ number_format($capacity_m3, 2) }} m³ <span class="secondary-unit"> ({{ number_format($tugs_capacity) }} L)</span></p>
                                     <p class="tank-current"><strong>Current Level:</strong> {{ number_format($currentLevel_m3, 2) }} m³ <span class="secondary-unit"> ({{ number_format($currentLevel) }} L • {{ number_format($percentage, 1) }}%)</span></p>                                    <div class="tank-status">
                                         Status: <span style="color: {{ $color }}; font-weight: bold;">{{ $status }}</span>
+                                    </div>
+                                    <div class="tank-freshwater">
+                                        <h2>Fresh Water</h2>
+                                        <p><strong>Current Level:</strong> {{ number_format($freshwater, 0) }} L <span class="secondary-unit"> ({{ number_format($freshwater_percentage, 1) }}%)</span></p>
                                     </div>
                                     <p><strong>Captain:</strong> {{ $Tank->Captain ?? 'N/A' }}</p>
                                     <p><strong>Night Duty Captain:</strong> {{ $Tank->NightDutyCaptain ?? 'N/A' }}</p>

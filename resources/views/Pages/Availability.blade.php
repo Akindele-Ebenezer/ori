@@ -2161,7 +2161,7 @@
                     <tr>
                         <th class="Hide">ID</th>
                         <th>Date</th> 
-                        <th>Remarks</th>
+                        <th>Vessel</th>
                         <th>Done by</th>
                         <th>1st Call Time</th>
                         <th>2nd Call Time</th>
@@ -2171,7 +2171,7 @@
                     <tr data-report="{{ base64_encode(json_encode($RadioBroadcast)) }}">
                         <td class="Hide">{{ $RadioBroadcast->id }}</td>
                         <td>{{ $RadioBroadcast->Date }}</td>
-                        <td>{{ $RadioBroadcast->Remarks }}</td>
+                        <td>{{ $RadioBroadcast->Vessel }}</td>
                         <td>{{ $RadioBroadcast->DoneBy }}</td>
                         <td>{{ $RadioBroadcast->FirstCallTime === 'Yes' ? 'Done' : ($RadioBroadcast->FirstCallTime ?: '--:--') }}</td>
                         <td>{{ $RadioBroadcast->SecondCallTime === 'Yes' ? 'Done' : ($RadioBroadcast->SecondCallTime ?: '--:--') }}</td>

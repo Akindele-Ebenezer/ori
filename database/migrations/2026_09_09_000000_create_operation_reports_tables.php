@@ -21,7 +21,7 @@ return new class extends Migration
             $table->id(); $table->string('Supervisor')->nullable(); for ($index = 1; $index <= 7; $index++) { $suffix = $index === 1 ? '' : $index; $table->string('Name' . $suffix)->nullable(); $table->string('Morning' . $suffix)->default('No'); $table->string('Afternoon' . $suffix)->default('No'); $table->string('Night' . $suffix)->default('No'); $table->string('Signature' . $suffix)->nullable(); } $table->text('Remarks')->nullable(); $table->date('Date'); $table->date('DateIn')->nullable(); $table->string('TimeIn')->nullable(); $table->timestamps();
         });
         Schema::create('other_reports', function (Blueprint $table) {
-            $table->id(); $table->string('Vessel'); $table->string('ROB'); $table->string('FreshWater'); $table->string('DoneBy'); $table->text('Remarks')->nullable(); $table->date('Date'); $table->date('DateIn')->nullable(); $table->string('TimeIn')->nullable(); $table->timestamps();
+            $table->id(); $table->string('Vessel'); $table->string('ROB')->nullable(); $table->string('FreshWater')->nullable(); $table->string('DoneBy'); $table->text('Remarks')->nullable(); $table->date('Date'); $table->date('DateIn')->nullable(); $table->string('TimeIn')->nullable(); $table->timestamps();
         });
     }
 

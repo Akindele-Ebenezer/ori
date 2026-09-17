@@ -18,7 +18,8 @@
         $Vessels_GeneralOthers = \DB::table('vessels_general_others')->where('VesselName', $Vessel->VesselName)->first();
         $Vessels_Section3 = \DB::table('vessels_section_3')->where('VesselName', $Vessel->VesselName)->first();
         $Vessels_Section4 = \DB::table('vessels_section_4')->where('VesselName', $Vessel->VesselName)->first();
-    @endphp
+        $Rob = \DB::table('other_reports')->where('Vessel', $Vessel->VesselName)->select('ROB')->orderBy('Date', 'DESC')->first();
+        @endphp
     <div class="list vessel">  
         <span class="Hide">{{ $Vessel->VesselName ?? '-' }}</span>
         <span class="Hide">{{ $Vessel->ImoNumber ?? '-' }}</span>
@@ -52,7 +53,7 @@
         <span class="Hide">{{ $Vessel->Company ?? '-' }}</span>
         <span class="Hide">{{ $Vessel->VesselType ?? '-' }}</span>
         <span class="Hide">{{ $Vessel->Captain ?? '-' }}</span>
-        <span class="Hide">{{ $Vessels_Section4->ROB ?? '-' }}</span>
+        <span class="Hide">{{ $Rob->ROB ?? '-' }}</span>
         <span class="Hide">{{ $Vessels_Section4->Area ?? '-' }}</span>
         <span class="Hide">{{ $Vessels_Section4->Position ?? '-' }}</span>
         <span class="Hide">{{ $Vessels_Section4->TankCapacity ?? '-' }}</span>
