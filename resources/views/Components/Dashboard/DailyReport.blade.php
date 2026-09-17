@@ -165,7 +165,7 @@
                                             <span class="deck-sub-text">{{ $displayTime($report->StartTime ?? null) }} — {{ $displayTime($report->EndTime ?? null) }}</span>
                                         </td>
                                         <td style="color: var(--text-muted); font-family: 'DM Sans', sans-serif;">
-                                            {{ $remarks ?: 'None' }}
+                                            {{ str_ireplace(['merchant', 'marchant'], 'MARCHANT', $remarks ?: 'None') }}
                                         </td>
                                     </tr>
                                 @endforeach

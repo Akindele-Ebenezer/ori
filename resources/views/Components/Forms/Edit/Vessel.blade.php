@@ -177,14 +177,14 @@
                             <label for="">NET TONNAGE</label>
                             <input type="text" name="EditNetTonnage">
                         </div>  
-                        <div class="input">
+                        {{-- <div class="input">
                             <label for="">ROB</label>
                             <input type="number" name="EditROB">
-                        </div> 
-                        {{-- <div class="input">
+                        </div>  --}}
+                        <div class="input">
                             <label for="">TANK CAPACITY</label>
                             <input type="number" name="EditTankCapacity">
-                        </div> --}}
+                        </div>
                         <div class="input">
                             <label for="">AREA</label>
                             <select name="EditArea">

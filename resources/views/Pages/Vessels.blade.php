@@ -264,6 +264,12 @@
                     <li>
                         <span>TANK CAPACITY</span><span class="tank-capacity"><strong></strong></span>
                     </li>
+                    <li>
+                        <span>CAPTAIN</span><span class="captain"><strong></strong></span>
+                    </li>
+                    <li>
+                        <span>NIGHT DUTY CAPTAIN</span><span class="night-duty-captain"><strong></strong></span>    
+                    </li>
                 </ul>
             </div>
         </div>

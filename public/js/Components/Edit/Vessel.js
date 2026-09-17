@@ -52,7 +52,7 @@ EditVesselButtons.forEach(EditVesselButton => {
         document.querySelector('.EditVessel select[name=EditCompany]').value    = H[29].textContent;
         document.querySelector('.EditVessel select[name=EditVesselType]').value = H[30].textContent;
         document.querySelector('.EditVessel input[name=EditCaptain]').value     = H[31].textContent;
-        document.querySelector('.EditVessel input[name=EditROB]').value = H[32].textContent;
+        // document.querySelector('.EditVessel input[name=EditROB]').value = H[32].textContent;
         document.querySelector('.EditVessel select[name=EditArea]').value = H[33].textContent;
         document.querySelector('.EditVessel input[name=EditTankCapacity]').value = H[35].textContent;
         document.querySelector('.EditVessel input[name=EditNightDutyCaptain]').value = H[36].textContent;
