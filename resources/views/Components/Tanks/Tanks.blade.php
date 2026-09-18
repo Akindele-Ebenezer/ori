@@ -11,19 +11,26 @@
             @foreach ($VesselTypes as $Vessel) 
                 <h1 class="section-title">{{ $Vessel }}</h1>
                 @php
-                    $vessels = \DB::table('other_reports as tanks')
-                        ->whereRaw("tanks.id = ( SELECT MAX(id) FROM other_reports WHERE Vessel = tanks.Vessel )")
-                        ->join('vessels_vessel_information as vi', 'tanks.Vessel', '=', 'vi.VesselName')
-                        ->join('vessels_section_4 as s4', 'tanks.Vessel', '=', 's4.VesselName')
-                        ->where('vi.VesselType', $Vessel)
-                        ->select(
-                            'tanks.*',
-                            'vi.VesselType',
-                            'vi.Captain',
-                            'vi.NightDutyCaptain',
-                            's4.TankCapacity', 
-                        )
-                        ->get();
+              $vessels = \DB::table('other_reports as tanks')
+                            ->whereRaw("tanks.id = (
+                                SELECT MAX(id)
+                                FROM other_reports
+                                WHERE Vessel = tanks.Vessel
+                                AND (ROB IS NOT NULL AND ROB != '')
+                            )")
+                            ->join('vessels_vessel_information as vi', 'tanks.Vessel', '=', 'vi.VesselName')
+                            ->join('vessels_section_4 as s4', 'tanks.Vessel', '=', 's4.VesselName')
+                            ->where('vi.VesselType', $Vessel)
+                            ->select(
+                                'tanks.*',
+                                'vi.VesselType',
+                                'vi.Captain',
+                                'vi.NightDutyCaptain',
+                                's4.TankCapacity'
+                            )
+                            ->orderByDesc('tanks.Date')
+                            ->orderByDesc('tanks.TimeIn')
+                            ->get();
                 @endphp
                 <div class="inner-x">
                     @forelse ($vessels as $Tank)

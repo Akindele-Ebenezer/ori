@@ -1,13 +1,37 @@
 <script>
 @php
-        $iVessels = \DB::table('vessels_vessel_information as v')
-            ->select(['v.VesselName', 'v.Captain', 'v.NightDutyCaptain', 'v.VesselType', 'v.Company', 'v.ImoNumber', 's4.TankCapacity', 's4.ROB', 'va.Status', 's4.Area'])
-            ->leftJoin('vessels_section_4 as s4', 'v.VesselName', '=', 's4.VesselName')
-            ->leftJoin('vessel_availabilities as va', function ($join) {
-                $join->on('v.VesselName', '=', 'va.Vessel')->where('va.TillNow', 'YES');
-            })
-            ->orderBy('v.VesselName')
-            ->get();
+$iVessels = \DB::table('vessels_vessel_information as v')
+    ->select([
+        'v.VesselName',
+        'v.Captain',
+        'v.NightDutyCaptain',
+        'v.VesselType',
+        'v.Company',
+        'v.ImoNumber',
+        's4.TankCapacity',
+        'va.Status',
+        's4.Area',
+        'tanks.ROB',
+        'tanks.FreshWater',
+        'tanks.Date',
+        'tanks.TimeIn',
+    ])
+    ->leftJoin('vessels_section_4 as s4', 'v.VesselName', '=', 's4.VesselName')
+    ->leftJoin('vessel_availabilities as va', function ($join) {
+        $join->on('v.VesselName', '=', 'va.Vessel')
+            ->where('va.TillNow', 'YES');
+    })
+    ->join('other_reports as tanks', 'v.VesselName', '=', 'tanks.Vessel')
+    ->where(function ($query) {
+        $query->whereNotNull('tanks.ROB')
+        ->where('tanks.ROB', '!=', '');
+    })
+    ->orderBy('v.VesselName')
+    ->orderByDesc('tanks.Date')
+    ->orderByDesc('tanks.TimeIn')
+    ->get()
+    ->unique('VesselName')
+    ->values();
 
 @endphp
 const vessels = [

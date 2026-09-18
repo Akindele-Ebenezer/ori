@@ -18,7 +18,7 @@
         $Vessels_GeneralOthers = \DB::table('vessels_general_others')->where('VesselName', $Vessel->VesselName)->first();
         $Vessels_Section3 = \DB::table('vessels_section_3')->where('VesselName', $Vessel->VesselName)->first();
         $Vessels_Section4 = \DB::table('vessels_section_4')->where('VesselName', $Vessel->VesselName)->first();
-        $Rob = \DB::table('other_reports')->where('Vessel', $Vessel->VesselName)->select('ROB')->orderBy('Date', 'DESC')->first();
+        $Rob = \DB::table('other_reports')->where('Vessel', $Vessel->VesselName)->select('ROB')->whereNotNull('ROB')->orderBy('Date', 'DESC')->first();
         @endphp
     <div class="list vessel">  
         <span class="Hide">{{ $Vessel->VesselName ?? '-' }}</span>

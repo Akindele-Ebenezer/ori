@@ -125,7 +125,16 @@
                     $EndTime_2 = \Carbon\Carbon::parse(date('H:i') ?? '00:00')->format('H:i').' HRS'; 
                 }
             }
-            $Dredgers_ROB = \DB::table('vessels_section_4')->select(['ROB'])->where('VesselName', $Vessel->VesselName)->first();
+            $Dredgers_ROB = \DB::table('vessels_section_4')->select(['tanks.ROB'])->where('VesselName', $Vessel->VesselName)
+                            ->join('other_reports as tanks', 'vessels_section_4.VesselName', '=', 'tanks.Vessel')
+                            ->where(function ($query) {
+                                $query->whereNotNull('tanks.ROB')
+                                ->where('tanks.ROB', '!=', '');
+                            })
+                            ->orderByDesc('tanks.Date')
+                            ->orderByDesc('tanks.TimeIn')
+                            ->orderByDesc('tanks.id')
+                            ->first();
         @endphp
         <div class="list tooltip-x vessels_">
             @if ($EndDate === $StartDate)  
@@ -239,7 +248,16 @@
                     $EndTime_2 = \Carbon\Carbon::parse(date('H:i') ?? '00:00')->format('H:i').' HRS'; 
                 }
             }
-            $TugBoats_ROB = \DB::table('vessels_section_4')->select(['ROB'])->where('VesselName', $Vessel->VesselName)->first();
+            $TugBoats_ROB = \DB::table('vessels_section_4')->select(['tanks.ROB'])->where('VesselName', $Vessel->VesselName)
+                            ->join('other_reports as tanks', 'vessels_section_4.VesselName', '=', 'tanks.Vessel')
+                            ->where(function ($query) {
+                                $query->whereNotNull('tanks.ROB')
+                                ->where('tanks.ROB', '!=', '');
+                            })
+                            ->orderByDesc('tanks.Date')
+                            ->orderByDesc('tanks.TimeIn')
+                            ->orderByDesc('tanks.id')
+                            ->first();
         @endphp
         <div class="list tooltip-x vessels_"> 
             @if ($EndDate === $StartDate)  
@@ -354,7 +372,16 @@
                     $EndTime_2 = \Carbon\Carbon::parse(date('H:i') ?? '00:00')->format('H:i').' HRS'; 
                 }
             }
-            $PilotCutters_ROB = \DB::table('vessels_section_4')->select(['ROB'])->where('VesselName', $Vessel->VesselName)->first();
+            $PilotCutters_ROB = \DB::table('vessels_section_4')->select(['tanks.ROB'])->where('VesselName', $Vessel->VesselName)
+                                ->join('other_reports as tanks', 'vessels_section_4.VesselName', '=', 'tanks.Vessel')
+                                ->where(function ($query) {
+                                $query->whereNotNull('tanks.ROB')
+                                ->where('tanks.ROB', '!=', '');
+                            })
+                                ->orderByDesc('tanks.Date')
+                                ->orderByDesc('tanks.TimeIn')
+                                ->orderByDesc('tanks.id')
+                                ->first();
         @endphp
         <div class="list tooltip-x vessels_"> 
             @if ($EndDate === $StartDate)  
@@ -477,7 +504,16 @@
                     $EndTime_2 = \Carbon\Carbon::parse(date('H:i') ?? '00:00')->format('H:i').' HRS'; 
                 }
             }
-            $Mooring_ROB = \DB::table('vessels_section_4')->select(['ROB'])->where('VesselName', $Vessel->VesselName)->first();
+            $Mooring_ROB = \DB::table('vessels_section_4')->select(['tanks.ROB'])->where('VesselName', $Vessel->VesselName)
+                            ->join('other_reports as tanks', 'vessels_section_4.VesselName', '=', 'tanks.Vessel')
+                            ->where(function ($query) {
+                                $query->whereNotNull('tanks.ROB')
+                                ->where('tanks.ROB', '!=', '');
+                            })
+                            ->orderByDesc('tanks.Date')
+                            ->orderByDesc('tanks.TimeIn')
+                            ->orderByDesc('tanks.id')
+                            ->first();
         @endphp
         <div class="list tooltip-x vessels_"> 
             @if ($EndDate === $StartDate)  
@@ -592,7 +628,16 @@
                     $EndTime_2 = \Carbon\Carbon::parse(date('H:i') ?? '00:00')->format('H:i').' HRS'; 
                 }
             }
-            $Multicat_ROB = \DB::table('vessels_section_4')->select(['ROB'])->where('VesselName', $Vessel->VesselName)->first();
+            $Multicat_ROB = \DB::table('vessels_section_4')->select(['tanks.ROB'])->where('VesselName', $Vessel->VesselName)
+                            ->join('other_reports as tanks', 'vessels_section_4.VesselName', '=', 'tanks.Vessel')
+                            ->where(function ($query) {
+                                $query->whereNotNull('tanks.ROB')
+                                ->where('tanks.ROB', '!=', '');
+                            })
+                            ->orderByDesc('tanks.Date')
+                            ->orderByDesc('tanks.TimeIn')
+                            ->orderByDesc('tanks.id')
+                            ->first();
         @endphp
         <div class="list tooltip-x vessels_"> 
             @if ($EndDate === $StartDate)  
@@ -707,7 +752,16 @@
                     $EndTime_2 = \Carbon\Carbon::parse(date('H:i') ?? '00:00')->format('H:i').' HRS'; 
                 }
             }
-            $Survey_ROB = \DB::table('vessels_section_4')->select(['ROB'])->where('VesselName', $Vessel->VesselName)->first();
+            $Survey_ROB = \DB::table('vessels_section_4')->select(['tanks.ROB'])->where('VesselName', $Vessel->VesselName)
+                            ->join('other_reports as tanks', 'vessels_section_4.VesselName', '=', 'tanks.Vessel')
+                            ->where(function ($query) {
+                                $query->whereNotNull('tanks.ROB')
+                                ->where('tanks.ROB', '!=', '');
+                            })
+                            ->orderByDesc('tanks.Date')
+                            ->orderByDesc('tanks.TimeIn')
+                            ->orderByDesc('tanks.id')
+                            ->first();
         @endphp
         <div class="list tooltip-x vessels_"> 
             @if ($EndDate === $StartDate)  
@@ -822,7 +876,16 @@
                     $EndTime_2 = \Carbon\Carbon::parse(date('H:i') ?? '00:00')->format('H:i').' HRS'; 
                 }
             }
-            $SpeedBoats_ROB = \DB::table('vessels_section_4')->select(['ROB'])->where('VesselName', $Vessel->VesselName)->first();
+            $SpeedBoats_ROB = \DB::table('vessels_section_4')->select(['tanks.ROB'])->where('VesselName', $Vessel->VesselName)
+                                ->join('other_reports as tanks', 'vessels_section_4.VesselName', '=', 'tanks.Vessel')
+                                ->where(function ($query) {
+                                $query->whereNotNull('tanks.ROB')
+                                ->where('tanks.ROB', '!=', '');
+                            })
+                                ->orderByDesc('tanks.Date')
+                                ->orderByDesc('tanks.TimeIn')
+                                ->orderByDesc('tanks.id')
+                                ->first();
         @endphp
         <div class="list tooltip-x vessels_"> 
             @if ($EndDate === $StartDate)  
@@ -937,7 +1000,16 @@
                     $EndTime_2 = \Carbon\Carbon::parse(date('H:i') ?? '00:00')->format('H:i').' HRS'; 
                 }
             }
-            $Ploughing_ROB = \DB::table('vessels_section_4')->select(['ROB'])->where('VesselName', $Vessel->VesselName)->first();
+            $Ploughing_ROB = \DB::table('vessels_section_4')->select(['tanks.ROB'])->where('VesselName', $Vessel->VesselName)
+                            ->join('other_reports as tanks', 'vessels_section_4.VesselName', '=', 'tanks.Vessel')
+                            ->where(function ($query) {
+                                $query->whereNotNull('tanks.ROB')
+                                ->where('tanks.ROB', '!=', '');
+                            })
+                            ->orderByDesc('tanks.Date')
+                            ->orderByDesc('tanks.TimeIn')
+                            ->orderByDesc('tanks.id')
+                            ->first();
         @endphp
         <div class="list tooltip-x vessels_"> 
             @if ($EndDate === $StartDate)  
@@ -1052,7 +1124,16 @@
                     $EndTime_2 = \Carbon\Carbon::parse(date('H:i') ?? '00:00')->format('H:i').' HRS'; 
                 }
             }
-            $Others_ROB = \DB::table('vessels_section_4')->select(['ROB'])->where('VesselName', $Vessel->VesselName)->first();
+            $Others_ROB = \DB::table('vessels_section_4')->select(['tanks.ROB'])->where('VesselName', $Vessel->VesselName)
+                            ->join('other_reports as tanks', 'vessels_section_4.VesselName', '=', 'tanks.Vessel')
+                            ->where(function ($query) {
+                                $query->whereNotNull('tanks.ROB')
+                                ->where('tanks.ROB', '!=', '');
+                            })
+                            ->orderByDesc('tanks.Date')
+                            ->orderByDesc('tanks.TimeIn')
+                            ->orderByDesc('tanks.id')
+                            ->first();
         @endphp
         <div class="list tooltip-x vessels_"> 
             @if ($EndDate === $StartDate)  

@@ -60,7 +60,21 @@ class VesselAvailabilityController extends Controller
             'RadioBroadcastReports' => $ReportDateFilter(\DB::table('radio_broadcast_reports'))->orderByDesc('Date')->orderByDesc('id')->get(),
             'DeviceReports' => $ReportDateFilter(\DB::table('device_reports'))->orderByDesc('Date')->orderByDesc('id')->get(),
             'OfficerOnDutyReports' => $ReportDateFilter(\DB::table('officer_on_duty_reports'))->orderByDesc('Date')->orderByDesc('id')->get(),
-            'OtherReports' => $ReportDateFilter(\DB::table('other_reports'))->orderByDesc('Date')->orderByDesc('id')->get(),
+            'OtherReports' => $ReportDateFilter(\DB::table('other_reports'))
+                                ->where(function ($query) {
+                                    $query->where(function ($q) {
+                                        $q->whereNotNull('ROB')
+                                        ->where('ROB', '!=', '');
+                                    })
+                                    ->orWhere(function ($q) {
+                                        $q->whereNotNull('FreshWater')
+                                        ->where('FreshWater', '!=', '');
+                                    });
+                                }) 
+                                ->orderByDesc('Date')
+                                ->orderByDesc('TimeIn')
+                                ->orderByDesc('id')
+                                ->get(),
         ];
         $NumberOfVessels_IDLE = VesselAvailability::select('Vessel')->where('Status', 'IDLE')
                                 ->where(function($query) {
