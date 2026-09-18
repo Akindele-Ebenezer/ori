@@ -155,7 +155,7 @@
                     <span class="vessel-captain--">{{ $Vessel->Captain }}</span> 
                     <span class="vessel-night-duty-captain--">{{ $Vessel->NightDutyCaptain }}</span> 
                     <span class="vessel-area--">{{ $Vessel->Area ?? 'N/A' }}</span> 
-                    <span class="vessel-rob--">{{ $Dredgers_ROB->ROB }}</span> 
+                    <span class="vessel-rob--">{{ $Dredgers_ROB->ROB ?? 0 }}</span> 
                     <span class="imo availability-status vessels {{ strtolower($Availability_STATUS->Status ?? 'READY TO GO') }} status-1">
                         @if (!empty($Availability_STATUS->TillNow) == 'YES')
                             {{ (($Availability_STATUS->Status ?? 'READY') == 'IDLE' ? 'READY' : (($Availability_STATUS->Status ?? 'READY') == 'BUNKERY' ? 'BUNKERING' : $Availability_STATUS->Status ?? 'READY')) }}
@@ -278,7 +278,7 @@
                     <span class="vessel-captain--">{{ $Vessel->Captain }}</span>  
                     <span class="vessel-night-duty-captain--">{{ $Vessel->NightDutyCaptain }}</span> 
                     <span class="vessel-area--">{{ $Vessel->Area ?? 'N/A' }}</span> 
-                    <span class="vessel-rob--">{{ $TugBoats_ROB->ROB }}</span> 
+                    <span class="vessel-rob--">{{ $TugBoats_ROB->ROB ?? 0 }}</span> 
                     <span class="imo availability-status vessels {{ strtolower($Availability_STATUS->Status ?? 'READY TO GO') }} {{ $Availability_STATUS->Status ?? 'ready' == 'IDLE' ? 'ready' : $Availability_STATUS->Status ?? 'ready' }}
                         status-1">   
                         @if (!empty($Availability_STATUS->TillNow) == 'YES')
@@ -410,7 +410,7 @@
                     <span class="vessel-captain--">{{ $Vessel->Captain }}</span>  
                     <span class="vessel-night-duty-captain--">{{ $Vessel->NightDutyCaptain }}</span> 
                     <span class="vessel-area--">{{ $Vessel->Area ?? 'N/A' }}</span> 
-                    <span class="vessel-rob--">{{ $PilotCutters_ROB->ROB }}</span> 
+                    <span class="vessel-rob--">{{ $PilotCutters_ROB->ROB ?? 0 }}</span> 
                     <span class="imo availability-status vessels {{ strtolower($Availability_STATUS->Status ?? 'READY TO GO') }} {{ $Availability_STATUS->Status ?? 'ready' == 'IDLE' ? 'ready' : $Availability_STATUS->Status ?? 'ready' }}
                         status-1">
                         @if (!empty($Availability_STATUS->TillNow) == 'YES')
@@ -534,7 +534,7 @@
                     <span class="vessel-captain--">{{ $Vessel->Captain }}</span> 
                     <span class="vessel-night-duty-captain--">{{ $Vessel->NightDutyCaptain }}</span>  
                     <span class="vessel-area--">{{ $Vessel->Area ?? 'N/A' }}</span> 
-                    <span class="vessel-rob--">{{ $Mooring_ROB->ROB }}</span> 
+                    <span class="vessel-rob--">{{ $Mooring_ROB->ROB ?? 0 }}</span> 
                     <span class="imo availability-status vessels {{ strtolower($Availability_STATUS->Status ?? 'READY TO GO') }} {{ $Availability_STATUS->Status ?? 'ready' == 'IDLE' ? 'ready' : $Availability_STATUS->Status ?? 'ready' }}
                         status-1">
                         @if (!empty($Availability_STATUS->TillNow) == 'YES')
@@ -658,7 +658,7 @@
                     <span class="vessel-captain--">{{ $Vessel->Captain }}</span>  
                     <span class="vessel-night-duty-captain--">{{ $Vessel->NightDutyCaptain }}</span> 
                     <span class="vessel-area--">{{ $Vessel->Area ?? 'N/A' }}</span> 
-                    <span class="vessel-rob--">{{ $Multicat_ROB->ROB }}</span> 
+                    <span class="vessel-rob--">{{ $Multicat_ROB->ROB ?? 0 }}</span> 
                     <span class="imo availability-status vessels {{ strtolower($Availability_STATUS->Status ?? 'READY TO GO') }} {{ $Availability_STATUS->Status ?? 'ready' == 'IDLE' ? 'ready' : $Availability_STATUS->Status ?? 'ready' }}
                         status-1">
                         @if (!empty($Availability_STATUS->TillNow) == 'YES')
@@ -782,7 +782,7 @@
                     <span class="vessel-captain--">{{ $Vessel->Captain }}</span>  
                     <span class="vessel-night-duty-captain--">{{ $Vessel->NightDutyCaptain }}</span> 
                     <span class="vessel-area--">{{ $Vessel->Area ?? 'N/A' }}</span> 
-                    <span class="vessel-rob--">{{ $Survey_ROB->ROB }}</span> 
+                    <span class="vessel-rob--">{{ $Survey_ROB->ROB ?? 0 }}</span> 
                     <span class="imo availability-status vessels {{ strtolower($Availability_STATUS->Status ?? 'READY TO GO') }} {{ $Availability_STATUS->Status ?? 'ready' == 'IDLE' ? 'ready' : $Availability_STATUS->Status ?? 'ready' }}
                         status-1">
                         @if (!empty($Availability_STATUS->TillNow) == 'YES')
@@ -906,7 +906,7 @@
                     <span class="vessel-captain--">{{ $Vessel->Captain }}</span>  
                     <span class="vessel-night-duty-captain--">{{ $Vessel->NightDutyCaptain }}</span> 
                     <span class="vessel-area--">{{ $Vessel->Area ?? 'N/A' }}</span> 
-                    <span class="vessel-rob--">{{ $SpeedBoats_ROB->ROB }}</span> 
+                    <span class="vessel-rob--">{{ $SpeedBoats_ROB->ROB ?? 0 }}</span> 
                     <span class="imo availability-status vessels {{ strtolower($Availability_STATUS->Status ?? 'READY TO GO') }} {{ $Availability_STATUS->Status ?? 'ready' == 'IDLE' ? 'ready' : $Availability_STATUS->Status ?? 'ready' }}
                         status-1">
                         @if (!empty($Availability_STATUS->TillNow) == 'YES')
@@ -1030,7 +1030,7 @@
                     <span class="vessel-captain--">{{ $Vessel->Captain }}</span>  
                     <span class="vessel-night-duty-captain--">{{ $Vessel->NightDutyCaptain }}</span> 
                     <span class="vessel-area--">{{ $Vessel->Area ?? 'N/A' }}</span> 
-                    <span class="vessel-rob--">{{ $Ploughing_ROB->ROB }}</span> 
+                    <span class="vessel-rob--">{{ $Ploughing_ROB->ROB ?? 0 }}</span> 
                     <span class="imo availability-status vessels {{ strtolower($Availability_STATUS->Status ?? 'READY TO GO') }} {{ $Availability_STATUS->Status ?? 'ready' == 'IDLE' ? 'ready' : $Availability_STATUS->Status ?? 'ready' }}
                         status-1">
                         @if (!empty($Availability_STATUS->TillNow) == 'YES')
@@ -1154,7 +1154,7 @@
                     <span class="vessel-captain--">{{ $Vessel->Captain }}</span>  
                     <span class="vessel-night-duty-captain--">{{ $Vessel->NightDutyCaptain }}</span> 
                     <span class="vessel-area--">{{ $Vessel->Area ?? 'N/A' }}</span> 
-                    <span class="vessel-rob--">{{ $Others_ROB->ROB }}</span> 
+                    <span class="vessel-rob--">{{ $Others_ROB->ROB ?? 0 }}</span> 
                     <span class="imo availability-status vessels {{ strtolower($Availability_STATUS->Status ?? 'READY TO GO') }} {{ $Availability_STATUS->Status ?? 'ready' == 'IDLE' ? 'ready' : $Availability_STATUS->Status ?? 'ready' }}
                         status-1">
                         @if (!empty($Availability_STATUS->TillNow) == 'YES')
@@ -2341,7 +2341,7 @@
                     <tr data-report="{{ base64_encode(json_encode($Others)) }}">
                         <td class="Hide">{{ $Others->id }}</td>
                         <td>{{ $Others->Vessel }}</td>
-                        <td>{{ $Others->ROB }}</td>
+                        <td>{{ $Others->ROB ?? 0 }}</td>
                         <td>{{ $Others->FreshWater }}</td>
                         <td>{{ $Others->Date }}</td>
                         <td class="action">  
