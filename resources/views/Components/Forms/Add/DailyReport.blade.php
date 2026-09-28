@@ -35,7 +35,9 @@
                             <option value="DEPARTURE">DEPARTURE</option>
                             <option value="ARRIVAL">ARRIVAL</option>
                             <option value="INSPECTION">INSPECTION</option> 
-                            <option value="DRILL">DRILL</option>  
+                            <option value="DRILL">DRILL</option>
+                            <option value="DIVE CHECK">DIVE CHECK</option>
+                            <option value="WEATHER BROADCAST">WEATHER BROADCAST</option>
                         </select>
                     </div>    
                 </section>

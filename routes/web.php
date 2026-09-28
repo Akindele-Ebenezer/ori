@@ -22,6 +22,8 @@ use App\Http\Controllers\RadioBroadcastReportController;
 use App\Http\Controllers\DeviceReportController;
 use App\Http\Controllers\OfficerOnDutyReportController;
 use App\Http\Controllers\OtherReportController;
+use App\Http\Controllers\AvailabilityReportController;
+use App\Http\Controllers\PeriodicCheckController;
 use Illuminate\Support\Facades\Storage;
 
 Route::get('/', [LoginController::class, 'login']);
@@ -49,6 +51,12 @@ Route::post('/Add/Availability', [PriorityExcelImportController::class, 'import'
 // Route::post('/Add/Availability', [VesselAvailabilityController::class, 'store'])->name('AddAvailability');
 Route::post('/Edit/Availability/{Id}', [VesselAvailabilityController::class, 'update'])->name('EditAvailability');
 Route::get('/Delete/Availability/{Id}', [VesselAvailabilityController::class, 'destroy'])->name('DeleteAvailability');
+Route::post('/Add/AvailabilityReport/{type}', [AvailabilityReportController::class, 'store'])->name('AddAvailabilityReport');
+Route::post('/Edit/AvailabilityReport/{type}/{id}', [AvailabilityReportController::class, 'update'])->name('EditAvailabilityReport');
+Route::get('/Delete/AvailabilityReport/{type}/{id}', [AvailabilityReportController::class, 'destroy'])->name('DeleteAvailabilityReport');
+Route::post('/Add/PeriodicCheck', [PeriodicCheckController::class, 'store'])->name('AddPeriodicCheck');
+Route::post('/Edit/PeriodicCheck/{id}', [PeriodicCheckController::class, 'update'])->name('EditPeriodicCheck');
+Route::get('/Delete/PeriodicCheck/{id}', [PeriodicCheckController::class, 'destroy'])->name('DeletePeriodicCheck');
 
 Route::post('/Add/Availability/Generator', [GeneratorAvailabilityController::class, 'create'])->name('AddGeneratorAvailability');
 Route::post('/Edit/Availability/Generator/{Id}', [GeneratorAvailabilityController::class, 'update'])->name('EditGeneratorAvailability');

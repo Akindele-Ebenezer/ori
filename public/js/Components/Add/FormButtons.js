@@ -3,8 +3,12 @@ const formButtons = {
     AvailabilityFormButton: 'AvailabilityFormWrapper',
     RadioBroadcastFormButton: 'RadioBroadcastFormWrapper',
     DevicesFormButton: 'DevicesFormWrapper',
+    PeriodicChecksFormButton: 'PeriodicChecksFormWrapper',
     OfficersOnDutyFormButton: 'OfficersOnDutyFormWrapper',
-    OthersFormButton: 'OthersFormWrapper'
+    OthersFormButton: 'OthersFormWrapper',
+    IncidentReportFormButton: 'IncidentReportFormWrapper',
+    HospitalReportFormButton: 'HospitalReportFormWrapper',
+    TugsReportFormButton: 'TugsReportFormWrapper'
 };
 
 Object.entries(formButtons).forEach(([buttonClass, wrapperClass]) => {

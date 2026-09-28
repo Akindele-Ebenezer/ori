@@ -7,11 +7,11 @@ use Illuminate\Support\Facades\DB;
 
 class DeviceReportController extends Controller
 {
-    private const DEVICE_FIELDS = ['VhfBaseRadio', 'VhfHandHeld', 'Ais', 'VhfRecorder', 'WindDetector', 'StormDetector', 'ComputerSystem', 'PublicAddressSystem', 'FireAlarmSystem', 'VoltageRegulator', 'VhfRepeater', 'MobilePhone', 'Intercomm', 'CCTV', 'Internet'];
+    private const DEVICE_FIELDS = ['VhfBaseRadio', 'VhfHandHeld', 'Ais', 'VhfRecorder', 'WindDetector', 'StormDetector', 'ComputerSystem', 'PublicAddressSystem', 'FireAlarmSystem', 'VoltageRegulator', 'VhfRepeater', 'MobilePhone', 'Intercomm', 'CCTV', 'Internet', 'CCTVDockyard', 'CCTVBullnose'];
 
     private function attributes(Request $request): array
     {
-        $data = ['DoneBy' => $request->input('DoneBy'), 'Remarks' => $request->input('Remarks'), 'Date' => $request->input('Date'), 'DateIn' => now()->toDateString(), 'TimeIn' => now()->format('H:i')];
+        $data = ['DoneBy' => $request->input('DoneBy'), 'Remarks' => $request->input('Remarks'), 'Date' => $request->input('Date'), 'Time' => $request->input('Time'), 'DateIn' => now()->toDateString(), 'TimeIn' => now()->format('H:i')];
         foreach (self::DEVICE_FIELDS as $field) {
             $data[$field] = $request->input($field, 'No');
         }
@@ -20,6 +20,7 @@ class DeviceReportController extends Controller
 
     public function add_device_report(Request $request, ?string $Id = null)
     {
+        $request->validate($this->validationRules());
         $attributes = $this->attributes($request);
         DB::table('device_reports')->insert($attributes);
         $this->notifyReport('MOC Office', 'Create', 'Devices Report Created!', $attributes['DoneBy'] . ' created a devices report for ' . $attributes['Date'] . '.');
@@ -28,6 +29,7 @@ class DeviceReportController extends Controller
 
     public function edit_device_report(Request $request, string $Id)
     {
+        $request->validate($this->validationRules());
         $attributes = $this->attributes($request);
         DB::table('device_reports')->where('id', $Id)->update($attributes);
         $this->notifyReport('MOC Office', 'Update', 'Devices Report Updated!', $attributes['DoneBy'] . ' updated a devices report for ' . $attributes['Date'] . '.');
@@ -42,5 +44,20 @@ class DeviceReportController extends Controller
         }
         DB::table('device_reports')->where('id', $Id)->delete();
         return back();
+    }
+
+    private function validationRules(): array
+    {
+        $rules = [
+            'DoneBy' => ['required', 'string', 'max:255'],
+            'Date' => ['required', 'date'],
+            'Time' => ['nullable', 'date_format:H:i'],
+            'Remarks' => ['nullable', 'string'],
+        ];
+        foreach (self::DEVICE_FIELDS as $field) {
+            $rules[$field] = ['required', 'in:Yes,No'];
+        }
+
+        return $rules;
     }
 }

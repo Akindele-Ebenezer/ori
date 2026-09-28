@@ -18,6 +18,8 @@ if (AddDevicesButton && AddDevicesForm) {
         'MobilePhone',
         'Intercomm',
         'CCTV',
+        'CCTVDockyard',
+        'CCTVBullnose',
         'Internet'
     ];
 

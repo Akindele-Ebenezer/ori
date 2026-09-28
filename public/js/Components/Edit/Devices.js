@@ -3,7 +3,7 @@ const updateDevicesButton = document.querySelector('.UpdateDevicesButton');
 const updateDevicesForm = document.querySelector('.UpdateDevicesForm');
 const devicesModal = document.querySelector('.UpdateDevices');
 const cancelDevicesButton = document.querySelector('.close-button-update-devices');
-const deviceFields = ['VhfBaseRadio', 'VhfHandHeld', 'Ais', 'VhfRecorder', 'WindDetector', 'StormDetector', 'ComputerSystem', 'PublicAddressSystem', 'FireAlarmSystem', 'VoltageRegulator', 'VhfRepeater', 'MobilePhone', 'Intercomm', 'CCTV', 'Internet'];
+const deviceFields = ['VhfBaseRadio', 'VhfHandHeld', 'Ais', 'VhfRecorder', 'WindDetector', 'StormDetector', 'ComputerSystem', 'PublicAddressSystem', 'FireAlarmSystem', 'VoltageRegulator', 'VhfRepeater', 'MobilePhone', 'Intercomm', 'CCTV', 'CCTVDockyard', 'CCTVBullnose', 'Internet'];
 
 if (updateDevicesButton && updateDevicesForm) {
     editDevicesButtons.forEach((button) => {
@@ -11,7 +11,7 @@ if (updateDevicesButton && updateDevicesForm) {
             const row = button.closest('tr');
             if (!row) return;
             const report = JSON.parse(atob(row.dataset.report));
-            ['DoneBy', 'Remarks', 'Date'].forEach((name) => { updateDevicesForm.querySelector(`[name="${name}"]`).value = report[name] || ''; });
+            ['DoneBy', 'Remarks', 'Date', 'Time'].forEach((name) => { updateDevicesForm.querySelector(`[name="${name}"]`).value = report[name] || ''; });
             deviceFields.forEach((name) => {
                 const radio = updateDevicesForm.querySelector(`[name="${name}"][value="${report[name] || 'No'}"]`);
                 if (radio) radio.checked = true;

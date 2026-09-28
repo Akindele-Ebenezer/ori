@@ -23,13 +23,13 @@
                     <section>
                         <div class="input">
                             <label for="">ROB</label>
-                            <input type="text" name="ROB">
+                            <input type="number" name="ROB">
                         </div> 
                     </section>
                     <section>
                         <div class="input">
                             <label for="">FRESH WATER</label>
-                            <input type="text" name="FreshWater">
+                            <input type="number" name="FreshWater">
                         </div> 
                     </section>
                     <section>
@@ -71,6 +71,6 @@
                 <br><br>
             </div>
         </form>
-        <button class="UpdateOthersButton">Update →</button>
+        <button class="UpdateOthersButton UpdateButton">Update →</button>
     </div>
 </div>

@@ -17,6 +17,7 @@ class VesselAvailabilityController extends Controller
 
     public function index(Request $Request)
     {  
+        // dd();
         VesselAvailability::where('TillNow', 'YES')->update([
             'EndTime' => date('H:i'),
             'EndDate' => date('Y-m-d'),
@@ -57,7 +58,7 @@ class VesselAvailabilityController extends Controller
 
         $ReportData = [
             'DailyReports' => $DailyReportsQuery->orderByDesc('StartDate')->orderByDesc('StartTime')->get(),
-            'RadioBroadcastReports' => $ReportDateFilter(\DB::table('radio_broadcast_reports'))->orderByDesc('Date')->orderByDesc('id')->get(),
+            'RadioBroadcastReports' => $ReportDateFilter(\DB::table('radio_broadcast_reports as r')->leftJoin('vessels_vessel_information as v', 'r.Vessel', '=', 'v.VesselName'))->select('r.id as report_id','r.*', 'v.*')->orderByDesc('r.Date')->orderByDesc('r.id')->get(),
             'DeviceReports' => $ReportDateFilter(\DB::table('device_reports'))->orderByDesc('Date')->orderByDesc('id')->get(),
             'OfficerOnDutyReports' => $ReportDateFilter(\DB::table('officer_on_duty_reports'))->orderByDesc('Date')->orderByDesc('id')->get(),
             'OtherReports' => $ReportDateFilter(\DB::table('other_reports'))
@@ -73,6 +74,16 @@ class VesselAvailabilityController extends Controller
                                 }) 
                                 ->orderByDesc('Date')
                                 ->orderByDesc('TimeIn')
+                                ->orderByDesc('id')
+                                ->get(),
+            'AvailabilityReports' => $ReportDateFilter(\DB::table('availability_reports'))
+                                ->orderByDesc('Date')
+                                ->orderByDesc('Time')
+                                ->orderByDesc('id')
+                                ->get(), 
+            'PeriodicCheckReports' => $ReportDateFilter(\DB::table('periodic_checks'))
+                                ->orderByDesc('Date')
+                                ->orderByDesc('Time')
                                 ->orderByDesc('id')
                                 ->get(),
         ];

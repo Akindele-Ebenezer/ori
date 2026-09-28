@@ -101,6 +101,17 @@
                         <input type="radio" name="CCTV" value="Yes">
                         <input type="radio" name="CCTV" value="No">
                     </div> 
+                    <h2>CCTV Locations</h2>
+                    <div class="input">
+                        <label for="">Dockyard</label>
+                        <input type="radio" name="CCTVDockyard" value="Yes" aria-label="Dockyard CCTV OK">
+                        <input type="radio" name="CCTVDockyard" value="No" aria-label="Dockyard CCTV FAIL">
+                    </div>
+                    <div class="input">
+                        <label for="">Bullnose</label>
+                        <input type="radio" name="CCTVBullnose" value="Yes" aria-label="Bullnose CCTV OK">
+                        <input type="radio" name="CCTVBullnose" value="No" aria-label="Bullnose CCTV FAIL">
+                    </div>
                     <div class="input">
                         <label for="">Internet</label>
                         <input type="radio" name="Internet" value="Yes">
@@ -124,10 +135,14 @@
                         <label for="">Date</label>
                         <input type="date" name="Date">
                     </div>  
+                    <div class="input">
+                        <label for="">Time</label>
+                        <input type="time" name="Time">
+                    </div>
                 </section> 
                 <br><br>
             </div>
         </form>
-        <button class="UpdateDevicesButton">Update →</button>
+        <button class="UpdateDevicesButton UpdateButton">Update →</button>
     </div>
 </div>

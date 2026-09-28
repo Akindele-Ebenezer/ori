@@ -6,6 +6,7 @@
 .form-1 {
     align-items: center;
     background: rgba(0, 0, 0, .5); 
+    backdrop-filter: blur(.5em);
     display: none;
     justify-content: center;
     height: 100vh; 
@@ -19,7 +20,7 @@
     .FormWrapper {
         padding-top: 3.5em;
         height: 40em;
-        width: 60em;
+        width: 60em !important;
         input[type=file] {
             background-color: lighten($color: $Color-2, $amount: 55);
             border: none;
@@ -246,8 +247,10 @@
 
     form { 
         display: flex;
-        justify-content: space-around; 
-
+        justify-content: space-between; 
+        &.UpdateAvailabilityReportForm {
+            display: unset;
+        }
         &.VesselForm {  
             .input {
                 label {
@@ -258,7 +261,7 @@
             }
         }
 
-        & + button {
+        & + button, button {
             background: $Color-2;
             border: none;
             border-radius: 0.3em;

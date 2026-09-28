@@ -2,8 +2,13 @@
     $dailyReports = collect($DailyReports ?? []);
     $radioBroadcasts = collect($RadioBroadcastReports ?? []);
     $deviceLogs = collect($DeviceReports ?? []);
+    $periodicChecks = collect($PeriodicCheckReports ?? []);
     $officerLogs = collect($OfficerOnDutyReports ?? []);
     $otherLogs = collect($OtherReports ?? []);
+    $availabilityReports = collect($AvailabilityReports ?? []);
+    $incidentReports = $availabilityReports->filter(fn ($report) => strtolower((string) ($report->ReportType ?? '')) === 'incident');
+    $hospitalReports = $availabilityReports->filter(fn ($report) => strtolower((string) ($report->ReportType ?? '')) === 'hospital');
+    $tugsReports = $availabilityReports->filter(fn ($report) => strtolower((string) ($report->ReportType ?? '')) === 'tugs');
     $officerCount = $officerLogs->sum(function ($log) {
         return collect(range(1, 7))->filter(function ($index) use ($log) {
             $suffix = $index === 1 ? '' : $index;
@@ -17,6 +22,8 @@
         'ARRIVAL' => 'status-blue',
         'INSPECTION' => 'status-amber',
         'DRILL' => 'status-violet',
+        'DIVE CHECK' => 'status-violet',
+        'WEATHER BROADCAST' => 'status-blue',
         'DOCKING' => 'status-blue',
         'MAINTENANCE' => 'status-green',
         'BREAKDOWN' => 'status-red',
@@ -31,7 +38,7 @@
     $activeReports = $dailyReports->filter(fn ($report) => ($report->TillNow ?? '') === 'YES' || ($report->EndDate ?? '') >= $today)->count();
     $uniqueVessels = $dailyReports->pluck('Vessel')->filter()->unique()->count();
     $dateLabel = $dailyReports->pluck('StartDate')->filter()->sortDesc()->first();
-    $totalLogs = $dailyReports->count() + $radioBroadcasts->count() + $deviceLogs->count() + $officerLogs->count() + $otherLogs->count();
+    $totalLogs = $dailyReports->count() + $radioBroadcasts->count() + $deviceLogs->count() + $periodicChecks->count() + $officerLogs->count() + $otherLogs->count() + $availabilityReports->count();
 
     $displayDate = function ($date) {
         if (!$date) return 'Not set';
@@ -55,10 +62,10 @@
         return $value === 'Yes' ? 'Done' : ($value === 'No' || !$value ? '--:--' : $value);
     };
 @endphp
-
 <div class="DailyVesselOperations">
     <section class="ori-deck" data-daily-report-dashboard>
-        <p class="deck-close">✖</p>
+        <p class="deck-close" title="Close Dashboard">✖</p>
+        
         <!-- Header Section -->
         <header class="deck-hero">
             <div>
@@ -104,7 +111,7 @@
             <div class="deck-card-metric">
                 <span class="deck-card-metric-label">Total Submissions</span>
                 <span class="deck-card-metric-value">{{ $totalLogs }}</span>
-                <span class="deck-card-metric-note">Across 5 Log Classes</span>
+                <span class="deck-card-metric-note">Across 6 Log Classes</span>
             </div>
         </div>
 
@@ -114,15 +121,16 @@
                 <div class="deck-panel-head">
                     <div>
                         <h2>Vessel Operational Logbook</h2>
-                        <span>Showing recent vessel movements & activities</span>
+                        <span>Showing <strong data-report-visible-count>{{ $dailyReports->count() }}</strong> of {{ $dailyReports->count() }} vessel movements & activities</span>
                     </div>
                     <input class="deck-search" type="search" placeholder="Search vessel, officer, status..." data-report-search aria-label="Search vessel logs">
                 </div>
 
                 @if ($dailyReports->isEmpty())
-                    <div style="padding: 3rem; text-align: center; color: var(--text-muted);">
-                        <strong>No Operational Records Found</strong>
-                        <p style="margin-top: 0.5rem; font-size: 0.8rem;">Vessel activities submitted today will automatically display here.</p>
+                    <div style="padding: 4rem; text-align: center; color: var(--text-muted);">
+                        <svg style="width: 48px; height: 48px; margin: 0 auto 1rem auto; opacity: 0.5;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        <strong style="display: block; font-size: 1.125rem; color: var(--text-main);">No Operational Records Found</strong>
+                        <p style="margin-top: 0.5rem; font-size: 0.875rem;">Vessel activities submitted today will automatically display here.</p>
                     </div>
                 @else
                     <div class="deck-table-wrap">
@@ -148,23 +156,23 @@
                                             $report->DeployedVessel3 ?? null,
                                         ])->filter()->implode(', ');
                                     @endphp
-                                    <tr data-report-row data-search-value="{{ strtolower(($report->Vessel ?? '') . ' ' . ($report->DeployedVessel1 ?? '') . ' ' . ($report->DeployedVessel2 ?? '') . ' ' . ($report->DeployedVessel3 ?? '') . ' ' . $status . ' ' . ($report->DoneBy ?? '') . ' ' . $remarks) }}">
+                                    <tr data-report-row data-report="{{ base64_encode(json_encode($report)) }}" data-search-value="{{ strtolower(($report->Vessel ?? '') . ' ' . ($report->DeployedVessel1 ?? '') . ' ' . ($report->DeployedVessel2 ?? '') . ' ' . ($report->DeployedVessel3 ?? '') . ' ' . $status . ' ' . ($report->DoneBy ?? '') . ' ' . $remarks) }}">
                                         <td>
                                             <span class="deck-vessel-title">{{ $report->Vessel ?? 'Unnamed Vessel' }}</span>
                                             <span class="deck-sub-text">Deployed: {{ $deployedVessels ?: 'None' }}</span>
-                                            <span class="deck-sub-text">{{ $report->TillNow === 'YES' ? '⚡ Ongoing Event' : 'Scheduled Entry' }}</span>
+                                            <span class="deck-sub-text" style="color: {{ $report->TillNow === 'YES' ? 'var(--accent-primary)' : 'inherit' }}">{{ $report->TillNow === 'YES' ? '⚡ Ongoing Event' : 'Scheduled Entry' }}</span>
                                         </td>
                                         <td>
                                             <span class="status-pill {{ $statusClass }}">{{ $status }}</span>
                                         </td>
                                         <td>
-                                            <strong style="font-weight: 700; color: var(--text-main);">{{ $report->DoneBy ?? 'Unassigned' }}</strong>
+                                            <strong style="font-weight: 600; color: var(--text-main);">{{ $report->DoneBy ?? 'Unassigned' }}</strong>
                                         </td>
                                         <td>
-                                            <div>{{ $displayDate($report->StartDate ?? null) }}</div>
+                                            <div style="font-weight: 500;">{{ $displayDate($report->StartDate ?? null) }}</div>
                                             <span class="deck-sub-text">{{ $displayTime($report->StartTime ?? null) }} — {{ $displayTime($report->EndTime ?? null) }}</span>
                                         </td>
-                                        <td style="color: var(--text-muted); font-family: 'DM Sans', sans-serif;">
+                                        <td style="color: var(--text-muted); max-width: 250px;">
                                             {{ str_ireplace(['merchant', 'marchant'], 'MARCHANT', $remarks ?: 'None') }}
                                         </td>
                                     </tr>
@@ -178,7 +186,7 @@
             <!-- Sidebar Analytics -->
             <aside style="display: flex; flex-direction: column; gap: 1.5rem;">
                 <section class="deck-panel" style="padding: 1.5rem;">
-                    <h2 style="font-size: 1rem; margin: 0 0 1.25rem 0;">Status Allocation</h2>
+                    <h2>Status Allocation</h2>
                     @forelse ($statusCounts as $status => $count)
                         @php 
                             $statusClass = $statusColors[$status] ?? 'status-slate'; 
@@ -198,9 +206,12 @@
                     @endforelse
                 </section>
 
-                <section class="deck-panel" style="padding: 1.25rem; background: #f0fdfa; border-color: #ccfbf1;">
-                    <strong style="color: var(--accent-teal); display: block; margin-bottom: 0.4rem; font-size: 0.9rem;">Operations Briefing</strong>
-                    <p style="font-family: 'DM Sans', sans-serif; font-size: 0.8rem; color: #134e4a; margin: 0; line-height: 1.5;">
+                <section class="deck-panel" style="padding: 1.5rem; background: #f0fdfa; border-color: #ccfbf1; border-left: 4px solid #0d9488;">
+                    <strong style="color: #0f766e; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; font-size: 0.9rem;">
+                        <svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Operations Briefing
+                    </strong>
+                    <p style="font-size: 0.875rem; color: #134e4a; margin: 0; line-height: 1.6;">
                         Verify active till-now events with bridge staff before watch handover. Ensure VHF check logs correspond to high-traffic departure windows.
                     </p>
                 </section>
@@ -212,23 +223,57 @@
             <!-- Radio Broadcasts -->
             <section class="deck-log-panel">
                 <div class="deck-panel-head">
-                    <h2>Radio Communications Log</h2>
-                    <span>{{ $radioBroadcasts->count() }} Entries</span>
+                    <div>
+                        <h2>Radio Communications Log</h2>
+                        <span>
+                            Showing
+                            <strong data-report-visible-count>
+                                {{ $radioBroadcasts->filter(fn ($log) => $log->VesselType != 'FUEL STATION')->count() }}
+                            </strong>
+                            of
+                            {{ $radioBroadcasts->filter(fn ($log) => $log->VesselType != 'FUEL STATION')->count() }} Entries
+                        </span>
+                    </div>
+                    <input class="radio-communications-search" type="search" placeholder="Search logs..." data-report-search aria-label="Search vessel radio communications">
                 </div>
                 <ul class="deck-log-list">
                     @foreach ($radioBroadcasts as $log)
-                        <li class="deck-log-item">
-                            <div>
-                                <span class="deck-vessel-title">{{ $log->Vessel }}</span>
-                                <span class="deck-sub-text">{{ $log->DoneBy }} · {{ $displayDate($log->Date) }}</span>
-                            </div>
-                            <span style="font-size: 0.8rem; color: var(--text-muted); font-family: 'DM Sans', sans-serif;">{{ $log->Remarks }}</span>
-                            <div style="display: flex; gap: 0.5rem;">
-                                <span class="status-pill status-teal">1st {{ $displayCall($log->FirstCallTime) }}</span>
-                                <span class="status-pill status-blue">2nd {{ $displayCall($log->SecondCallTime) }}</span>
-                                <span class="status-pill status-violet">Responders {{ $log->Responders }}</span>
-                            </div>
-                        </li>
+                        @if ($log->VesselType != 'FUEL STATION')
+                            <li
+                                data-report-row
+                                class="deck-log-item"
+                                data-search-value="{{ strtolower(trim(
+                                    ($log->Vessel ?? '') . ' ' .
+                                    ($log->DoneBy ?? '') . ' ' .
+                                    (data_get($log, 'Remarks_') ?: data_get($log, 'Remarks', '')) . ' ' .
+                                    ($log->Date ?? '') . ' ' .
+                                    '1st ' . $displayCall($log->FirstCallTime ?? '') . ' ' .
+                                    '2nd ' . $displayCall($log->SecondCallTime ?? '') . ' ' .
+                                    'responders ' . ($log->Responders ?? '')
+                                )) }}"
+                            >
+                                <div>
+                                    <span class="deck-vessel-title">{{ $log->Vessel }}</span>
+                                    <span class="deck-sub-text">{{ $log->DoneBy }} · {{ $displayDate($log->Date) }}</span>
+                                </div>
+
+                                <span style="font-size: 0.875rem; color: var(--text-muted);">
+                                    {{ data_get($log, 'Remarks_') ?: data_get($log, 'Remarks', 'None') }}
+                                </span>
+
+                                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                                    <span class="status-pill {{ ($log->FirstCallTime ?? '') === 'No' ? 'status-red' : 'status-teal' }}">
+                                        1st {{ $displayCall($log->FirstCallTime ?? '') }}
+                                    </span>
+                                    <span class="status-pill {{ ($log->SecondCallTime ?? '') === 'No' ? 'status-red' : 'status-blue' }}">
+                                        2nd {{ $displayCall($log->SecondCallTime ?? '') }}
+                                    </span>
+                                    <span class="status-pill {{ ($log->Responders ?? '') === 'No' ? 'status-red' : 'status-violet' }}">
+                                        Responders {{ $log->Responders ?? '' }}
+                                    </span>
+                                </div>
+                            </li>
+                        @endif
                     @endforeach
                 </ul>
             </section>
@@ -236,8 +281,10 @@
             <!-- Officers Watchkeeping Shift -->
             <section class="deck-log-panel">
                 <div class="deck-panel-head">
-                    <h2>Watchkeeping Roster</h2>
-                    <span>{{ $officerCount }} Duty Officers</span>
+                    <div>
+                        <h2>Watchkeeping Roster</h2>
+                        <span>{{ $officerCount }} Duty Officers</span>
+                    </div>
                 </div>
                 <div class="shift-header">
                     <span>Officer / Role</span>
@@ -252,13 +299,13 @@
                         @if ($officerName)
                             <div class="shift-row">
                                 <div>
-                                    <span class="deck-vessel-title">{{ $officerName }}</span>
+                                    <span class="deck-vessel-title" style="font-size: 0.9rem;">{{ $officerName }}</span>
                                     <span class="deck-sub-text">{{ $displayDate($log->Date) }}</span>
                                 </div>
                                 @if ($log->{'Signature' . $suffix})
-                                    <img src="{{ route('public.storage', ['path' => $log->{'Signature' . $suffix}]) }}" alt="{{ $officerName }} signature" style="display: block; width: 8rem; height: 2.5rem; object-fit: contain; background: #fff; border-radius: 0.25rem;">
+                                    <img src="{{ route('public.storage', ['path' => $log->{'Signature' . $suffix}]) }}" alt="{{ $officerName }} signature" style="display: block; width: 100%; max-width: 6rem; height: 2.5rem; object-fit: contain; margin: 0 auto; background: #fff; border-radius: 4px; border: 1px solid var(--border-dim);">
                                 @else
-                                    <span class="deck-sub-text">No signature uploaded</span>
+                                    <span class="deck-sub-text" style="text-align: center; font-size: 0.75rem;">N/A</span>
                                 @endif
                                 <div class="shift-pill {{ $log->{'Morning' . $suffix} === 'Yes' ? 'active' : 'inactive' }}">{{ $log->{'Morning' . $suffix} === 'Yes' ? '✓' : '–' }}</div>
                                 <div class="shift-pill {{ $log->{'Afternoon' . $suffix} === 'Yes' ? 'active' : 'inactive' }}">{{ $log->{'Afternoon' . $suffix} === 'Yes' ? '✓' : '–' }}</div>
@@ -272,8 +319,10 @@
             <!-- Bridge Equipment Health Check -->
             <section class="deck-log-panel full-width">
                 <div class="deck-panel-head">
-                    <h2>Bridge Equipment & Device Diagnostics</h2>
-                    <span>{{ $deviceLogs->count() }} Active Inspection Batches</span>
+                    <div>
+                        <h2>Bridge Equipment & Device Diagnostics</h2>
+                        <span>{{ $deviceLogs->count() }} Active Inspection Batches</span>
+                    </div>
                 </div>
                 @foreach ($deviceLogs as $log)
                     @php
@@ -281,50 +330,204 @@
                         $workingDevices = collect($deviceFields)->filter(fn ($device) => $log->{$device} === 'Yes')->count();
                     @endphp
                     <div style="border-bottom: 1px solid var(--border-dim);">
-                        <div class="deck-log-item" style="border-bottom: none; background: #f8fafc;">
-                            <div>
-                                <span class="deck-vessel-title">MOC OFFICE</span>
-                                <span class="deck-sub-text">Checked by {{ $log->DoneBy }}</span>
+                        <div class="deck-log-item" style="border-bottom: none; background: #f8fafc; grid-template-columns: 1fr;">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
+                                <div>
+                                    <span class="deck-vessel-title">MOC OFFICE</span>
+                                    <span class="deck-sub-text">Checked by {{ $log->DoneBy }} · {{ $displayDate($log->Date) }} {{ $displayTime($log->Time) }} HRS</span>
+                                </div>
+                                <span class="status-pill status-blue">{{ $workingDevices }} / {{ count($deviceFields) }} operational</span>
                             </div>
-                            <span style="font-size: 0.8rem; color: var(--text-muted); font-family: 'DM Sans', sans-serif;">{{ $log->Remarks }}</span>
-                            <span class="status-pill status-blue">{{ $workingDevices }} / {{ count($deviceFields) }} operational</span>
+                            <span style="font-size: 0.875rem; color: var(--text-muted);">{{ $log->Remarks }}</span>
                         </div>
                         <div class="check-matrix">
                             @foreach ($deviceFields as $device)
                                 @php $result = $log->{$device}; @endphp
+                                @if ($device === 'CCTV')
+                                <details class="check-badge cctv-location-popover">
+                                    <summary>
+                                        <span>CCTV</span>
+                                        <strong class="{{ $result === 'Yes' ? 'pass' : 'fail' }}">{{ $result === 'Yes' ? 'OK' : 'FAIL' }}</strong>
+                                    </summary>
+                                    <div class="cctv-location-statuses">
+                                        <div><span>Dockyard</span><strong class="{{ ($log->CCTVDockyard ?? 'No') === 'Yes' ? 'pass' : 'fail' }}">{{ ($log->CCTVDockyard ?? 'No') === 'Yes' ? 'OK' : 'FAIL' }}</strong></div>
+                                        <div><span>Bullnose</span><strong class="{{ ($log->CCTVBullnose ?? 'No') === 'Yes' ? 'pass' : 'fail' }}">{{ ($log->CCTVBullnose ?? 'No') === 'Yes' ? 'OK' : 'FAIL' }}</strong></div>
+                                    </div>
+                                </details>
+                                @else
                                 <div class="check-badge">
                                     <span>{{ preg_replace('/(?<!^)([A-Z])/', ' $1', $device) }}</span>
                                     <strong class="{{ $result === 'Yes' ? 'pass' : 'fail' }}">{{ $result === 'Yes' ? 'OK' : 'FAIL' }}</strong>
                                 </div>
+                                @endif
                             @endforeach
                         </div>
                     </div>
                 @endforeach
             </section>
 
+            <!-- Periodic Checks -->
+            <section class="deck-log-panel">
+                <div class="deck-panel-head">
+                    <div>
+                        <h2>Periodic Checks</h2>
+                        <span>{{ $periodicChecks->count() }} checks logged</span>
+                    </div>
+                </div>
+                @forelse ($periodicChecks as $check)
+                    <div class="deck-log-item" style="grid-template-columns: 1fr auto; align-items: center;">
+                        <div>
+                            <span class="deck-vessel-title">{{ $check->Equipment }} · {{ $check->Location }}</span>
+                            <span class="deck-sub-text">{{ $check->Type }} · {{ $displayDate($check->Date) }} {{ $displayTime($check->Time) }} · {{ $check->DoneBy }}</span>
+                        </div>
+                        @if ($check->Remarks)
+                            <span style="font-size: 0.875rem; color: var(--text-muted); background: #f1f5f9; padding: 0.5rem; border-radius: 4px; max-width: 200px; text-align: right;">{{ $check->Remarks }}</span>
+                        @endif
+                    </div>
+                @empty
+                    <div style="padding: 2rem; text-align: center; color: var(--text-muted);">
+                        <span style="font-size: 0.875rem;">No periodic checks for this date range.</span>
+                    </div>
+                @endforelse
+            </section>
+
+            @php
+                $availabilityTable = function ($reports, $title, $searchLabel, $columns) {
+                    return compact('reports', 'title', 'searchLabel', 'columns');
+                };
+                $availabilityTables = [
+                    $availabilityTable($incidentReports, 'Incident Reports', 'Search incident reports', [
+                        'Person / Vessel Involved' => 'PersonVesselInvolved',
+                        'Nature Of' => 'NatureOf',
+                        'Location' => 'Location',
+                        'Aid Required' => 'AidRequired',
+                        'Salvage Tugs' => 'SalvageTugs',
+                    ]),
+                    $availabilityTable($hospitalReports, 'Hospital Reports', 'Search hospital reports', [
+                        'Name' => 'Name',
+                        'Vessel / Office' => 'VesselOffice',
+                        'Admission' => 'Admission',
+                        'Departure Time' => 'DepartureTime',
+                        'Arrival Time' => 'ArrivalTime',
+                    ]),
+                    $availabilityTable($tugsReports, 'Tugs Reports', 'Search tugs reports', [
+                        'Vessel' => 'Vessel',
+                        'No. Of Jobs' => 'NoOfJobs',
+                        'Navy Jobs' => 'NavyJobs',
+                        'Tugs' => 'Tugs',
+                    ]),
+                ];
+            @endphp
+
+            @foreach ($availabilityTables as $availabilityTable)
+                <section class="deck-log-panel full-width">
+                    <div class="deck-panel-head">
+                        <div>
+                            <h2>{{ $availabilityTable['title'] }}</h2>
+                            <span>Showing <strong data-report-visible-count>{{ $availabilityTable['reports']->count() }}</strong> of {{ $availabilityTable['reports']->count() }} Entries</span>
+                        </div>
+                        <input type="search" placeholder="{{ $availabilityTable['searchLabel'] }}" data-report-search aria-label="{{ $availabilityTable['searchLabel'] }}">
+                    </div>
+                    <div class="deck-table-wrap">
+                        <table class="deck-table">
+                            <thead>
+                                <tr>
+                                    @foreach ($availabilityTable['columns'] as $label => $field)
+                                        <th>{{ $label }}</th>
+                                    @endforeach
+                                    <th>Date / Time</th>
+                                    <th>Done By</th>
+                                    <th>Remarks</th>
+                                    <th style="visibility: hidden; width: 100px;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($availabilityTable['reports'] as $report)
+                                    @php
+                                        $searchValue = strtolower(trim(collect($availabilityTable['columns'])->map(fn ($field) => $report->{$field} ?? '')->implode(' ') . ' ' . ($report->Date ?? '') . ' ' . ($report->Time ?? '') . ' ' . ($report->DoneBy ?? '') . ' ' . ($report->Remarks ?? '')));
+                                    @endphp
+                                    <tr
+                                        data-report-row
+                                        data-availability-report="{{ base64_encode(json_encode($report)) }}"
+                                        data-search-value="{{ $searchValue }}"
+                                    >
+                                        @foreach ($availabilityTable['columns'] as $field)
+                                            <td><strong>{{ $report->{$field} ?: 'None' }}</strong></td>
+                                        @endforeach
+                                        <td style="white-space: nowrap;">{{ $displayDate($report->Date) }} <br><span class="deck-sub-text" style="display:inline;">{{ $displayTime($report->Time) }}</span></td>
+                                        <td>{{ $report->DoneBy ?: 'Unassigned' }}</td>
+                                        <td style="color: var(--text-muted); max-width: 200px;">{{ $report->Remarks ?: 'None' }}</td>
+                                        <td class="action" style="visibility: hidden">
+                                            <div style="display: flex; gap: 0.25rem;">
+                                                <button type="button" class="EditAvailabilityReportButton" data-report-type="{{ $report->ReportType }}">Edit</button>
+                                                <button type="button" class="DeleteAvailabilityReportButton" data-report-type="{{ $report->ReportType }}">Del</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="{{ count($availabilityTable['columns']) + 4 }}" style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                                            No {{ strtolower($availabilityTable['title']) }} found.
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            @endforeach
+
             <!-- Tank Sounding / ROB Logs -->
             <section class="deck-log-panel full-width">
                 <div class="deck-panel-head">
-                    <h2>ROB & Freshwater Status Logs</h2>
-                    <span>{{ $otherLogs->count() }} Tank Soundings</span>
+                    <div>
+                        <h2>ROB & Freshwater Status Logs</h2>
+                        <span>
+                            Showing
+                            <strong data-report-visible-count>
+                                {{ $otherLogs->count() }}
+                            </strong>
+                            of {{ $otherLogs->count() }} Tank Soundings
+                        </span>
+                    </div>
+                    <input class="rob-freshwater-search" type="search" placeholder="Search vessel, time..." data-report-search aria-label="Search ROB & Freshwater logs">
                 </div>
-                <ul class="deck-log-list">
+                <div class="deck-log-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));">
                     @foreach ($otherLogs as $log)
-                        <li class="deck-log-item">
-                            <div>
-                                <span class="deck-vessel-title">{{ $log->Vessel }}</span>
-                                <span class="deck-sub-text">{{ $displayDate($log->Date) }}</span>
+                        <div
+                            class="deck-log-item"
+                            style="border-right: 1px solid var(--border-dim); grid-template-columns: 1fr;"
+                            data-report-row
+                            data-search-value="{{ strtolower(trim(
+                                ($log->Vessel ?? '') . ' ' .
+                                ($log->Date ?? '') . ' ' .
+                                ($log->Remarks ?? '') . ' ' .
+                                'ROB ' . ($log->ROB ?? '') . ' ' .
+                                'Freshwater FW ' . ($log->FreshWater ?? '') . ' ' .
+                                'CCTV ' . ($log->CCTV ?? 'No') . ' ' .
+                                'Internet ' . ($log->Internet ?? 'No')
+                            )) }}"
+                        >
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                <div>
+                                    <span class="deck-vessel-title">{{ $log->Vessel }}</span>
+                                    <span class="deck-sub-text">{{ $displayDate($log->Date) }}</span>
+                                </div>
                             </div>
-                            <span style="font-size: 0.8rem; color: var(--text-muted); font-family: 'DM Sans', sans-serif;">{{ $log->Remarks }}</span>
-                            <div style="display: flex; gap: 0.5rem;">
+
+                            <span style="font-size: 0.875rem; color: var(--text-muted);">
+                                {{ $log->Remarks ?: 'No remarks recorded.' }}
+                            </span>
+
+                            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
                                 <span class="status-pill status-amber">ROB {{ $log->ROB }}</span>
                                 <span class="status-pill status-blue">FW {{ $log->FreshWater }}</span>
-                                <span class="status-pill status-teal">CCTV {{ $log->CCTV ?? 'No' }}</span>
-                                <span class="status-pill status-violet">Internet {{ $log->Internet ?? 'No' }}</span>
+                                <span class="status-pill {{ ($log->CCTV ?? 'No') === 'No' ? 'status-red' : 'status-teal' }}">CCTV {{ $log->CCTV ?? 'No' }}</span>
+                                <span class="status-pill {{ ($log->Internet ?? 'No') === 'No' ? 'status-red' : 'status-violet' }}">Internet {{ $log->Internet ?? 'No' }}</span>
                             </div>
-                        </li>
+                        </div>
                     @endforeach
-                </ul>
+                </div>
             </section>
         </div>
     </section>

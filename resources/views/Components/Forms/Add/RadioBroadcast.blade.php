@@ -1,7 +1,7 @@
 <div class="RadioBroadcastFormWrapper FormWrapper Hide">
     <form action="" class="AddRadioBroadcastForm" enctype="multipart/form-data" method="POST">
         @csrf
-        @php $vesselRows = max(30, $Vessels->count()); @endphp
+        @php $vesselRows = $Vessels->count(); @endphp
         <div class="inner-1"> 
             <div class="fields">
                 <p class="error-daily-report error"></p> 
@@ -15,7 +15,8 @@
                                 <th>Related Distress</th>
                                 <th>1st Call Time</th>
                                 <th>2nd Call Time</th>
-                                <th>Responders</th>
+                                <th>Vessel Remarks</th>
+                                <th style="visibility: hidden">Responders</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -33,9 +34,36 @@
                                     <td><input type="checkbox" name="vessels[{{ $index }}][RelatedDistress]" value="Yes"></td>
                                     <td><input type="checkbox" name="vessels[{{ $index }}][FirstCallTimeEnabled]" value="Yes" aria-label="1st call time completed for selected vessel"></td>
                                     <td><input type="checkbox" name="vessels[{{ $index }}][SecondCallTimeEnabled]" value="Yes" aria-label="2nd call time completed for selected vessel"></td>
-                                    <td><input type="checkbox" name="vessels[{{ $index }}][Responders]" value="Yes"></td>
+                                    <td><input type="text" name="vessels[{{ $index }}][Remarks_]" placeholder="Vessel remarks"></td>
+                                    <td style="visibility: hidden"><input type="checkbox" name="vessels[{{ $index }}][Responders]" value="Yes"></td>
                                 </tr>
                             @endfor
+                            <tr>
+                                <td>
+                                    <select name="vessels[{{ $vesselRows }}][Vessel]">
+                                        <option value="SECURITY GATE" selected>SECURITY GATE</option>
+                                    </select>
+                                </td>
+                                <td><input type="checkbox" name="vessels[{{ $vesselRows }}][WatchKeepingAlert]" value="Yes"></td>
+                                <td><input type="checkbox" name="vessels[{{ $vesselRows }}][RelatedDistress]" value="Yes"></td>
+                                <td><input type="checkbox" name="vessels[{{ $vesselRows }}][FirstCallTimeEnabled]" value="Yes"></td>
+                                <td><input type="checkbox" name="vessels[{{ $vesselRows }}][SecondCallTimeEnabled]" value="Yes"></td>
+                                <td><input type="text" name="vessels[{{ $vesselRows }}][Remarks_]" placeholder="Vessel remarks"></td>
+                                <td style="visibility: hidden"><input type="checkbox" name="vessels[{{ $vesselRows }}][Responders]" value="Yes"></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <select name="vessels[{{ $vesselRows + 1 }}][Vessel]">
+                                        <option value="CONTAINER CITY" selected>CONTAINER CITY</option>
+                                    </select>
+                                </td>
+                                <td><input type="checkbox" name="vessels[{{ $vesselRows + 1 }}][WatchKeepingAlert]" value="Yes"></td>
+                                <td><input type="checkbox" name="vessels[{{ $vesselRows + 1 }}][RelatedDistress]" value="Yes"></td>
+                                <td><input type="checkbox" name="vessels[{{ $vesselRows + 1 }}][FirstCallTimeEnabled]" value="Yes"></td>
+                                <td><input type="checkbox" name="vessels[{{ $vesselRows + 1 }}][SecondCallTimeEnabled]" value="Yes"></td>
+                                <td><input type="text" name="vessels[{{ $vesselRows + 1 }}][Remarks_]" placeholder="Vessel remarks"></td>
+                                <td style="visibility: hidden"><input type="checkbox" name="vessels[{{ $vesselRows + 1 }}][Responders]" value="Yes"></td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>

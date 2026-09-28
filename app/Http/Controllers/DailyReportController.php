@@ -29,6 +29,7 @@ class DailyReportController extends Controller
 
     public function add_daily_report(Request $request, ?string $Id = null)
     { 
+        $request->validate($this->validationRules());
         $attributes = $this->attributes($request);
         DB::table('daily_reports')->insert($attributes);
         $this->notifyReport(
@@ -42,6 +43,7 @@ class DailyReportController extends Controller
 
     public function edit_daily_report(Request $request, string $Id)
     {        
+        $request->validate($this->validationRules());
         $attributes = $this->attributes($request);
         DB::table('daily_reports')->where('id', $Id)->update($attributes);
         $this->notifyReport(
@@ -75,7 +77,7 @@ class DailyReportController extends Controller
             'DeployedVessel1' => ['nullable', 'string', 'max:255'],
             'DeployedVessel2' => ['nullable', 'string', 'max:255'],
             'DeployedVessel3' => ['nullable', 'string', 'max:255'],
-            'Status' => ['required', 'in:DEPARTURE,ARRIVAL,INSPECTION,DRILL'],
+            'Status' => ['required', 'in:DEPARTURE,ARRIVAL,INSPECTION,DRILL,DIVE CHECK,WEATHER BROADCAST'],
             'DoneBy' => ['required', 'string', 'max:255'],
             'Remarks' => ['nullable', 'string'],
             'StartTime' => ['required', 'regex:/^(?:[01]\d|2[0-3]):[0-5]\d(?:\sHRS)?$/i'],

@@ -1,17 +1,60 @@
 (() => {
-    const dashboard = document.querySelector('[data-daily-report-dashboard]');
-    if (!dashboard) return;
-    
-    const search = dashboard.querySelector('[data-report-search]');
-    const rows = [...dashboard.querySelectorAll('[data-report-row]')];
-    if (!search) return;
+    const dashboard = document.querySelector(
+        '[data-daily-report-dashboard]'
+    );
 
-    search.addEventListener('input', () => {
-        const query = search.value.trim().toLowerCase();
-        rows.forEach((row) => {
-            const matches = !query || row.dataset.searchValue.includes(query);
-            row.style.display = matches ? '' : 'none';
-        });
+    if (!dashboard) return;
+
+    const searchInputs = dashboard.querySelectorAll(
+        '[data-report-search]'
+    );
+
+    searchInputs.forEach((search) => {
+        // Find the section containing this search input.
+        const panel = search.closest(
+            '.deck-panel, .deck-log-panel'
+        );
+
+        if (!panel) return;
+
+        // Only select rows within this particular panel.
+        const rows = Array.from(
+            panel.querySelectorAll('[data-report-row]')
+        );
+
+        if (!rows.length) return;
+
+        const visibleCount = panel.querySelector(
+            '[data-report-visible-count]'
+        );
+
+        const filterRows = () => {
+            const query = search.value.trim().toLowerCase();
+            let count = 0;
+
+            rows.forEach((row) => {
+                const searchText = (
+                    row.dataset.searchValue ||
+                    row.textContent ||
+                    ''
+                ).toLowerCase();
+
+                const matches = searchText.includes(query);
+
+                row.style.display = matches ? '' : 'none';
+
+                if (matches) count++;
+            });
+
+            if (visibleCount) {
+                visibleCount.textContent = count;
+            }
+        };
+
+        search.addEventListener('input', filterRows);
+
+        // Initialize the count for this section.
+        filterRows();
     });
 })();
 let DisplayDailyReportButton = document.querySelector('.DisplayDailyReportButton');

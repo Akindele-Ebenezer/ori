@@ -10,7 +10,7 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
 
-    protected function notifyReport(string $vessel, string $action, string $subject, string $message): void
+    protected function notifyReport( $vessel,  $action,  $subject,  $message) 
     {
         \DB::table('notifications')->insert([
             'DateIn' => now()->format('Y-m-d'),

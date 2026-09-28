@@ -1,7 +1,7 @@
 <div class="OthersFormWrapper FormWrapper Hide">
     <form action="" class="AddOthersForm" enctype="multipart/form-data" method="POST">
         @csrf
-        @php $vesselRows = max(30, $Vessels->count()); @endphp
+        @php $vesselRows = $Vessels->count(); @endphp
         <div class="inner-1"> 
             <div class="fields">
                 <p class="error-daily-report error"></p>
@@ -28,8 +28,8 @@
                                             @endforeach
                                         </select>
                                     </td>
-                                    <td><input type="text" name="vessels[{{ $index }}][ROB]"></td>
-                                    <td><input type="text" name="vessels[{{ $index }}][FreshWater]"></td>
+                                    <td><input type="number" name="vessels[{{ $index }}][ROB]"></td>
+                                    <td><input type="number" name="vessels[{{ $index }}][FreshWater]"></td>
                                     @foreach (['CCTV', 'Internet'] as $field)
                                         <td>
                                             <label><input type="radio" name="vessels[{{ $index }}][{{ $field }}]" value="Yes"> Yes</label>

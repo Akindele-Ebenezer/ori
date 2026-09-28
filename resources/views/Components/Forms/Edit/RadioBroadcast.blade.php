@@ -12,14 +12,23 @@
                     <h1>Radio Broadcast</h1>
                     <section>  
                         <div class="input">
-                            <label for="">Vessel</label>
-                            <select name="Vessel" id="">
+                            <label for="">Vessel Remarks</label>
+                            <textarea name="Remarks_"></textarea>
+                        </div>
+                    </section>
+                    <section>
+                        <div class="input">
+                            <label for="edit-radio-vessel">Vessel</label>
+                            <select disabled name="Vessel" id="edit-radio-vessel" required>
+                                <option value="">Select vessel</option>
+
                                 @foreach ($Vessels as $Vessel)
-                                    <option value="{{ $Vessel->VesselName }}">{{ $Vessel->VesselName }}</option>
+                                    <option value="{{ $Vessel->VesselName }}">
+                                        {{ $Vessel->VesselName }}
+                                    </option>
                                 @endforeach
-                                <option value=""></option>  
                             </select>
-                        </div>     
+                        </div>  
                     </section>
                     <section>
                         <div class="input">
@@ -42,13 +51,13 @@
                 <section>
                     <div class="input">
                         <label for="edit-radio-first-call-time">1st Call Time</label>
-                        <input type="time" id="edit-radio-first-call-time" name="FirstCallTime">
+                        <input type="time" id="edit-radio-first-call-time" name="FirstCallTime" disabled>
                         <label for="edit-radio-first-call-enabled">Call completed</label>
                         <input type="checkbox" id="edit-radio-first-call-enabled" name="FirstCallTimeEnabled" value="Yes">
                     </div>
                     <div class="input">
                         <label for="edit-radio-second-call-time">2nd Call Time</label>
-                        <input type="time" id="edit-radio-second-call-time" name="SecondCallTime">
+                        <input type="time" id="edit-radio-second-call-time" name="SecondCallTime" disabled>
                         <label for="edit-radio-second-call-enabled">Call completed</label>
                         <input type="checkbox" id="edit-radio-second-call-enabled" name="SecondCallTimeEnabled" value="Yes">
                     </div>
@@ -74,6 +83,6 @@
                 <br><br>
             </div>
         </form>
-        <button class="UpdateRadioBroadcastButton">Update →</button>
+        <button class="UpdateRadioBroadcastButton UpdateButton">Update →</button>
     </div>
 </div>

@@ -2158,6 +2158,7 @@
                         <td class="Hide">{{ $Availabilty->Report }}</td> 
                         <td class="Hide">{{ $Availabilty->Picture }}</td> 
                         <td class="Hide">{{ $Availabilty->Location }}</td>  
+                        <td class="Hide">{{ $Availabilty->Remark }}</td>
                         <td>{{ $Availabilty->Vessel }}</td> 
                         @php
                             $_StartDateTime = \Carbon\Carbon::parse(($Availabilty->StartDate ?? date('Y-m-d')) . ' ' . ($Availabilty->StartTime ?? '00:00'));
@@ -2250,7 +2251,7 @@
                     </tr>
                     @forelse ($RadioBroadcastReports as $RadioBroadcast)
                     <tr data-report="{{ base64_encode(json_encode($RadioBroadcast)) }}">
-                        <td class="Hide">{{ $RadioBroadcast->id }}</td>
+                        <td class="Hide">{{ $RadioBroadcast->report_id }}</td>
                         <td>{{ $RadioBroadcast->Date }}</td>
                         <td>{{ $RadioBroadcast->Vessel }}</td>
                         <td>{{ $RadioBroadcast->DoneBy }}</td>
@@ -2295,6 +2296,42 @@
                 </table>
             </div> 
         </div> 
+        <div class="board-3i">
+            <div class="div">
+                <h1>Periodic Checks</h1>
+                <table>
+                    <tr>
+                        <th class="Hide">ID</th>
+                        <th>Type</th>
+                        <th>Equipment</th>
+                        <th>Location</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Done by</th>
+                        <th>Remarks</th>
+                        <th>#</th>
+                    </tr>
+                    @forelse ($PeriodicCheckReports as $PeriodicCheck)
+                    <tr data-report="{{ base64_encode(json_encode($PeriodicCheck)) }}">
+                        <td class="Hide">{{ $PeriodicCheck->id }}</td>
+                        <td>{{ $PeriodicCheck->Type }}</td>
+                        <td>{{ $PeriodicCheck->Equipment }}</td>
+                        <td>{{ $PeriodicCheck->Location }}</td>
+                        <td>{{ $PeriodicCheck->Date }}</td>
+                        <td>{{ $PeriodicCheck->Time }}</td>
+                        <td>{{ $PeriodicCheck->DoneBy }}</td>
+                        <td>{{ $PeriodicCheck->Remarks }}</td>
+                        <td class="action">
+                            <img class="EditPeriodicChecksButton" src="{{ asset('images/write.png') }}" alt="Edit">
+                            <img class="DeletePeriodicChecksRowButton" src="{{ asset('images/delete.png') }}" alt="Delete">
+                        </td>
+                    </tr>
+                    @empty
+                    <tr><td class="action" colspan="9">System doesn't have any records yet.</td></tr>
+                    @endforelse
+                </table>
+            </div>
+        </div>
         <div class="board-3i">
             <div class="div">
                 <h1>Officers On Duty</h1>
@@ -2347,6 +2384,96 @@
                         <td class="action">  
                             <img class="EditOthersButton" src="{{ asset('images/write.png') }}" alt="Edit">
                             <img class="DeleteOthersButton" src="{{ asset('images/delete.png') }}" alt="Delete">
+                        </td>
+                    </tr>
+                    @empty
+                    <tr><td class="action" colspan="6">System doesn't have any records yet.</td></tr>
+                    @endforelse
+                </table>
+            </div> 
+        </div>
+        <div class="board-3i">
+            <div class="div">
+                <h1>Incident Report</h1>
+                <table>
+                    <tr>
+                        <th class="Hide">ID</th>
+                        <th>Person / Vessel Involved</th>
+                        <th>Nature Of (IAN)</th>
+                        <th>Location</th>
+                        <th>Date</th> 
+                        <th>#</th>
+                    </tr>
+                    @forelse ($AvailabilityReports->where('ReportType', 'incident') as $IncidentReport)
+                    <tr data-availability-report="{{ base64_encode(json_encode($IncidentReport)) }}">
+                        <td class="Hide">{{ $IncidentReport->id }}</td>
+                        <td>{{ $IncidentReport->PersonVesselInvolved ?? 0 }}</td>
+                        <td>{{ $IncidentReport->NatureOf }}</td>
+                        <td>{{ $IncidentReport->Location }}</td>
+                        <td>{{ $IncidentReport->Date }}</td>
+                        <td class="action">  
+                            <img class="EditAvailabilityReportButton" src="{{ asset('images/write.png') }}" alt="Edit">
+                            <img class="DeleteAvailabilityReportButton" src="{{ asset('images/delete.png') }}" alt="Delete">
+                        </td>
+                    </tr>
+                    @empty
+                    <tr><td class="action" colspan="6">System doesn't have any records yet.</td></tr>
+                    @endforelse
+                </table>
+            </div> 
+        </div>
+        <div class="board-3i">
+            <div class="div">
+                <h1>Hospital Visit</h1>
+                <table>
+                    <tr>
+                        <th class="Hide">ID</th>
+                        <th>Hospital Name</th>  
+                        <th>Vessel / Office</th>
+                        <th>Admission </th>
+                        <th>Date</th> 
+                        <th>#</th>
+                    </tr>
+                    @forelse ($AvailabilityReports->where('ReportType', 'hospital') as $HospitalVisit)
+                    <tr data-availability-report="{{ base64_encode(json_encode($HospitalVisit)) }}">
+                        <td class="Hide">{{ $HospitalVisit->id }}</td>
+                        <td>{{ $HospitalVisit->Name }}</td>
+                        <td>{{ $HospitalVisit->VesselOffice ?? 0 }}</td>
+                        <td>{{ $HospitalVisit->Admission }}</td>
+                        <td>{{ $HospitalVisit->Date }}</td>
+                        <td class="action">  
+                            <img class="EditAvailabilityReportButton" src="{{ asset('images/write.png') }}" alt="Edit">
+                            <img class="DeleteAvailabilityReportButton" src="{{ asset('images/delete.png') }}" alt="Delete">
+                        </td>
+                    </tr>
+                    @empty
+                    <tr><td class="action" colspan="6">System doesn't have any records yet.</td></tr>
+                    @endforelse
+                </table>
+            </div> 
+        </div>
+        <div class="board-3i">
+            <div class="div">
+                <h1>Tugs Assignment</h1>
+                <table>
+                    <tr>
+                        <th class="Hide">ID</th>
+                        <th>Vessel</th>  
+                        <th>No. Of Jobs</th>
+                        <th>Navy Jobs</th>
+                        <th>Date</th> 
+                        <th>#</th>
+                    </tr>
+                    @forelse ($AvailabilityReports->where('ReportType', 'tugs') as $TugsAssignment)
+                    <tr data-availability-report="{{ base64_encode(json_encode($TugsAssignment)) }}">
+                        <td class="Hide">{{ $TugsAssignment->id }}</td>
+                        <td>{{ $TugsAssignment->Vessel }}</td>
+                        <td>{{ $TugsAssignment->NoOfJobs ?? 0 }}</td>
+                        <td>{{ $TugsAssignment->NavyJobs }}</td>
+                        <td>{{ $TugsAssignment->Date }}</td>
+                        <td class="action">  
+                            <img class="EditAvailabilityReportButton" src="{{ asset('images/write.png') }}" alt="Edit">
+                            <img class="DeleteAvailabilityReportButton" src="{{ asset('images/delete.png') }}" alt="Delete">
                         </td>
                     </tr>
                     @empty

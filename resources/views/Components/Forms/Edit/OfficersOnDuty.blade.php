@@ -109,6 +109,6 @@
                 <br>
             </div> 
         </form>
-        <button class="UpdateOfficersOnDutyButton">Update →</button>
+        <button class="UpdateOfficersOnDutyButton UpdateButton">Update →</button>
     </div>
 </div>
