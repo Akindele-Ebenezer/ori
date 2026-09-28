@@ -334,7 +334,7 @@
                             <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
                                 <div>
                                     <span class="deck-vessel-title">MOC OFFICE</span>
-                                    <span class="deck-sub-text">Checked by {{ $log->DoneBy }} · {{ $displayDate($log->Date) }} {{ $log->Time ? date('H:i', strtotime($log->Time)) : '00:00' }} HRS</span>
+                                    <span class="deck-sub-text">Checked by {{ $log->DoneBy }} · {{ $displayDate($log->Date) }} {{ $displayTime($log->Time) }} HRS</span>
                                 </div>
                                 <span class="status-pill status-blue">{{ $workingDevices }} / {{ count($deviceFields) }} operational</span>
                             </div>
