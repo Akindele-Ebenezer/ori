@@ -92,7 +92,7 @@
             </section>
             <section>
                 <div class="input">
-                    <label for="">CCTV</label>
+                    <label for="">MONITOR 1 - 4</label>
                     <input type="radio" name="CCTV" value="Yes">
                     <input type="radio" name="CCTV" value="No">
                 </div> 
