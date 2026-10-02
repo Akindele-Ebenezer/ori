@@ -8,7 +8,8 @@ const formButtons = {
     OthersFormButton: 'OthersFormWrapper',
     IncidentReportFormButton: 'IncidentReportFormWrapper',
     HospitalReportFormButton: 'HospitalReportFormWrapper',
-    TugsReportFormButton: 'TugsReportFormWrapper'
+    TugsReportFormButton: 'TugsReportFormWrapper',
+    CctvReportFormButton: 'CctvReportFormWrapper'
 };
 
 Object.entries(formButtons).forEach(([buttonClass, wrapperClass]) => {

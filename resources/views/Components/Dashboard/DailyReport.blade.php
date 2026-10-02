@@ -9,6 +9,13 @@
     $incidentReports = $availabilityReports->filter(fn ($report) => strtolower((string) ($report->ReportType ?? '')) === 'incident');
     $hospitalReports = $availabilityReports->filter(fn ($report) => strtolower((string) ($report->ReportType ?? '')) === 'hospital');
     $tugsReports = $availabilityReports->filter(fn ($report) => strtolower((string) ($report->ReportType ?? '')) === 'tugs');
+    $cctvReports = $availabilityReports->filter(fn ($report) => strtolower((string) ($report->ReportType ?? '')) === 'cctv');
+    $tugJobCounts = $tugsReports
+        ->filter(fn ($report) => trim((string) ($report->Tugs ?? '')) !== '')
+        ->groupBy(fn ($report) => strtoupper(trim((string) $report->Tugs)))
+        ->map(fn ($reports) => $reports->sum(fn ($report) => is_numeric($report->NoOfJobs ?? null) ? (int) $report->NoOfJobs : 0))
+        ->sortDesc();
+    $maxTugJobs = max(1, (int) $tugJobCounts->max());
     $officerCount = $officerLogs->sum(function ($log) {
         return collect(range(1, 7))->filter(function ($index) use ($log) {
             $suffix = $index === 1 ? '' : $index;
@@ -20,6 +27,8 @@
     $statusColors = [
         'DEPARTURE' => 'status-coral',
         'ARRIVAL' => 'status-blue',
+        'DISEMBARKATION' => 'status-teal',
+        'EMBARKATION' => 'status-green',
         'INSPECTION' => 'status-amber',
         'DRILL' => 'status-violet',
         'DIVE CHECK' => 'status-violet',
@@ -204,6 +213,18 @@
                     @empty
                         <span class="deck-sub-text">No distribution metrics available.</span>
                     @endforelse
+                    <div class="tug-assignments-insight">
+                        <h3>Tug Assignments</h3>
+                        <span class="deck-sub-text">Jobs by tug</span>
+                        @forelse ($tugJobCounts as $tug => $jobs)
+                            <div class="tug-jobs-row">
+                                <div class="tug-jobs-meta"><span>{{ $tug }}</span><strong>{{ $jobs }}</strong></div>
+                                <div class="tug-jobs-track"><span style="width: {{ round(($jobs / $maxTugJobs) * 100) }}%"></span></div>
+                            </div>
+                        @empty
+                            <span class="deck-sub-text">No tug assignment data available.</span>
+                        @endforelse
+                    </div>
                 </section>
 
                 <section class="deck-panel" style="padding: 1.5rem; background: #f0fdfa; border-color: #ccfbf1; border-left: 4px solid #0d9488;">
@@ -415,6 +436,14 @@
                         'No. Of Jobs' => 'NoOfJobs',
                         'Navy Jobs' => 'NavyJobs',
                         'Tugs' => 'Tugs',
+                    ]),
+                    $availabilityTable($cctvReports, 'CCTV Positioning', 'Search CCTV positioning reports', [
+                        'Vessel' => 'Vessel',
+                        'Recording Capacity' => 'RecordingCapacity',
+                        'Positioning' => 'Positioning',
+                        'Correction' => 'Correction',
+                        'From' => 'From',
+                        'To' => 'To',
                     ]),
                 ];
             @endphp

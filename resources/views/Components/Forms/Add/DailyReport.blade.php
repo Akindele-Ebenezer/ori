@@ -34,6 +34,9 @@
                         <select name="Status" id=""> 
                             <option value="DEPARTURE">DEPARTURE</option>
                             <option value="ARRIVAL">ARRIVAL</option>
+                            <option value="DISEMBARKATION">DISEMBARKATION</option>
+                            <option value="EMBARKATION">EMBARKATION</option>
+                            <option value="MAINTENANCE">MAINTENANCE</option>
                             <option value="INSPECTION">INSPECTION</option> 
                             <option value="DRILL">DRILL</option>
                             <option value="DIVE CHECK">DIVE CHECK</option>

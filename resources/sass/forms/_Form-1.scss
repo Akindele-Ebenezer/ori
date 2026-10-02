@@ -261,6 +261,28 @@
             }
         }
 
+        &#availability-report-form-cctv {
+            display: unset;
+
+            .inner-2 {
+                margin-top: 5em;
+            }
+
+            table td {
+                input[type=date] {
+                    width: 100% !important;
+                }
+            }
+        }
+
+        &.AddOthersForm {
+            table td {
+                input {
+                    width: 100% !important;
+                }
+            }
+        }
+
         & + button, button {
             background: $Color-2;
             border: none;

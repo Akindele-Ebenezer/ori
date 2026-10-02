@@ -1252,6 +1252,18 @@ body {
   font-weight: 400;
   font-size: smaller;
 }
+.form-1 form#availability-report-form-cctv {
+  display: unset;
+}
+.form-1 form#availability-report-form-cctv .inner-2 {
+  margin-top: 5em;
+}
+.form-1 form#availability-report-form-cctv table td input[type=date] {
+  width: 100% !important;
+}
+.form-1 form.AddOthersForm table td input {
+  width: 100% !important;
+}
 .form-1 form + button, .form-1 form button {
   background: #225f7d;
   border: none;

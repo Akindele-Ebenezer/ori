@@ -5,6 +5,7 @@ const deleteModalClasses = {
     incident: '.DeleteIncidentAccidentNearMiss',
     hospital: '.DeleteHospitalVisitCrewStaff',
     tugs: '.DeleteTugsAssignment',
+    cctv: '.DeleteCctvPositioning',
 };
 
 const reportFromRow = (button) => {

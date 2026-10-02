@@ -2482,6 +2482,42 @@
                 </table>
             </div> 
         </div>
+        <div class="board-3i">
+            <div class="div">
+                <h1>CCTV Positioning</h1>
+                <table>
+                    <tr>
+                        <th class="Hide">ID</th>
+                        <th>Vessel</th>
+                        <th>Recording Capacity</th>
+                        <th>Positioning</th>
+                        <th>Correction</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Date</th>
+                        <th>#</th>
+                    </tr>
+                    @forelse ($AvailabilityReports->where('ReportType', 'cctv') as $CctvPositioning)
+                    <tr data-availability-report="{{ base64_encode(json_encode($CctvPositioning)) }}">
+                        <td class="Hide">{{ $CctvPositioning->id }}</td>
+                        <td>{{ $CctvPositioning->Vessel }}</td>
+                        <td>{{ $CctvPositioning->RecordingCapacity }}</td>
+                        <td>{{ $CctvPositioning->Positioning }}</td>
+                        <td>{{ $CctvPositioning->Correction }}</td>
+                        <td>{{ $CctvPositioning->From }}</td>
+                        <td>{{ $CctvPositioning->To }}</td>
+                        <td>{{ $CctvPositioning->Date }}</td>
+                        <td class="action">
+                            <img class="EditAvailabilityReportButton" src="{{ asset('images/write.png') }}" alt="Edit">
+                            <img class="DeleteAvailabilityReportButton" src="{{ asset('images/delete.png') }}" alt="Delete">
+                        </td>
+                    </tr>
+                    @empty
+                    <tr><td class="action" colspan="9">System doesn't have any records yet.</td></tr>
+                    @endforelse
+                </table>
+            </div>
+        </div>
         @php
             $GeneratorAvailability = \DB::table('generator_availability')
                                             ->orderBy('StartDate', 'DESC')
