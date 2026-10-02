@@ -3,7 +3,7 @@
         $reportForms = [
             'incident' => ['class' => 'IncidentReportFormWrapper', 'title' => 'Incident / Accident / Near Miss Report', 'fields' => [['PersonVesselInvolved', 'Person / Vessel Involved'], ['NatureOf', 'Nature Of (IAN)'], ['Location', 'Location'], ['AidRequired', 'Aid Required'], ['SalvageTugs', 'Salvage Tugs']]],
             'hospital' => ['class' => 'HospitalReportFormWrapper', 'title' => 'Hospital Visit Crew / Staff', 'fields' => [['Name', 'Name'], ['VesselOffice', 'Vessel / Office'], ['Admission', 'Admission'], ['DepartureTime', 'Departure Time'], ['ArrivalTime', 'Arrival Time']]],
-            'tugs' => ['class' => 'TugsReportFormWrapper', 'title' => 'Tugs Assignment', 'fields' => [['Vessel', 'Vessel'], ['NoOfJobs', 'No. Of Jobs'], ['NavyJobs', 'Navy Jobs'], ['Tugs', 'Tugs']]],
+            'tugs' => ['class' => 'TugsReportFormWrapper', 'title' => 'Tugs Assignment', 'fields' => [['Tugs', 'Tugs'], ['Vessel', 'Vessel'], ['NoOfJobs', 'No. Of Jobs'], ['NavyJobs', 'Navy Jobs']]],
             'cctv' => ['class' => 'CctvReportFormWrapper', 'title' => 'CCTV Positioning', 'fields' => [['Vessel', 'Vessel'], ['RecordingCapacity', 'Recording Capacity'], ['Positioning', 'Positioning'], ['Correction', 'Correction'], ['From', 'From'], ['To', 'To']]],
         ];
     @endphp

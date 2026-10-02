@@ -5,7 +5,7 @@
             @csrf
             <input type="hidden" name="ReportType" value="tugs">
             <h1>Update Tugs Assignment</h1>
-            @foreach (['Vessel' => 'Vessel', 'NoOfJobs' => 'No. Of Jobs', 'NavyJobs' => 'Navy Jobs', 'Tugs' => 'Tugs'] as $name => $label)
+            @foreach (['Tugs' => 'Tugs', 'Vessel' => 'Vessel', 'NoOfJobs' => 'No. Of Jobs', 'NavyJobs' => 'Navy Jobs'] as $name => $label)
                 <div class="input"><label for="tugs-edit-{{ $name }}">{{ $label }}</label><input id="tugs-edit-{{ $name }}" type="{{ $name === 'NoOfJobs' ? 'number' : 'text' }}" @if ($name === 'NoOfJobs') min="0" step="1" required @endif name="{{ $name }}"></div>
             @endforeach
             <div class="input"><label for="tugs-edit-Date">Date</label><input id="tugs-edit-Date" type="date" name="Date" required></div>
