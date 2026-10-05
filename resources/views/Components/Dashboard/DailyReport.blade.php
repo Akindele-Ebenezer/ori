@@ -16,6 +16,7 @@
         ->map(fn ($reports) => $reports->sum(fn ($report) => is_numeric($report->NoOfJobs ?? null) ? (int) $report->NoOfJobs : 0))
         ->sortDesc();
     $maxTugJobs = max(1, (int) $tugJobCounts->max());
+    $tugJobTotal = (int) $tugJobCounts->sum();
     $officerCount = $officerLogs->sum(function ($log) {
         return collect(range(1, 7))->filter(function ($index) use ($log) {
             $suffix = $index === 1 ? '' : $index;
@@ -27,6 +28,8 @@
     $statusColors = [
         'DEPARTURE' => 'status-coral',
         'ARRIVAL' => 'status-blue',
+        'BERTHING' => 'status-teal',
+        'UNBERTHING' => 'status-coral',
         'DISEMBARKATION' => 'status-teal',
         'EMBARKATION' => 'status-green',
         'INSPECTION' => 'status-amber',
@@ -190,6 +193,48 @@
                         </table>
                     </div>
                 @endif
+                <section class="tug-assignments-insight" aria-labelledby="tug-assignments-heading">
+                    <div class="tug-jobs-heading">
+                        <div class="tug-jobs-copy">
+                            <h3 id="tug-assignments-heading">Tug Assignments</h3>
+                            <p class="tug-jobs-caption">Jobs by tug, compared with the busiest tug.</p>
+                        </div>
+                        <div class="tug-jobs-total">
+                            <strong>{{ number_format($tugJobTotal) }}</strong>
+                            <span>Total jobs</span>
+                        </div>
+                    </div>
+                    @if ($tugJobCounts->isNotEmpty())
+                        <div class="tug-jobs-legend" aria-label="Bar color thresholds">
+                            <span class="tug-jobs-legend-item"><i class="tug-jobs-swatch tug-jobs-swatch--low" aria-hidden="true"></i>Low <small>0-25%</small></span>
+                            <span class="tug-jobs-legend-item"><i class="tug-jobs-swatch tug-jobs-swatch--medium" aria-hidden="true"></i>Medium <small>26-50%</small></span>
+                            <span class="tug-jobs-legend-item"><i class="tug-jobs-swatch tug-jobs-swatch--high" aria-hidden="true"></i>High <small>51-99%</small></span>
+                            <span class="tug-jobs-legend-item"><i class="tug-jobs-swatch tug-jobs-swatch--full" aria-hidden="true"></i>Full <small>100%</small></span>
+                        </div>
+                        <ol class="tug-jobs-list" aria-label="Job counts by tug">
+                            @foreach ($tugJobCounts as $tug => $jobs)
+                                @php
+                                    $jobPercentage = (int) round(($jobs / $maxTugJobs) * 100);
+                                    $jobLevel = $jobPercentage <= 25 ? 'low' : ($jobPercentage <= 50 ? 'medium' : ($jobPercentage < 100 ? 'high' : 'full'));
+                                @endphp
+                                <li class="tug-jobs-row">
+                                    <div class="tug-jobs-meta">
+                                        <div class="tug-jobs-name">
+                                            <span class="tug-jobs-rank" aria-hidden="true">{{ $loop->iteration }}</span>
+                                            <span class="tug-jobs-label" title="{{ $tug }}">{{ $tug }}</span>
+                                        </div>
+                                        <strong>{{ number_format((int) $jobs) }} <span>jobs</span></strong>
+                                    </div>
+                                    <div class="tug-jobs-track tug-jobs-track--{{ $jobLevel }}" role="meter" aria-label="{{ $tug }} job count" aria-valuetext="{{ number_format((int) $jobs) }} jobs, {{ $jobPercentage }}% of busiest tug" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ $jobPercentage }}">
+                                        <span aria-hidden="true" style="width: {{ $jobPercentage }}%"></span>
+                                    </div>
+                                </li>
+                            @endforeach
+                        </ol>
+                    @else
+                        <div class="tug-jobs-empty">No tug assignment data available.</div>
+                    @endif
+                </section>
             </section>
 
             <!-- Sidebar Analytics -->
@@ -213,18 +258,6 @@
                     @empty
                         <span class="deck-sub-text">No distribution metrics available.</span>
                     @endforelse
-                    <div class="tug-assignments-insight">
-                        <h3>Tug Assignments</h3>
-                        <span class="deck-sub-text">Jobs by tug</span>
-                        @forelse ($tugJobCounts as $tug => $jobs)
-                            <div class="tug-jobs-row">
-                                <div class="tug-jobs-meta"><span>{{ $tug }}</span><strong>{{ $jobs }}</strong></div>
-                                <div class="tug-jobs-track"><span style="width: {{ round(($jobs / $maxTugJobs) * 100) }}%"></span></div>
-                            </div>
-                        @empty
-                            <span class="deck-sub-text">No tug assignment data available.</span>
-                        @endforelse
-                    </div>
                 </section>
 
                 <section class="deck-panel" style="padding: 1.5rem; background: #f0fdfa; border-color: #ccfbf1; border-left: 4px solid #0d9488;">

@@ -108,6 +108,10 @@
             transform: rotate(90deg);
         }
     }
+
+    .tug-assignments-insight {
+        padding: 2em;
+    }
 }
 
 /* -------------------------------------------------------------
@@ -693,6 +697,198 @@ input[type=search] {
     height: 100%; 
     border-radius: 4px;
     transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); 
+}
+
+.tug-assignments-insight {
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border-dim);
+
+    h3 {
+        margin: 0;
+        color: var(--text-heading);
+        font-size: 1rem;
+        font-weight: 700;
+    }
+}
+
+.tug-jobs-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.tug-jobs-copy {
+    min-width: 0;
+}
+
+.tug-jobs-caption {
+    margin: 0.35rem 0 0;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    line-height: 1.45;
+}
+
+.tug-jobs-total {
+    display: grid;
+    flex: 0 0 auto;
+    justify-items: end;
+    gap: 0.2rem;
+    padding: 0.5rem 0.7rem;
+    border: 1px solid #99f6e4;
+    border-radius: var(--radius-sm);
+    background: var(--status-teal-bg);
+
+    strong {
+        color: var(--status-teal-text);
+        font-size: 1.1rem;
+        line-height: 1;
+        font-variant-numeric: tabular-nums;
+    }
+
+    span {
+        color: var(--status-teal-text);
+        font-size: 0.65rem;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+}
+
+.tug-jobs-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem 0.8rem;
+    margin: -0.25rem 0 1rem;
+}
+
+.tug-jobs-legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    color: var(--text-main);
+    font-size: 0.68rem;
+    font-weight: 600;
+    white-space: nowrap;
+
+    small {
+        color: var(--text-muted);
+        font-size: inherit;
+        font-weight: 400;
+    }
+}
+
+.tug-jobs-swatch {
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 50%;
+
+    &--low { background: var(--status-green-text); }
+    &--medium { background: var(--status-blue-text); }
+    &--high { background: var(--status-amber-text); }
+    &--full { background: var(--status-coral-text); }
+}
+
+.tug-jobs-list {
+    display: grid;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.tug-jobs-row {
+    min-width: 0;
+}
+
+.tug-jobs-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.45rem;
+    color: var(--text-main);
+    font-size: 0.8rem;
+
+    > strong {
+        flex: 0 0 auto;
+        color: var(--text-heading);
+        font-size: 0.8rem;
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+    }
+
+    > strong span {
+        color: var(--text-muted);
+        font-size: 0.7rem;
+        font-weight: 500;
+    }
+}
+
+.tug-jobs-name {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    gap: 0.55rem;
+    font-weight: 600;
+}
+
+.tug-jobs-rank {
+    display: grid;
+    flex: 0 0 1.5rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    place-items: center;
+    border: 1px solid var(--border-dim);
+    border-radius: 50%;
+    background: var(--bg-surface);
+    color: var(--text-muted);
+    font-size: 0.7rem;
+    font-variant-numeric: tabular-nums;
+}
+
+.tug-jobs-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.tug-jobs-track {
+    height: 0.55rem;
+    overflow: hidden;
+    border: 1px solid #ccfbf1;
+    border-radius: 999px;
+    background: #f0fdfa;
+
+    > span {
+        display: block;
+        height: 100%;
+        min-width: 0;
+        border-radius: inherit;
+        background: #0f766e;
+        transition: width 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+
+    &--low > span { background: var(--status-green-text); }
+    &--medium > span { background: var(--status-blue-text); }
+    &--high > span { background: var(--status-amber-text); }
+    &--full > span { background: var(--status-coral-text); }
+}
+
+.tug-jobs-empty {
+    padding: 0.85rem;
+    border: 1px dashed var(--border-bright);
+    border-radius: var(--radius-sm);
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .tug-jobs-track > span {
+        transition: none;
+    }
 }
 
 aside .deck-panel > h2 {

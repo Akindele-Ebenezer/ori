@@ -22,13 +22,13 @@ class AvailabilityReportController extends Controller
             $data = $request->validate([
                 'vessels' => ['required', 'array', 'min:1'],
                 'vessels.*.Vessel' => ['required', 'string', 'distinct', 'exists:vessels_vessel_information,VesselName'],
-                'vessels.*.RecordingCapacity' => ['required', 'string', 'max:255'],
-                'vessels.*.Positioning' => ['required', 'in:OK,NOT OK'],
-                'vessels.*.Correction' => ['required', 'in:OK,NOT OK'],
-                'vessels.*.From' => ['required', 'string', 'max:255'],
-                'vessels.*.To' => ['required', 'string', 'max:255'],
-                'Date' => ['required', 'date'],
-                'DoneBy' => ['required', 'string', 'max:255'],
+                'vessels.*.RecordingCapacity' => ['nullable', 'string', 'max:255'],
+                'vessels.*.Positioning' => ['nullable', 'in:OK,NOT OK'],
+                'vessels.*.Correction' => ['nullable', 'in:OK,NOT OK'],
+                'vessels.*.From' => ['nullable', 'string', 'max:255'],
+                'vessels.*.To' => ['nullable', 'string', 'max:255'],
+                'Date' => ['nullable', 'date'],
+                'DoneBy' => ['nullable', 'string', 'max:255'],
                 'Remarks' => ['nullable', 'string'],
             ]);
 
@@ -36,19 +36,19 @@ class AvailabilityReportController extends Controller
                 return collect($data['vessels'])->map(fn (array $vessel) => AvailabilityReport::create([
                     'ReportType' => 'cctv',
                     'Vessel' => $vessel['Vessel'],
-                    'RecordingCapacity' => $vessel['RecordingCapacity'],
-                    'Positioning' => $vessel['Positioning'],
-                    'Correction' => $vessel['Correction'],
-                    'From' => $vessel['From'],
-                    'To' => $vessel['To'],
-                    'Date' => $data['Date'],
-                    'DoneBy' => $data['DoneBy'],
+                    'RecordingCapacity' => $vessel['RecordingCapacity'] ?? null,
+                    'Positioning' => $vessel['Positioning'] ?? null,
+                    'Correction' => $vessel['Correction'] ?? null,
+                    'From' => $vessel['From'] ?? null,
+                    'To' => $vessel['To'] ?? null,
+                    'Date' => $data['Date'] ?? null,
+                    'DoneBy' => $data['DoneBy'] ?? null,
                     'Remarks' => $data['Remarks'] ?? null,
                 ]))->all();
             });
 
             foreach ($reports as $report) {
-                $this->notifyReport($report->Vessel, 'Create', 'CCTV Positioning Created!', $data['DoneBy'] . ' created a CCTV positioning record for ' . $report->Vessel . ' dated ' . $data['Date'] . '.');
+                $this->notifyReport($report->Vessel, 'Create', 'CCTV Positioning Created!', ($data['DoneBy'] ?? 'A user') . ' created a CCTV positioning record for ' . $report->Vessel . ' dated ' . ($data['Date'] ?? '') . '.');
             }
 
             return back();

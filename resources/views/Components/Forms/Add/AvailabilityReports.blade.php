@@ -36,18 +36,18 @@
                                                         {{ $Vessel->VesselName }}
                                                         <input type="hidden" name="vessels[{{ $index }}][Vessel]" value="{{ $Vessel->VesselName }}">
                                                     </td>
-                                                    <td><input type="text" name="vessels[{{ $index }}][RecordingCapacity]" required maxlength="255"></td>
+                                                    <td><input type="text" name="vessels[{{ $index }}][RecordingCapacity]" maxlength="255"></td>
                                                     @foreach (['Positioning', 'Correction'] as $field)
                                                         <td>
-                                                            <select name="vessels[{{ $index }}][{{ $field }}]" required>
+                                                            <select name="vessels[{{ $index }}][{{ $field }}]">
                                                                 <option value="">Select status</option>
                                                                 <option value="OK">OK</option>
                                                                 <option value="NOT OK">NOT OK</option>
                                                             </select>
                                                         </td>
                                                     @endforeach
-                                                    <td><input type="date" name="vessels[{{ $index }}][From]" required maxlength="255"></td>
-                                                    <td><input type="date" name="vessels[{{ $index }}][To]" required maxlength="255"></td>
+                                                    <td><input type="date" name="vessels[{{ $index }}][From]" maxlength="255"></td>
+                                                    <td><input type="date" name="vessels[{{ $index }}][To]" maxlength="255"></td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
@@ -68,7 +68,7 @@
                     <h1>{{ $type === 'cctv' ? 'Accountability' : 'Date / Time and Accountability' }}</h1>
                     <div class="input">
                         <label for="{{ $type }}-Date">Date</label>
-                        <input id="{{ $type }}-Date" type="date" name="Date" required>
+                        <input id="{{ $type }}-Date" type="date" name="Date" @if ($type !== 'cctv') required @endif>
                     </div>
                     @if ($type !== 'cctv')
                     <div class="input">
@@ -78,7 +78,7 @@
                     @endif
                     <div class="input">
                         <label for="{{ $type }}-DoneBy">Done By</label>
-                        <input id="{{ $type }}-DoneBy" type="text" name="DoneBy" required>
+                        <input id="{{ $type }}-DoneBy" type="text" name="DoneBy" @if ($type !== 'cctv') required @endif>
                     </div>
                     <div class="input">
                         <label for="{{ $type }}-Remarks">Remarks</label>

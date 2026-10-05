@@ -77,7 +77,7 @@ class DailyReportController extends Controller
             'DeployedVessel1' => ['nullable', 'string', 'max:255'],
             'DeployedVessel2' => ['nullable', 'string', 'max:255'],
             'DeployedVessel3' => ['nullable', 'string', 'max:255'],
-            'Status' => ['required', 'in:DEPARTURE,ARRIVAL,DISEMBARKATION,EMBARKATION,MAINTENANCE,INSPECTION,DRILL,DIVE CHECK,WEATHER BROADCAST'],
+            'Status' => ['required', 'in:DEPARTURE,ARRIVAL,BERTHING,UNBERTHING,DISEMBARKATION,EMBARKATION,MAINTENANCE,INSPECTION,DRILL,DIVE CHECK,WEATHER BROADCAST'],
             'DoneBy' => ['required', 'string', 'max:255'],
             'Remarks' => ['nullable', 'string'],
             'StartTime' => ['required', 'regex:/^(?:[01]\d|2[0-3]):[0-5]\d(?:\sHRS)?$/i'],
