@@ -149,3 +149,43 @@ $blue: #42e5ff;
 @import 'portfolio/_Portfolio';
 @import 'dashboard/_VesselSpotlight';
 @import 'dashboard/_DailyReport';
+
+:is(
+  [class*="close-button"] button,
+  button[class*="close-button"],
+  button.Close
+) {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  color: #ef4444;
+  transform-origin: center;
+  transition: all 0.2s ease;
+
+  &:hover,
+  &:focus-visible {
+    background: #ef4444;
+    color: #fff;
+    transform: rotate(90deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :is(
+    [class*="close-button"] button,
+    button[class*="close-button"],
+    button.Close
+  ) {
+    transition: none;
+
+    &:hover,
+    &:focus-visible {
+      transform: none;
+    }
+  }
+}
