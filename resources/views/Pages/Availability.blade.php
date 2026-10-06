@@ -2212,6 +2212,7 @@
                         <th>Start time</th>
                         <th>End date</th>
                         <th>End time</th> 
+                        <th>Movement milestones</th>
                         <th>#</th>
                     </tr>
                     @forelse ($DailyReports as $DailyReport)
@@ -2225,13 +2226,18 @@
                         <td>{{ $DailyReport->StartTime }}</td>
                         <td>{{ $DailyReport->EndDate }}</td>
                         <td>{{ $DailyReport->EndTime }}</td>
+                        <td>
+                            <div>Berthing: {{ $DailyReport->BerthingDate ?: '-' }} {{ $DailyReport->BerthingTime ? substr($DailyReport->BerthingTime, 0, 5) : '--:--' }}</div>
+                            <div>Unberthing: {{ $DailyReport->UnberthingDate ?: '-' }} {{ $DailyReport->UnberthingTime ? substr($DailyReport->UnberthingTime, 0, 5) : '--:--' }}</div>
+                            <div>Shifting: {{ $DailyReport->ShiftingDate ?: '-' }} {{ $DailyReport->ShiftingTime ? substr($DailyReport->ShiftingTime, 0, 5) : '--:--' }}</div>
+                        </td>
                         <td class="action">  
                             <img class="EditDailyReportButton" src="{{ asset('images/write.png') }}" alt="Edit">
                             <img class="DeleteDailyReportButton" src="{{ asset('images/delete.png') }}" alt="Delete">
                         </td>
                     </tr>
                     @empty
-                    <tr><td class="action" colspan="10">System doesn't have any records yet.</td></tr>
+                    <tr><td class="action" colspan="11">System doesn't have any records yet.</td></tr>
                     @endforelse
                 </table>
             </div> 

@@ -23,6 +23,7 @@
                             <option value="Alarm">Alarm</option>
                             <option value="Iridium Satellite Phone">Iridium Satellite Phone</option>
                             <option value="CCTV">CCTV</option>
+                            <option value="FIRE CONTAINER">FIRE CONTAINER</option>
                         </select>
                     </div>
                     <div class="input">

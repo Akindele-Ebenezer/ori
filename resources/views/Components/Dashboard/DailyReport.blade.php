@@ -152,7 +152,7 @@
                                     <th>Vessel Details</th>
                                     <th>Status</th>
                                     <th>Duty Officer</th>
-                                    <th>Window / Schedule</th>
+                                    <th>Schedule & Movement</th>
                                     <th>Remarks & Notes</th>
                                 </tr>
                             </thead>
@@ -183,6 +183,15 @@
                                         <td>
                                             <div style="font-weight: 500;">{{ $displayDate($report->StartDate ?? null) }}</div>
                                             <span class="deck-sub-text">{{ $displayTime($report->StartTime ?? null) }} — {{ $displayTime($report->EndTime ?? null) }}</span>
+                                            @if (!empty($report->BerthingDate) || !empty($report->BerthingTime))
+                                                <span class="deck-sub-text">Berthing: {{ $displayDate($report->BerthingDate ?? null) }} {{ $displayTime($report->BerthingTime ?? null) }}</span>
+                                            @endif
+                                            @if (!empty($report->UnberthingDate) || !empty($report->UnberthingTime))
+                                                <span class="deck-sub-text">Unberthing: {{ $displayDate($report->UnberthingDate ?? null) }} {{ $displayTime($report->UnberthingTime ?? null) }}</span>
+                                            @endif
+                                            @if (!empty($report->ShiftingDate) || !empty($report->ShiftingTime))
+                                                <span class="deck-sub-text">Shifting: {{ $displayDate($report->ShiftingDate ?? null) }} {{ $displayTime($report->ShiftingTime ?? null) }}</span>
+                                            @endif
                                         </td>
                                         <td style="color: var(--text-muted); max-width: 250px;">
                                             {{ str_ireplace(['merchant', 'marchant'], 'MARCHANT', $remarks ?: 'None') }}

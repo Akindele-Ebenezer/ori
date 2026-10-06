@@ -21,6 +21,12 @@ class DailyReportController extends Controller
             'EndTime' => substr((string) $request->input('EndTime'), 0, 5),
             'StartDate' => $request->input('StartDate'),
             'EndDate' => $request->input('EndDate'),
+            'BerthingDate' => $request->input('BerthingDate') ?: null,
+            'BerthingTime' => $request->input('BerthingTime') ?: null,
+            'UnberthingDate' => $request->input('UnberthingDate') ?: null,
+            'UnberthingTime' => $request->input('UnberthingTime') ?: null,
+            'ShiftingDate' => $request->input('ShiftingDate') ?: null,
+            'ShiftingTime' => $request->input('ShiftingTime') ?: null,
             'TillNow' => $request->input('TillNow', 'NO'),
             'DateIn' => now()->toDateString(),
             'TimeIn' => now()->format('H:i'),
@@ -84,6 +90,12 @@ class DailyReportController extends Controller
             'EndTime' => ['required', 'regex:/^(?:[01]\d|2[0-3]):[0-5]\d(?:\sHRS)?$/i'],
             'StartDate' => ['required', 'date'],
             'EndDate' => ['required', 'date', 'after_or_equal:StartDate'],
+            'BerthingDate' => ['nullable', 'date'],
+            'BerthingTime' => ['nullable', 'date_format:H:i'],
+            'UnberthingDate' => ['nullable', 'date'],
+            'UnberthingTime' => ['nullable', 'date_format:H:i'],
+            'ShiftingDate' => ['nullable', 'date'],
+            'ShiftingTime' => ['nullable', 'date_format:H:i'],
         ];
     }
 }

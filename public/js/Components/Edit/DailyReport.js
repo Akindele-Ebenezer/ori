@@ -53,7 +53,7 @@ if (updateDailyReportButton && updateDailyReportForm) {
                 const option = new Option(report.Vessel || '', report.Vessel || '');
                 vessel.add(option);
             }
-            Object.entries({ Vessel: report.Vessel || '', DeployedVessel1: report.DeployedVessel1 || '', DeployedVessel2: report.DeployedVessel2 || '', DeployedVessel3: report.DeployedVessel3 || '', Status: status, DoneBy: report.DoneBy || '', Remarks: report.Remarks || '', StartTime: report.StartTime || '', EndTime: report.EndTime || '', StartDate: report.StartDate || '', EndDate: report.EndDate || '' }).forEach(([name, value]) => {
+            Object.entries({ Vessel: report.Vessel || '', DeployedVessel1: report.DeployedVessel1 || '', DeployedVessel2: report.DeployedVessel2 || '', DeployedVessel3: report.DeployedVessel3 || '', Status: status, DoneBy: report.DoneBy || '', Remarks: report.Remarks || '', StartTime: report.StartTime || '', EndTime: report.EndTime || '', StartDate: report.StartDate || '', EndDate: report.EndDate || '', BerthingDate: report.BerthingDate || '', BerthingTime: (report.BerthingTime || '').slice(0, 5), UnberthingDate: report.UnberthingDate || '', UnberthingTime: (report.UnberthingTime || '').slice(0, 5), ShiftingDate: report.ShiftingDate || '', ShiftingTime: (report.ShiftingTime || '').slice(0, 5) }).forEach(([name, value]) => {
                 const input = field(name);
                 if (input) input.value = value;
             });
