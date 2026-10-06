@@ -1137,6 +1137,7 @@ body {
   position: absolute;
   top: 1em;
   right: 2em;
+  z-index: 1;
 }
 .form-1.AddAvailability .inner .nav {
   padding-top: 3.5em;
@@ -1268,13 +1269,13 @@ body {
   background: #225f7d;
   border: none;
   border-radius: 0.3em;
-  bottom: 0.2em;
+  bottom: -10.6em;
   color: #eee;
   cursor: pointer;
   margin-block: 0.5em;
   padding: 1em 2em;
   position: absolute;
-  right: 2em;
+  right: 0;
 }
 .form-1 form + button.button-2, .form-1 form button.button-2 {
   left: 2em;
@@ -1356,7 +1357,7 @@ body {
   border-bottom: 3px solid #225f7d;
 }
 .form-1 form .inner-1 .fields .fleet-report-table-wrapper {
-  max-height: 28em;
+  max-height: 22em;
   overflow-x: hidden;
   width: 100%;
 }
@@ -1541,7 +1542,234 @@ body {
 .form-1 .AddSpeedBoats_ChecklistForm .input input[type=checkbox] {
   width: 6%;
 }
+.form-1.AddAvailability > .inner {
+  border: 2px solid transparent;
+  border-radius: 0.6em;
+  position: relative;
+  overflow: hidden;
+}
+.form-1.AddAvailability > .inner::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 5em;
+  height: 6px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #ec4899, #d946ef 55%, #8b5cf6);
+  box-shadow: 0 0 10px rgba(236, 72, 153, 0.9), 0 0 22px rgba(139, 92, 246, 0.75);
+  offset-path: inset(1px round 0.6em);
+  offset-anchor: center;
+  offset-distance: 0%;
+  offset-rotate: auto;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+.form-1.AddAvailability.is-open > .inner::after {
+  animation: availability-border-travel 5.5s linear infinite;
+  opacity: 1;
+}
+.form-1.AddAvailability.is-open .AvailabilityFormWrapper:not(.Hide) .AddAvailabilityForm {
+  animation: availability-form-enter 300ms cubic-bezier(0.2, 0.75, 0.25, 1) both;
+}
+.form-1.AddAvailability .AvailabilityFormWrapper .AddAvailabilityForm .input label {
+  transition: color 180ms ease, transform 180ms ease;
+}
+.form-1.AddAvailability .AvailabilityFormWrapper .AddAvailabilityForm .input select, .form-1.AddAvailability .AvailabilityFormWrapper .AddAvailabilityForm .input input, .form-1.AddAvailability .AvailabilityFormWrapper .AddAvailabilityForm .input textarea {
+  transition: box-shadow 180ms ease, background-color 180ms ease, transform 180ms ease;
+}
+.form-1.AddAvailability .AvailabilityFormWrapper .AddAvailabilityForm .input:focus-within label {
+  color: #225f7d;
+  transform: translateX(2px);
+}
+.form-1.AddAvailability .AvailabilityFormWrapper .AddAvailabilityForm .input:focus-within select, .form-1.AddAvailability .AvailabilityFormWrapper .AddAvailabilityForm .input:focus-within input, .form-1.AddAvailability .AvailabilityFormWrapper .AddAvailabilityForm .input:focus-within textarea {
+  background-color: #fff;
+  box-shadow: 0 0 0 3px rgba(34, 95, 125, 0.16);
+  transform: translateY(-1px);
+}
+.form-1.AddAvailability .AvailabilityFormWrapper .AddAvailabilityForm .input.is-invalid {
+  animation: availability-field-shake 320ms ease-out;
+}
+.form-1.AddAvailability .AvailabilityFormWrapper .AddAvailabilityForm .input.is-invalid select, .form-1.AddAvailability .AvailabilityFormWrapper .AddAvailabilityForm .input.is-invalid input, .form-1.AddAvailability .AvailabilityFormWrapper .AddAvailabilityForm .input.is-invalid textarea {
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.16);
+}
+.form-1.AddAvailability .AvailabilityFormWrapper .AddAvailabilityButton {
+  align-items: center;
+  display: inline-flex;
+  gap: 0.65em;
+  transition: transform 180ms ease, box-shadow 180ms ease, opacity 180ms ease;
+}
+.form-1.AddAvailability .AvailabilityFormWrapper .AddAvailabilityButton:hover:not(.is-processing) {
+  box-shadow: 0 6px 16px rgba(34, 95, 125, 0.25);
+  transform: translateY(-2px);
+}
+.form-1.AddAvailability .AvailabilityFormWrapper .AddAvailabilityButton.is-processing {
+  cursor: wait;
+  opacity: 0.92;
+  pointer-events: none;
+}
+.form-1.AddAvailability .AvailabilityFormWrapper .AddAvailabilityButton.is-processing::before {
+  animation: availability-spinner 700ms linear infinite;
+  border: 2px solid rgba(255, 255, 255, 0.45);
+  border-radius: 50%;
+  border-top-color: #fff;
+  content: "";
+  height: 1em;
+  width: 1em;
+}
 
+@keyframes availability-form-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes availability-field-shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-4px);
+  }
+  50% {
+    transform: translateX(4px);
+  }
+  75% {
+    transform: translateX(-2px);
+  }
+}
+@keyframes availability-spinner {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .form-1.AddAvailability.is-open .AvailabilityFormWrapper:not(.Hide) .AddAvailabilityForm,
+  .form-1.AddAvailability .AvailabilityFormWrapper .AddAvailabilityForm .input,
+  .form-1.AddAvailability .AvailabilityFormWrapper .AddAvailabilityButton,
+  .form-1.AddAvailability > .inner,
+  .form-1.AddAvailability .AvailabilityFormWrapper .AddAvailabilityButton::before {
+    animation: none;
+    transition: none;
+  }
+}
+.form-1[style*="display: flex"] .inner,
+.list-component[style*="display: flex"] .inner-x {
+  animation: shared-form-enter 260ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.form-1.AddAvailability[style*="display: flex"] > .inner {
+  animation: shared-form-enter 260ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.FormWrapper:not(.Hide) {
+  animation: shared-form-enter 240ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.form-1 form .input select,
+.form-1 form .input input:not([type=checkbox]):not([type=radio]):not([type=file]),
+.form-1 form .input textarea,
+.FormWrapper form .input select,
+.FormWrapper form .input input:not([type=checkbox]):not([type=radio]):not([type=file]),
+.FormWrapper form .input textarea,
+.list-component form .input select,
+.list-component form .input input:not([type=checkbox]):not([type=radio]):not([type=file]),
+.list-component form .input textarea {
+  transition: background-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.form-1 form .input:focus-within label,
+.FormWrapper form .input:focus-within label,
+.list-component form .input:focus-within label {
+  color: #225f7d;
+  transition: color 180ms ease, transform 180ms ease;
+  transform: translateX(2px);
+}
+
+.form-1 form .input :is(select, input:not([type=checkbox]):not([type=radio]):not([type=file]), textarea):focus,
+.FormWrapper form .input :is(select, input:not([type=checkbox]):not([type=radio]):not([type=file]), textarea):focus,
+.list-component form .input :is(select, input:not([type=checkbox]):not([type=radio]):not([type=file]), textarea):focus {
+  background-color: #fff;
+  box-shadow: 0 0 0 3px rgba(34, 95, 125, 0.16);
+  transform: translateY(-1px);
+}
+
+.form-1 button:not([class*=close-button]):not([class*=cancel-button]):not(:disabled),
+.FormWrapper button:not([class*=close-button]):not([class*=cancel-button]):not(:disabled),
+.list-component button:not([class*=close-button]):not([class*=cancel-button]):not(:disabled) {
+  transition: box-shadow 180ms ease, transform 180ms ease, background-color 180ms ease;
+}
+.form-1 button:not([class*=close-button]):not([class*=cancel-button]):not(:disabled):hover,
+.FormWrapper button:not([class*=close-button]):not([class*=cancel-button]):not(:disabled):hover,
+.list-component button:not([class*=close-button]):not([class*=cancel-button]):not(:disabled):hover {
+  box-shadow: 0 5px 14px rgba(34, 95, 125, 0.2);
+  transform: translateY(-1px);
+}
+.form-1 button:not([class*=close-button]):not([class*=cancel-button]):not(:disabled):active,
+.FormWrapper button:not([class*=close-button]):not([class*=cancel-button]):not(:disabled):active,
+.list-component button:not([class*=close-button]):not([class*=cancel-button]):not(:disabled):active {
+  transform: translateY(0) scale(0.98);
+}
+
+.form-1 .error:not(:empty),
+.FormWrapper .error:not(:empty),
+.list-component .error:not(:empty) {
+  animation: form-error-enter 220ms ease-out both;
+}
+
+@keyframes shared-form-enter {
+  0% {
+    opacity: 0;
+    transform: translateY(48px) scale(0.92);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+@keyframes form-error-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes availability-border-travel {
+  to {
+    offset-distance: 100%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .form-1[style*="display: flex"] .inner,
+  .list-component[style*="display: flex"] .inner-x,
+  .FormWrapper:not(.Hide),
+  .form-1 form .input select,
+  .form-1 form .input input:not([type=checkbox]):not([type=radio]):not([type=file]),
+  .form-1 form .input textarea,
+  .FormWrapper form .input select,
+  .FormWrapper form .input input:not([type=checkbox]):not([type=radio]):not([type=file]),
+  .FormWrapper form .input textarea,
+  .list-component form .input select,
+  .list-component form .input input:not([type=checkbox]):not([type=radio]):not([type=file]),
+  .list-component form .input textarea,
+  .form-1 button,
+  .FormWrapper button,
+  .list-component button,
+  .form-1 .error:not(:empty),
+  .FormWrapper .error:not(:empty),
+  .list-component .error:not(:empty) {
+    animation: none;
+    transition: none;
+  }
+}
 .DeleteModal {
   display: none;
 }
@@ -4830,6 +5058,103 @@ input[type=search]:focus {
   grid-column: 1/-1;
 }
 
+.DailyVesselOperations.is-open .ori-deck {
+  animation: dashboard-deck-reveal 380ms cubic-bezier(0.2, 0.75, 0.25, 1) both;
+}
+.DailyVesselOperations.is-open .deck-hero > div:first-child {
+  animation: dashboard-header-reveal 420ms cubic-bezier(0.2, 0.75, 0.25, 1) both;
+}
+.DailyVesselOperations.is-open .deck-date-pill {
+  animation: dashboard-content-reveal 360ms 90ms ease-out both;
+}
+.DailyVesselOperations.is-open .deck-card-metric,
+.DailyVesselOperations.is-open .deck-main-layout > *,
+.DailyVesselOperations.is-open .deck-log-grid > * {
+  animation: dashboard-content-reveal 380ms ease-out both;
+}
+.DailyVesselOperations.is-open .deck-card-metric:nth-child(1) {
+  animation-delay: 0ms;
+}
+.DailyVesselOperations.is-open .deck-card-metric:nth-child(2) {
+  animation-delay: 65ms;
+}
+.DailyVesselOperations.is-open .deck-card-metric:nth-child(3) {
+  animation-delay: 130ms;
+}
+.DailyVesselOperations.is-open .deck-card-metric:nth-child(4) {
+  animation-delay: 195ms;
+}
+.DailyVesselOperations.is-open .deck-main-layout > aside {
+  animation-delay: 100ms;
+}
+.DailyVesselOperations.is-open .deck-log-grid > :nth-child(2) {
+  animation-delay: 80ms;
+}
+.DailyVesselOperations.is-open [data-report-row]:nth-child(-n+6) {
+  animation: dashboard-content-reveal 320ms ease-out both;
+}
+.DailyVesselOperations.is-open [data-report-row]:nth-child(1) {
+  animation-delay: 0ms;
+}
+.DailyVesselOperations.is-open [data-report-row]:nth-child(2) {
+  animation-delay: 35ms;
+}
+.DailyVesselOperations.is-open [data-report-row]:nth-child(3) {
+  animation-delay: 70ms;
+}
+.DailyVesselOperations.is-open [data-report-row]:nth-child(4) {
+  animation-delay: 105ms;
+}
+.DailyVesselOperations.is-open [data-report-row]:nth-child(5) {
+  animation-delay: 140ms;
+}
+.DailyVesselOperations.is-open [data-report-row]:nth-child(6) {
+  animation-delay: 175ms;
+}
+.DailyVesselOperations.is-open .tug-jobs-track > span {
+  animation: dashboard-bars-reveal 520ms 180ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+@keyframes dashboard-deck-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.992);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+@keyframes dashboard-header-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes dashboard-content-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes dashboard-bars-reveal {
+  from {
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  to {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+}
 .deck-log-list {
   list-style: none;
   padding: 0;
@@ -5221,6 +5546,10 @@ input[type=search]:focus {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .DailyVesselOperations.is-open,
+  .DailyVesselOperations.is-open * {
+    animation: none !important;
+  }
   .tug-jobs-track > span {
     transition: none;
   }

@@ -525,6 +525,69 @@ input[type=search] {
     grid-column: 1 / -1; 
 }
 
+.DailyVesselOperations.is-open {
+    .ori-deck {
+        animation: dashboard-deck-reveal 380ms cubic-bezier(0.2, 0.75, 0.25, 1) both;
+    }
+
+    .deck-hero > div:first-child {
+        animation: dashboard-header-reveal 420ms cubic-bezier(0.2, 0.75, 0.25, 1) both;
+    }
+
+    .deck-date-pill {
+        animation: dashboard-content-reveal 360ms 90ms ease-out both;
+    }
+
+    .deck-card-metric,
+    .deck-main-layout > *,
+    .deck-log-grid > * {
+        animation: dashboard-content-reveal 380ms ease-out both;
+    }
+
+    @for $index from 1 through 4 {
+        .deck-card-metric:nth-child(#{$index}) {
+            animation-delay: #{($index - 1) * 65}ms;
+        }
+    }
+
+    .deck-main-layout > aside { animation-delay: 100ms; }
+    .deck-log-grid > :nth-child(2) { animation-delay: 80ms; }
+
+    [data-report-row]:nth-child(-n + 6) {
+        animation: dashboard-content-reveal 320ms ease-out both;
+    }
+
+    @for $index from 1 through 6 {
+        [data-report-row]:nth-child(#{$index}) {
+            animation-delay: #{($index - 1) * 35}ms;
+        }
+    }
+
+    .tug-jobs-track > span {
+        animation: dashboard-bars-reveal 520ms 180ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    }
+}
+
+@keyframes dashboard-deck-reveal {
+    from { opacity: 0; transform: translateY(12px) scale(0.992); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes dashboard-header-reveal {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes dashboard-content-reveal {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes dashboard-bars-reveal {
+    from { transform: scaleX(0); transform-origin: left; }
+    to { transform: scaleX(1); transform-origin: left; }
+}
+
 .deck-log-list { 
     list-style: none; 
     padding: 0; 
@@ -891,6 +954,11 @@ input[type=search] {
 }
 
 @media (prefers-reduced-motion: reduce) {
+    .DailyVesselOperations.is-open,
+    .DailyVesselOperations.is-open * {
+        animation: none !important;
+    }
+
     .tug-jobs-track > span {
         transition: none;
     }

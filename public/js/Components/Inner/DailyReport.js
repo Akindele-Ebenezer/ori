@@ -60,17 +60,23 @@
 let DisplayDailyReportButton = document.querySelector('.DisplayDailyReportButton');
 let closeDailyReportBtn = document.querySelector('.deck-close');
 let DailyReportDashboard = document.querySelector('.DailyVesselOperations');
+const openDailyReportDashboard = () => {
+    if (!DailyReportDashboard) return;
+    DailyReportDashboard.classList.remove('is-open');
+    DailyReportDashboard.style.display = 'flex';
+    requestAnimationFrame(() => DailyReportDashboard.classList.add('is-open'));
+};
+
 if (DisplayDailyReportButton && DailyReportDashboard) {
-    DisplayDailyReportButton.addEventListener('click', () => {
-        DailyReportDashboard.style.display = 'flex';
-    });
+    DisplayDailyReportButton.addEventListener('click', openDailyReportDashboard);
 }
 if (closeDailyReportBtn && DailyReportDashboard) {
     closeDailyReportBtn.addEventListener('click', () => {
+        DailyReportDashboard.classList.remove('is-open');
         DailyReportDashboard.style.display = 'none';
     });
 }
 if (window.location.search.includes('DailyReportFilter_SpecificDay')) {
-    document.querySelector('.chart-1').style.display = 'none';
-    DailyReportDashboard.style.display = 'flex';
+    document.querySelector('.chart-1')?.style.setProperty('display', 'none');
+    openDailyReportDashboard();
 } 

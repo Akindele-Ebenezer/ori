@@ -17,7 +17,7 @@
         </div>
         <div class="close-button FormCloseButton">
             <span>    </span>
-            <button class="cancel-button-availability">✖</button>
+            <button type="button" class="cancel-button-availability" aria-label="Close Availability form">✖</button>
         </div>
         <div class="AvailabilityFormWrapper FormWrapper">
             <form action="" class="AddAvailabilityForm" enctype="multipart/form-data" method="POST">

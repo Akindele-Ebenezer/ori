@@ -15,6 +15,10 @@
         ->groupBy(fn ($report) => strtoupper(trim((string) $report->Tugs)))
         ->map(fn ($reports) => $reports->sum(fn ($report) => is_numeric($report->NoOfJobs ?? null) ? (int) $report->NoOfJobs : 0))
         ->sortDesc();
+    $tugVessels = $tugsReports
+        ->filter(fn ($report) => trim((string) ($report->Tugs ?? '')) !== '')
+        ->groupBy(fn ($report) => strtoupper(trim((string) $report->Tugs)))
+        ->map(fn ($reports) => $reports->pluck('Vessel')->filter(fn ($vessel) => trim((string) $vessel) !== '')->unique()->sort()->values());
     $maxTugJobs = max(1, (int) $tugJobCounts->max());
     $tugJobTotal = (int) $tugJobCounts->sum();
     $officerCount = $officerLogs->sum(function ($log) {
@@ -253,6 +257,7 @@
                                         </div>
                                         <strong>{{ number_format((int) $jobs) }} <span>jobs</span></strong>
                                     </div>
+                                    <span class="deck-sub-text">Vessels: {{ $tugVessels->get($tug, collect())->join(', ') ?: 'No vessel recorded' }}</span>
                                     <div class="tug-jobs-track tug-jobs-track--{{ $jobLevel }}" role="meter" aria-label="{{ $tug }} job count" aria-valuetext="{{ number_format((int) $jobs) }} jobs, {{ $jobPercentage }}% of busiest tug" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ $jobPercentage }}">
                                         <span aria-hidden="true" style="width: {{ $jobPercentage }}%"></span>
                                     </div>
