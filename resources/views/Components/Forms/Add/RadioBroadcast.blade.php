@@ -23,7 +23,7 @@
                             @for ($index = 0; $index < $vesselRows; $index++)
                                 <tr>
                                     <td>
-                                        <select name="vessels[{{ $index }}][Vessel]" disabled>
+                                        <select name="vessels[{{ $index }}][Vessel]">
                                             <option value="">Select vessel</option>
                                             @foreach ($Vessels as $Vessel)
                                                 <option value="{{ $Vessel->VesselName }}" @selected($index < $Vessels->count() && $Vessels[$index]->VesselName === $Vessel->VesselName)>{{ $Vessel->VesselName }}</option>
