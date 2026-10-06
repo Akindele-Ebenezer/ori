@@ -2228,15 +2228,18 @@
                         <td>{{ $DailyReport->EndTime }}</td>
                         <td>
                             <div>
-                                Berthing: {{ $DailyReport->BerthingDate ?: '-' }} {{ $DailyReport->BerthingTime ? substr($DailyReport->BerthingTime, 0, 5) : '--:--' }}
+                                Berthing: {{ $DailyReport->BerthingStartDate ?: ($DailyReport->BerthingDate ?: '-') }} — {{ $DailyReport->BerthingEndDate ?: '-' }}
+                                {{ $DailyReport->BerthingStartTime ? substr($DailyReport->BerthingStartTime, 0, 5) : ($DailyReport->BerthingTime ? substr($DailyReport->BerthingTime, 0, 5) : '--:--') }} — {{ $DailyReport->BerthingEndTime ? substr($DailyReport->BerthingEndTime, 0, 5) : '--:--' }}
                                 ({{ collect([$DailyReport->BerthingDeployedVessel1, $DailyReport->BerthingDeployedVessel2, $DailyReport->BerthingDeployedVessel3])->filter()->implode(', ') ?: 'No deployed vessels' }})
                             </div>
                             <div>
-                                Unberthing: {{ $DailyReport->UnberthingDate ?: '-' }} {{ $DailyReport->UnberthingTime ? substr($DailyReport->UnberthingTime, 0, 5) : '--:--' }}
+                                Unberthing: {{ $DailyReport->UnberthingStartDate ?: ($DailyReport->UnberthingDate ?: '-') }} — {{ $DailyReport->UnberthingEndDate ?: '-' }}
+                                {{ $DailyReport->UnberthingStartTime ? substr($DailyReport->UnberthingStartTime, 0, 5) : ($DailyReport->UnberthingTime ? substr($DailyReport->UnberthingTime, 0, 5) : '--:--') }} — {{ $DailyReport->UnberthingEndTime ? substr($DailyReport->UnberthingEndTime, 0, 5) : '--:--' }}
                                 ({{ collect([$DailyReport->UnberthingDeployedVessel1, $DailyReport->UnberthingDeployedVessel2, $DailyReport->UnberthingDeployedVessel3])->filter()->implode(', ') ?: 'No deployed vessels' }})
                             </div>
                             <div>
-                                Shifting: {{ $DailyReport->ShiftingDate ?: '-' }} {{ $DailyReport->ShiftingTime ? substr($DailyReport->ShiftingTime, 0, 5) : '--:--' }}
+                                Shifting: {{ $DailyReport->ShiftingStartDate ?: ($DailyReport->ShiftingDate ?: '-') }} — {{ $DailyReport->ShiftingEndDate ?: '-' }}
+                                {{ $DailyReport->ShiftingStartTime ? substr($DailyReport->ShiftingStartTime, 0, 5) : ($DailyReport->ShiftingTime ? substr($DailyReport->ShiftingTime, 0, 5) : '--:--') }} — {{ $DailyReport->ShiftingEndTime ? substr($DailyReport->ShiftingEndTime, 0, 5) : '--:--' }}
                                 ({{ collect([$DailyReport->ShiftingDeployedVessel1, $DailyReport->ShiftingDeployedVessel2, $DailyReport->ShiftingDeployedVessel3])->filter()->implode(', ') ?: 'No deployed vessels' }})
                             </div>
                         </td>

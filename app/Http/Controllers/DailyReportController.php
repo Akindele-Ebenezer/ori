@@ -21,18 +21,30 @@ class DailyReportController extends Controller
             'EndTime' => substr((string) $request->input('EndTime'), 0, 5),
             'StartDate' => $request->input('StartDate'),
             'EndDate' => $request->input('EndDate'),
-            'BerthingDate' => $request->input('BerthingDate') ?: null,
-            'BerthingTime' => $request->input('BerthingTime') ?: null,
+            'BerthingDate' => $request->input('BerthingStartDate') ?: null,
+            'BerthingTime' => $request->input('BerthingStartTime') ?: null,
+            'BerthingStartDate' => $request->input('BerthingStartDate') ?: null,
+            'BerthingEndDate' => $request->input('BerthingEndDate') ?: null,
+            'BerthingStartTime' => $request->input('BerthingStartTime') ?: null,
+            'BerthingEndTime' => $request->input('BerthingEndTime') ?: null,
             'BerthingDeployedVessel1' => $request->input('BerthingDeployedVessel1'),
             'BerthingDeployedVessel2' => $request->input('BerthingDeployedVessel2'),
             'BerthingDeployedVessel3' => $request->input('BerthingDeployedVessel3'),
-            'UnberthingDate' => $request->input('UnberthingDate') ?: null,
-            'UnberthingTime' => $request->input('UnberthingTime') ?: null,
+            'UnberthingDate' => $request->input('UnberthingStartDate') ?: null,
+            'UnberthingTime' => $request->input('UnberthingStartTime') ?: null,
+            'UnberthingStartDate' => $request->input('UnberthingStartDate') ?: null,
+            'UnberthingEndDate' => $request->input('UnberthingEndDate') ?: null,
+            'UnberthingStartTime' => $request->input('UnberthingStartTime') ?: null,
+            'UnberthingEndTime' => $request->input('UnberthingEndTime') ?: null,
             'UnberthingDeployedVessel1' => $request->input('UnberthingDeployedVessel1'),
             'UnberthingDeployedVessel2' => $request->input('UnberthingDeployedVessel2'),
             'UnberthingDeployedVessel3' => $request->input('UnberthingDeployedVessel3'),
-            'ShiftingDate' => $request->input('ShiftingDate') ?: null,
-            'ShiftingTime' => $request->input('ShiftingTime') ?: null,
+            'ShiftingDate' => $request->input('ShiftingStartDate') ?: null,
+            'ShiftingTime' => $request->input('ShiftingStartTime') ?: null,
+            'ShiftingStartDate' => $request->input('ShiftingStartDate') ?: null,
+            'ShiftingEndDate' => $request->input('ShiftingEndDate') ?: null,
+            'ShiftingStartTime' => $request->input('ShiftingStartTime') ?: null,
+            'ShiftingEndTime' => $request->input('ShiftingEndTime') ?: null,
             'ShiftingDeployedVessel1' => $request->input('ShiftingDeployedVessel1'),
             'ShiftingDeployedVessel2' => $request->input('ShiftingDeployedVessel2'),
             'ShiftingDeployedVessel3' => $request->input('ShiftingDeployedVessel3'),
@@ -58,7 +70,7 @@ class DailyReportController extends Controller
 
     public function edit_daily_report(Request $request, string $Id)
     {        
-        $request->validate($this->validationRules());
+        $request->validate($this->validationRules($Id));
         $attributes = $this->attributes($request);
         DB::table('daily_reports')->where('id', $Id)->update($attributes);
         $this->notifyReport(
@@ -85,32 +97,46 @@ class DailyReportController extends Controller
         return back();
     }
 
-    private function validationRules(): array
+    private function validationRules(?string $Id = null): array
     {
+        $allowedStatuses = ['DEPARTURE', 'ARRIVAL', 'DISEMBARKATION', 'EMBARKATION', 'MAINTENANCE', 'INSPECTION', 'DRILL', 'DIVE CHECK', 'WEATHER BROADCAST'];
+        if ($Id !== null) {
+            $currentStatus = DB::table('daily_reports')->where('id', $Id)->value('Status');
+            if (in_array($currentStatus, ['BERTHING', 'UNBERTHING'], true)) {
+                $allowedStatuses[] = $currentStatus;
+            }
+        }
+
         return [
             'Vessel' => ['required', 'string', 'max:255'],
             'DeployedVessel1' => ['nullable', 'string', 'max:255'],
             'DeployedVessel2' => ['nullable', 'string', 'max:255'],
             'DeployedVessel3' => ['nullable', 'string', 'max:255'],
-            'Status' => ['required', 'in:DEPARTURE,ARRIVAL,BERTHING,UNBERTHING,DISEMBARKATION,EMBARKATION,MAINTENANCE,INSPECTION,DRILL,DIVE CHECK,WEATHER BROADCAST'],
+            'Status' => ['required', 'in:' . implode(',', $allowedStatuses)],
             'DoneBy' => ['required', 'string', 'max:255'],
             'Remarks' => ['nullable', 'string'],
             'StartTime' => ['required', 'regex:/^(?:[01]\d|2[0-3]):[0-5]\d(?:\sHRS)?$/i'],
             'EndTime' => ['required', 'regex:/^(?:[01]\d|2[0-3]):[0-5]\d(?:\sHRS)?$/i'],
             'StartDate' => ['required', 'date'],
             'EndDate' => ['required', 'date', 'after_or_equal:StartDate'],
-            'BerthingDate' => ['nullable', 'date'],
-            'BerthingTime' => ['nullable', 'date_format:H:i'],
+            'BerthingStartDate' => ['nullable', 'date', 'required_with:BerthingEndDate'],
+            'BerthingEndDate' => ['nullable', 'date', 'after_or_equal:BerthingStartDate'],
+            'BerthingStartTime' => ['nullable', 'date_format:H:i'],
+            'BerthingEndTime' => ['nullable', 'date_format:H:i'],
             'BerthingDeployedVessel1' => ['nullable', 'string', 'max:255'],
             'BerthingDeployedVessel2' => ['nullable', 'string', 'max:255'],
             'BerthingDeployedVessel3' => ['nullable', 'string', 'max:255'],
-            'UnberthingDate' => ['nullable', 'date'],
-            'UnberthingTime' => ['nullable', 'date_format:H:i'],
+            'UnberthingStartDate' => ['nullable', 'date', 'required_with:UnberthingEndDate'],
+            'UnberthingEndDate' => ['nullable', 'date', 'after_or_equal:UnberthingStartDate'],
+            'UnberthingStartTime' => ['nullable', 'date_format:H:i'],
+            'UnberthingEndTime' => ['nullable', 'date_format:H:i'],
             'UnberthingDeployedVessel1' => ['nullable', 'string', 'max:255'],
             'UnberthingDeployedVessel2' => ['nullable', 'string', 'max:255'],
             'UnberthingDeployedVessel3' => ['nullable', 'string', 'max:255'],
-            'ShiftingDate' => ['nullable', 'date'],
-            'ShiftingTime' => ['nullable', 'date_format:H:i'],
+            'ShiftingStartDate' => ['nullable', 'date', 'required_with:ShiftingEndDate'],
+            'ShiftingEndDate' => ['nullable', 'date', 'after_or_equal:ShiftingStartDate'],
+            'ShiftingStartTime' => ['nullable', 'date_format:H:i'],
+            'ShiftingEndTime' => ['nullable', 'date_format:H:i'],
             'ShiftingDeployedVessel1' => ['nullable', 'string', 'max:255'],
             'ShiftingDeployedVessel2' => ['nullable', 'string', 'max:255'],
             'ShiftingDeployedVessel3' => ['nullable', 'string', 'max:255'],

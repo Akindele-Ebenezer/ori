@@ -30,6 +30,7 @@
         'ARRIVAL' => 'status-blue',
         'BERTHING' => 'status-teal',
         'UNBERTHING' => 'status-coral',
+        'SHIFTING' => 'status-amber',
         'DISEMBARKATION' => 'status-teal',
         'EMBARKATION' => 'status-green',
         'INSPECTION' => 'status-amber',
@@ -43,9 +44,24 @@
         'IDLE' => 'status-slate',
     ];
 
-    $statusCounts = $dailyReports->groupBy(fn ($report) => strtoupper($report->Status ?? 'UNSPECIFIED'))
+    $movementFields = [
+        'BERTHING' => ['BerthingStartDate', 'BerthingEndDate', 'BerthingStartTime', 'BerthingEndTime', 'BerthingDate', 'BerthingTime', 'BerthingDeployedVessel1', 'BerthingDeployedVessel2', 'BerthingDeployedVessel3'],
+        'UNBERTHING' => ['UnberthingStartDate', 'UnberthingEndDate', 'UnberthingStartTime', 'UnberthingEndTime', 'UnberthingDate', 'UnberthingTime', 'UnberthingDeployedVessel1', 'UnberthingDeployedVessel2', 'UnberthingDeployedVessel3'],
+        'SHIFTING' => ['ShiftingStartDate', 'ShiftingEndDate', 'ShiftingStartTime', 'ShiftingEndTime', 'ShiftingDate', 'ShiftingTime', 'ShiftingDeployedVessel1', 'ShiftingDeployedVessel2', 'ShiftingDeployedVessel3'],
+    ];
+    $statusCounts = $dailyReports->filter(fn ($report) => !in_array(strtoupper($report->Status ?? ''), array_keys($movementFields), true))
+        ->groupBy(fn ($report) => strtoupper($report->Status ?? 'UNSPECIFIED'))
         ->map(fn ($reports) => $reports->count())
         ->sortDesc();
+    foreach ($movementFields as $movement => $fields) {
+        $count = $dailyReports->filter(function ($report) use ($movement, $fields) {
+            return strtoupper($report->Status ?? '') === $movement
+                || collect($fields)->contains(fn ($field) => !empty($report->{$field}));
+        })->count();
+        if ($count > 0) $statusCounts->put($movement, $count);
+    }
+    $statusCounts = $statusCounts->sortDesc();
+    $statusAllocationTotal = max(1, (int) $statusCounts->sum());
 
     $activeReports = $dailyReports->filter(fn ($report) => ($report->TillNow ?? '') === 'YES' || ($report->EndDate ?? '') >= $today)->count();
     $uniqueVessels = $dailyReports->pluck('Vessel')->filter()->unique()->count();
@@ -186,14 +202,14 @@
                                         <td>
                                             <div style="font-weight: 500;">{{ $displayDate($report->StartDate ?? null) }}</div>
                                             <span class="deck-sub-text">{{ $displayTime($report->StartTime ?? null) }} — {{ $displayTime($report->EndTime ?? null) }}</span>
-                                            @if (!empty($report->BerthingDate) || !empty($report->BerthingTime) || $berthingVessels)
-                                                <span class="deck-sub-text">Berthing: {{ $displayDate($report->BerthingDate ?? null) }} {{ $displayTime($report->BerthingTime ?? null) }}{{ $berthingVessels ? ' · ' . $berthingVessels : '' }}</span>
+                                            @if (!empty($report->BerthingStartDate) || !empty($report->BerthingEndDate) || !empty($report->BerthingStartTime) || !empty($report->BerthingEndTime) || !empty($report->BerthingDate) || !empty($report->BerthingTime) || $berthingVessels)
+                                                <span class="deck-sub-text">Berthing: {{ $displayDate($report->BerthingStartDate ?? $report->BerthingDate ?? null) }} — {{ $displayDate($report->BerthingEndDate ?? null) }} · {{ $displayTime($report->BerthingStartTime ?? $report->BerthingTime ?? null) }} — {{ $displayTime($report->BerthingEndTime ?? null) }}{{ $berthingVessels ? ' · ' . $berthingVessels : '' }}</span>
                                             @endif
-                                            @if (!empty($report->UnberthingDate) || !empty($report->UnberthingTime) || $unberthingVessels)
-                                                <span class="deck-sub-text">Unberthing: {{ $displayDate($report->UnberthingDate ?? null) }} {{ $displayTime($report->UnberthingTime ?? null) }}{{ $unberthingVessels ? ' · ' . $unberthingVessels : '' }}</span>
+                                            @if (!empty($report->UnberthingStartDate) || !empty($report->UnberthingEndDate) || !empty($report->UnberthingStartTime) || !empty($report->UnberthingEndTime) || !empty($report->UnberthingDate) || !empty($report->UnberthingTime) || $unberthingVessels)
+                                                <span class="deck-sub-text">Unberthing: {{ $displayDate($report->UnberthingStartDate ?? $report->UnberthingDate ?? null) }} — {{ $displayDate($report->UnberthingEndDate ?? null) }} · {{ $displayTime($report->UnberthingStartTime ?? $report->UnberthingTime ?? null) }} — {{ $displayTime($report->UnberthingEndTime ?? null) }}{{ $unberthingVessels ? ' · ' . $unberthingVessels : '' }}</span>
                                             @endif
-                                            @if (!empty($report->ShiftingDate) || !empty($report->ShiftingTime) || $shiftingVessels)
-                                                <span class="deck-sub-text">Shifting: {{ $displayDate($report->ShiftingDate ?? null) }} {{ $displayTime($report->ShiftingTime ?? null) }}{{ $shiftingVessels ? ' · ' . $shiftingVessels : '' }}</span>
+                                            @if (!empty($report->ShiftingStartDate) || !empty($report->ShiftingEndDate) || !empty($report->ShiftingStartTime) || !empty($report->ShiftingEndTime) || !empty($report->ShiftingDate) || !empty($report->ShiftingTime) || $shiftingVessels)
+                                                <span class="deck-sub-text">Shifting: {{ $displayDate($report->ShiftingStartDate ?? $report->ShiftingDate ?? null) }} — {{ $displayDate($report->ShiftingEndDate ?? null) }} · {{ $displayTime($report->ShiftingStartTime ?? $report->ShiftingTime ?? null) }} — {{ $displayTime($report->ShiftingEndTime ?? null) }}{{ $shiftingVessels ? ' · ' . $shiftingVessels : '' }}</span>
                                             @endif
                                         </td>
                                         <td style="color: var(--text-muted); max-width: 250px;">
@@ -256,7 +272,7 @@
                     @forelse ($statusCounts as $status => $count)
                         @php 
                             $statusClass = $statusColors[$status] ?? 'status-slate'; 
-                            $percentage = $dailyReports->count() ? round(($count / $dailyReports->count()) * 100) : 0;
+                            $percentage = round(($count / $statusAllocationTotal) * 100);
                         @endphp
                         <div class="breakdown-row">
                             <div class="breakdown-meta">

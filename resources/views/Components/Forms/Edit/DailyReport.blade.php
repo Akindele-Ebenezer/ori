@@ -20,7 +20,7 @@
                             </select>
                         </div>     
                     </section> 
-                    @foreach (range(1, 3) as $deployedVesselIndex)
+                    {{-- @foreach (range(1, 3) as $deployedVesselIndex)
                         <section>
                             <div class="input">
                                 <label for="edit-deployed-vessel-{{ $deployedVesselIndex }}">Deployed Vessel {{ $deployedVesselIndex }}</label>
@@ -32,15 +32,13 @@
                                 </select>
                             </div>
                         </section>
-                    @endforeach
+                    @endforeach --}}
                     <section> 
                         <div class="input">
                             <label for="">Status</label>
                             <select name="Status" id=""> 
                                 <option value="DEPARTURE">DEPARTURE</option>
                                 <option value="ARRIVAL">ARRIVAL</option>
-                                <option value="BERTHING">BERTHING</option>
-                                <option value="UNBERTHING">UNBERTHING</option>
                                 <option value="DISEMBARKATION">DISEMBARKATION</option>
                                 <option value="EMBARKATION">EMBARKATION</option>
                                 <option value="MAINTENANCE">MAINTENANCE</option>
@@ -91,12 +89,20 @@
                 <section class="t-f">
                     <h1>Berthing</h1>
                     <div class="input">
-                        <label for="edit-berthing-date">Date</label>
-                        <input type="date" name="BerthingDate" id="edit-berthing-date">
+                        <label for="edit-berthing-start-date">Start date</label>
+                        <input type="date" name="BerthingStartDate" id="edit-berthing-start-date">
                     </div>
                     <div class="input">
-                        <label for="edit-berthing-time">Time</label>
-                        <input type="time" name="BerthingTime" id="edit-berthing-time">
+                        <label for="edit-berthing-end-date">End date</label>
+                        <input type="date" name="BerthingEndDate" id="edit-berthing-end-date">
+                    </div>
+                    <div class="input">
+                        <label for="edit-berthing-start-time">Start time</label>
+                        <input type="time" name="BerthingStartTime" id="edit-berthing-start-time">
+                    </div>
+                    <div class="input">
+                        <label for="edit-berthing-end-time">End time</label>
+                        <input type="time" name="BerthingEndTime" id="edit-berthing-end-time">
                     </div>
                     @foreach (range(1, 3) as $deployedVesselIndex)
                         <div class="input">
@@ -115,12 +121,20 @@
                 <section class="t-f">
                     <h1>Unberthing</h1>
                     <div class="input">
-                        <label for="edit-unberthing-date">Date</label>
-                        <input type="date" name="UnberthingDate" id="edit-unberthing-date">
+                        <label for="edit-unberthing-start-date">Start date</label>
+                        <input type="date" name="UnberthingStartDate" id="edit-unberthing-start-date">
                     </div>
                     <div class="input">
-                        <label for="edit-unberthing-time">Time</label>
-                        <input type="time" name="UnberthingTime" id="edit-unberthing-time">
+                        <label for="edit-unberthing-end-date">End date</label>
+                        <input type="date" name="UnberthingEndDate" id="edit-unberthing-end-date">
+                    </div>
+                    <div class="input">
+                        <label for="edit-unberthing-start-time">Start time</label>
+                        <input type="time" name="UnberthingStartTime" id="edit-unberthing-start-time">
+                    </div>
+                    <div class="input">
+                        <label for="edit-unberthing-end-time">End time</label>
+                        <input type="time" name="UnberthingEndTime" id="edit-unberthing-end-time">
                     </div>
                     @foreach (range(1, 3) as $deployedVesselIndex)
                         <div class="input">
@@ -139,12 +153,20 @@
                 <section class="t-f">
                     <h1>Shifting</h1>
                     <div class="input">
-                        <label for="edit-shifting-date">Date</label>
-                        <input type="date" name="ShiftingDate" id="edit-shifting-date">
+                        <label for="edit-shifting-start-date">Start date</label>
+                        <input type="date" name="ShiftingStartDate" id="edit-shifting-start-date">
                     </div>
                     <div class="input">
-                        <label for="edit-shifting-time">Time</label>
-                        <input type="time" name="ShiftingTime" id="edit-shifting-time">
+                        <label for="edit-shifting-end-date">End date</label>
+                        <input type="date" name="ShiftingEndDate" id="edit-shifting-end-date">
+                    </div>
+                    <div class="input">
+                        <label for="edit-shifting-start-time">Start time</label>
+                        <input type="time" name="ShiftingStartTime" id="edit-shifting-start-time">
+                    </div>
+                    <div class="input">
+                        <label for="edit-shifting-end-time">End time</label>
+                        <input type="time" name="ShiftingEndTime" id="edit-shifting-end-time">
                     </div>
                     @foreach (range(1, 3) as $deployedVesselIndex)
                         <div class="input">
