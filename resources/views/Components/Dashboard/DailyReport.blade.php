@@ -167,8 +167,11 @@
                                             $report->DeployedVessel2 ?? null,
                                             $report->DeployedVessel3 ?? null,
                                         ])->filter()->implode(', ');
+                                        $berthingVessels = collect([$report->BerthingDeployedVessel1 ?? null, $report->BerthingDeployedVessel2 ?? null, $report->BerthingDeployedVessel3 ?? null])->filter()->implode(', ');
+                                        $unberthingVessels = collect([$report->UnberthingDeployedVessel1 ?? null, $report->UnberthingDeployedVessel2 ?? null, $report->UnberthingDeployedVessel3 ?? null])->filter()->implode(', ');
+                                        $shiftingVessels = collect([$report->ShiftingDeployedVessel1 ?? null, $report->ShiftingDeployedVessel2 ?? null, $report->ShiftingDeployedVessel3 ?? null])->filter()->implode(', ');
                                     @endphp
-                                    <tr data-report-row data-report="{{ base64_encode(json_encode($report)) }}" data-search-value="{{ strtolower(($report->Vessel ?? '') . ' ' . ($report->DeployedVessel1 ?? '') . ' ' . ($report->DeployedVessel2 ?? '') . ' ' . ($report->DeployedVessel3 ?? '') . ' ' . $status . ' ' . ($report->DoneBy ?? '') . ' ' . $remarks) }}">
+                                    <tr data-report-row data-report="{{ base64_encode(json_encode($report)) }}" data-search-value="{{ strtolower(($report->Vessel ?? '') . ' ' . ($report->DeployedVessel1 ?? '') . ' ' . ($report->DeployedVessel2 ?? '') . ' ' . ($report->DeployedVessel3 ?? '') . ' ' . $berthingVessels . ' ' . $unberthingVessels . ' ' . $shiftingVessels . ' ' . $status . ' ' . ($report->DoneBy ?? '') . ' ' . $remarks) }}">
                                         <td>
                                             <span class="deck-vessel-title">{{ $report->Vessel ?? 'Unnamed Vessel' }}</span>
                                             <span class="deck-sub-text">Deployed: {{ $deployedVessels ?: 'None' }}</span>
@@ -183,14 +186,14 @@
                                         <td>
                                             <div style="font-weight: 500;">{{ $displayDate($report->StartDate ?? null) }}</div>
                                             <span class="deck-sub-text">{{ $displayTime($report->StartTime ?? null) }} — {{ $displayTime($report->EndTime ?? null) }}</span>
-                                            @if (!empty($report->BerthingDate) || !empty($report->BerthingTime))
-                                                <span class="deck-sub-text">Berthing: {{ $displayDate($report->BerthingDate ?? null) }} {{ $displayTime($report->BerthingTime ?? null) }}</span>
+                                            @if (!empty($report->BerthingDate) || !empty($report->BerthingTime) || $berthingVessels)
+                                                <span class="deck-sub-text">Berthing: {{ $displayDate($report->BerthingDate ?? null) }} {{ $displayTime($report->BerthingTime ?? null) }}{{ $berthingVessels ? ' · ' . $berthingVessels : '' }}</span>
                                             @endif
-                                            @if (!empty($report->UnberthingDate) || !empty($report->UnberthingTime))
-                                                <span class="deck-sub-text">Unberthing: {{ $displayDate($report->UnberthingDate ?? null) }} {{ $displayTime($report->UnberthingTime ?? null) }}</span>
+                                            @if (!empty($report->UnberthingDate) || !empty($report->UnberthingTime) || $unberthingVessels)
+                                                <span class="deck-sub-text">Unberthing: {{ $displayDate($report->UnberthingDate ?? null) }} {{ $displayTime($report->UnberthingTime ?? null) }}{{ $unberthingVessels ? ' · ' . $unberthingVessels : '' }}</span>
                                             @endif
-                                            @if (!empty($report->ShiftingDate) || !empty($report->ShiftingTime))
-                                                <span class="deck-sub-text">Shifting: {{ $displayDate($report->ShiftingDate ?? null) }} {{ $displayTime($report->ShiftingTime ?? null) }}</span>
+                                            @if (!empty($report->ShiftingDate) || !empty($report->ShiftingTime) || $shiftingVessels)
+                                                <span class="deck-sub-text">Shifting: {{ $displayDate($report->ShiftingDate ?? null) }} {{ $displayTime($report->ShiftingTime ?? null) }}{{ $shiftingVessels ? ' · ' . $shiftingVessels : '' }}</span>
                                             @endif
                                         </td>
                                         <td style="color: var(--text-muted); max-width: 250px;">

@@ -2227,9 +2227,18 @@
                         <td>{{ $DailyReport->EndDate }}</td>
                         <td>{{ $DailyReport->EndTime }}</td>
                         <td>
-                            <div>Berthing: {{ $DailyReport->BerthingDate ?: '-' }} {{ $DailyReport->BerthingTime ? substr($DailyReport->BerthingTime, 0, 5) : '--:--' }}</div>
-                            <div>Unberthing: {{ $DailyReport->UnberthingDate ?: '-' }} {{ $DailyReport->UnberthingTime ? substr($DailyReport->UnberthingTime, 0, 5) : '--:--' }}</div>
-                            <div>Shifting: {{ $DailyReport->ShiftingDate ?: '-' }} {{ $DailyReport->ShiftingTime ? substr($DailyReport->ShiftingTime, 0, 5) : '--:--' }}</div>
+                            <div>
+                                Berthing: {{ $DailyReport->BerthingDate ?: '-' }} {{ $DailyReport->BerthingTime ? substr($DailyReport->BerthingTime, 0, 5) : '--:--' }}
+                                ({{ collect([$DailyReport->BerthingDeployedVessel1, $DailyReport->BerthingDeployedVessel2, $DailyReport->BerthingDeployedVessel3])->filter()->implode(', ') ?: 'No deployed vessels' }})
+                            </div>
+                            <div>
+                                Unberthing: {{ $DailyReport->UnberthingDate ?: '-' }} {{ $DailyReport->UnberthingTime ? substr($DailyReport->UnberthingTime, 0, 5) : '--:--' }}
+                                ({{ collect([$DailyReport->UnberthingDeployedVessel1, $DailyReport->UnberthingDeployedVessel2, $DailyReport->UnberthingDeployedVessel3])->filter()->implode(', ') ?: 'No deployed vessels' }})
+                            </div>
+                            <div>
+                                Shifting: {{ $DailyReport->ShiftingDate ?: '-' }} {{ $DailyReport->ShiftingTime ? substr($DailyReport->ShiftingTime, 0, 5) : '--:--' }}
+                                ({{ collect([$DailyReport->ShiftingDeployedVessel1, $DailyReport->ShiftingDeployedVessel2, $DailyReport->ShiftingDeployedVessel3])->filter()->implode(', ') ?: 'No deployed vessels' }})
+                            </div>
                         </td>
                         <td class="action">  
                             <img class="EditDailyReportButton" src="{{ asset('images/write.png') }}" alt="Edit">

@@ -157,6 +157,11 @@
     }
 }
 
+.AddDailyReportForm .inner-2, .UpdateDailyReportForm .inner-2 {
+    height: 40em;
+    overflow-y: scroll;
+}
+
 .deck-eyebrow {
     display: flex;
     align-items: center;

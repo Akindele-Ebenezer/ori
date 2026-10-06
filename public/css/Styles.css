@@ -4427,6 +4427,11 @@ main .left-navigation ul li .total {
   background: linear-gradient(to bottom, #7dd3fc, #0ea5e9);
 }
 
+.AddDailyReportForm .inner-2, .UpdateDailyReportForm .inner-2 {
+  height: 40em;
+  overflow-y: scroll;
+}
+
 .deck-eyebrow {
   display: flex;
   align-items: center;

@@ -93,7 +93,15 @@
                     <label for="add-berthing-time">Time</label>
                     <input type="time" name="BerthingTime" id="add-berthing-time">
                 </div>
+                @foreach (range(1, 3) as $deployedVesselIndex)
+                    <div class="input">
+                        <label for="add-berthing-deployed-vessel-{{ $deployedVesselIndex }}">Deployed Vessel {{ $deployedVesselIndex }}</label>
+                        <input type="text" name="BerthingDeployedVessel{{ $deployedVesselIndex }}" id="add-berthing-deployed-vessel-{{ $deployedVesselIndex }}" list="daily-report-vessels" autocomplete="off" placeholder="Type to filter vessels">
+                    </div>
+                @endforeach
             </section>
+            <br>
+            <br>
             <section class="t-f">
                 <h1>Unberthing</h1>
                 <div class="input">
@@ -104,7 +112,14 @@
                     <label for="add-unberthing-time">Time</label>
                     <input type="time" name="UnberthingTime" id="add-unberthing-time">
                 </div>
+                @foreach (range(1, 3) as $deployedVesselIndex)
+                    <div class="input">
+                        <label for="add-unberthing-deployed-vessel-{{ $deployedVesselIndex }}">Deployed Vessel {{ $deployedVesselIndex }}</label>
+                        <input type="text" name="UnberthingDeployedVessel{{ $deployedVesselIndex }}" id="add-unberthing-deployed-vessel-{{ $deployedVesselIndex }}" list="daily-report-vessels" autocomplete="off" placeholder="Type to filter vessels">
+                    </div>
+                @endforeach
             </section>
+            <br>
             <section class="t-f">
                 <h1>Shifting</h1>
                 <div class="input">
@@ -115,6 +130,12 @@
                     <label for="add-shifting-time">Time</label>
                     <input type="time" name="ShiftingTime" id="add-shifting-time">
                 </div>
+                @foreach (range(1, 3) as $deployedVesselIndex)
+                    <div class="input">
+                        <label for="add-shifting-deployed-vessel-{{ $deployedVesselIndex }}">Deployed Vessel {{ $deployedVesselIndex }}</label>
+                        <input type="text" name="ShiftingDeployedVessel{{ $deployedVesselIndex }}" id="add-shifting-deployed-vessel-{{ $deployedVesselIndex }}" list="daily-report-vessels" autocomplete="off" placeholder="Type to filter vessels">
+                    </div>
+                @endforeach
             </section>
             <br><br>
         </div>

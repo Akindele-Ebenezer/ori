@@ -98,7 +98,20 @@
                         <label for="edit-berthing-time">Time</label>
                         <input type="time" name="BerthingTime" id="edit-berthing-time">
                     </div>
+                    @foreach (range(1, 3) as $deployedVesselIndex)
+                        <div class="input">
+                            <label for="edit-berthing-deployed-vessel-{{ $deployedVesselIndex }}">Deployed Vessel {{ $deployedVesselIndex }}</label>
+                            <select name="BerthingDeployedVessel{{ $deployedVesselIndex }}" id="edit-berthing-deployed-vessel-{{ $deployedVesselIndex }}">
+                                <option value="">Select vessel</option>
+                                @foreach ($Vessels as $Vessel)
+                                    <option value="{{ $Vessel->VesselName }}">{{ $Vessel->VesselName }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    @endforeach
                 </section>
+                <br>
+                <br>
                 <section class="t-f">
                     <h1>Unberthing</h1>
                     <div class="input">
@@ -109,7 +122,20 @@
                         <label for="edit-unberthing-time">Time</label>
                         <input type="time" name="UnberthingTime" id="edit-unberthing-time">
                     </div>
+                    @foreach (range(1, 3) as $deployedVesselIndex)
+                        <div class="input">
+                            <label for="edit-unberthing-deployed-vessel-{{ $deployedVesselIndex }}">Deployed Vessel {{ $deployedVesselIndex }}</label>
+                            <select name="UnberthingDeployedVessel{{ $deployedVesselIndex }}" id="edit-unberthing-deployed-vessel-{{ $deployedVesselIndex }}">
+                                <option value="">Select vessel</option>
+                                @foreach ($Vessels as $Vessel)
+                                    <option value="{{ $Vessel->VesselName }}">{{ $Vessel->VesselName }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    @endforeach
                 </section>
+                <br>
+                <br>
                 <section class="t-f">
                     <h1>Shifting</h1>
                     <div class="input">
@@ -120,6 +146,17 @@
                         <label for="edit-shifting-time">Time</label>
                         <input type="time" name="ShiftingTime" id="edit-shifting-time">
                     </div>
+                    @foreach (range(1, 3) as $deployedVesselIndex)
+                        <div class="input">
+                            <label for="edit-shifting-deployed-vessel-{{ $deployedVesselIndex }}">Deployed Vessel {{ $deployedVesselIndex }}</label>
+                            <select name="ShiftingDeployedVessel{{ $deployedVesselIndex }}" id="edit-shifting-deployed-vessel-{{ $deployedVesselIndex }}">
+                                <option value="">Select vessel</option>
+                                @foreach ($Vessels as $Vessel)
+                                    <option value="{{ $Vessel->VesselName }}">{{ $Vessel->VesselName }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    @endforeach
                 </section>
                 <br><br>
             </div>
