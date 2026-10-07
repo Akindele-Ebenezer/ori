@@ -8,7 +8,6 @@
 @include('Components.Forms.Add.Checklists.Checklist3')
 {{-- @include('Components.Forms.Edit.Checklists.Checklist3')  --}}
 @include('Components.Forms.Add.Availability')
-@include('Components.Forms.Add.AvailabilityReports')
 @include('Components.Forms.Edit.Availability')
 @include('Components.Forms.Delete.Availability')
 @include('Components.Forms.Add.Generator')
@@ -37,6 +36,7 @@
 @include('Components.Forms.Edit.IncidentAccidentNearMiss')
 @include('Components.Forms.Edit.HospitalVisitCrewStaff')
 @include('Components.Forms.Edit.TugsAssignment')
+@include('Components.Forms.Edit.Travelling')
 @include('Components.Forms.Edit.CctvPositioning')
 @include('Components.Forms.Delete.DailyReport')
 @include('Components.Forms.Delete.RadioBroadcast')
@@ -47,4 +47,5 @@
 @include('Components.Forms.Delete.IncidentAccidentNearMiss')
 @include('Components.Forms.Delete.HospitalVisitCrewStaff')
 @include('Components.Forms.Delete.TugsAssignment')
+@include('Components.Forms.Delete.Travelling')
 @include('Components.Forms.Delete.CctvPositioning')

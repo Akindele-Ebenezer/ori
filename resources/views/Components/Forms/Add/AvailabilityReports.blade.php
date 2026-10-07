@@ -3,6 +3,7 @@
         $reportForms = [
             'incident' => ['class' => 'IncidentReportFormWrapper', 'title' => 'Incident / Accident / Near Miss Report', 'fields' => [['PersonVesselInvolved', 'Person / Vessel Involved'], ['NatureOf', 'Nature Of (IAN)'], ['Location', 'Location'], ['AidRequired', 'Aid Required'], ['SalvageTugs', 'Salvage Tugs']]],
             'hospital' => ['class' => 'HospitalReportFormWrapper', 'title' => 'Hospital Visit Crew / Staff', 'fields' => [['Name', 'Name'], ['VesselOffice', 'Vessel / Office'], ['Admission', 'Admission'], ['DepartureTime', 'Departure Time'], ['ArrivalTime', 'Arrival Time']]],
+            'travelling' => ['class' => 'TravellingReportFormWrapper', 'title' => 'Travelling', 'fields' => [['Name', 'Name'], ['Type', 'Type'], ['Vessel', 'Vessel'], ['Office', 'Office'], ['Driver', 'Driver'], ['Lodging', 'Lodging']]],
             'tugs' => ['class' => 'TugsReportFormWrapper', 'title' => 'Tugs Assignment', 'fields' => [['Tugs', 'Tugs'], ['Vessel', 'Vessel'], ['NoOfJobs', 'No. Of Jobs'], ['NavyJobs', 'Navy Jobs']]],
             'cctv' => ['class' => 'CctvReportFormWrapper', 'title' => 'CCTV Positioning', 'fields' => [['Vessel', 'Vessel'], ['RecordingCapacity', 'Recording Capacity'], ['Positioning', 'Positioning'], ['Correction', 'Correction'], ['From', 'From'], ['To', 'To']]],
         ];
@@ -57,7 +58,22 @@
                                 @foreach ($form['fields'] as [$name, $label])
                                     <div class="input">
                                         <label for="{{ $type }}-{{ $name }}">{{ $label }}</label>
-                                        <input id="{{ $type }}-{{ $name }}" type="{{ in_array($name, ['DepartureTime', 'ArrivalTime'], true) ? 'time' : ($type === 'tugs' && $name === 'NoOfJobs' ? 'number' : 'text') }}" @if ($type === 'tugs' && $name === 'NoOfJobs') min="0" step="1" @endif name="{{ $name }}" @if ($type !== 'hospital' || !in_array($name, ['Admission', 'DepartureTime', 'ArrivalTime'], true)) required @endif>
+                                        @if ($type === 'travelling' && $name === 'Type')
+                                            <select id="{{ $type }}-{{ $name }}" name="{{ $name }}" required>
+                                                <option value="">Select type</option>
+                                                <option value="ARRIVAL">ARRIVAL</option>
+                                                <option value="DEPARTURE">DEPARTURE</option>
+                                            </select>
+                                        @elseif ($type === 'travelling' && $name === 'Vessel')
+                                            <select id="{{ $type }}-{{ $name }}" name="{{ $name }}" required>
+                                                <option value="">Select vessel</option>
+                                                @foreach ($Vessels as $Vessel)
+                                                    <option value="{{ $Vessel->VesselName }}">{{ $Vessel->VesselName }}</option>
+                                                @endforeach
+                                            </select>
+                                        @else
+                                            <input id="{{ $type }}-{{ $name }}" type="{{ in_array($name, ['DepartureTime', 'ArrivalTime'], true) ? 'time' : ($type === 'tugs' && $name === 'NoOfJobs' ? 'number' : 'text') }}" @if ($type === 'tugs' && $name === 'NoOfJobs') min="0" step="1" @endif name="{{ $name }}" @if ($type !== 'hospital' || !in_array($name, ['Admission', 'DepartureTime', 'ArrivalTime'], true)) required @endif>
+                                        @endif
                                     </div>
                                 @endforeach
                             @endif
@@ -80,10 +96,12 @@
                         <label for="{{ $type }}-DoneBy">Done By</label>
                         <input id="{{ $type }}-DoneBy" type="text" name="DoneBy" @if ($type !== 'cctv') required @endif>
                     </div>
-                    <div class="input">
-                        <label for="{{ $type }}-Remarks">Remarks</label>
-                        <textarea id="{{ $type }}-Remarks" name="Remarks"></textarea>
-                    </div>
+                    @if ($type !== 'travelling')
+                        <div class="input">
+                            <label for="{{ $type }}-Remarks">Remarks</label>
+                            <textarea id="{{ $type }}-Remarks" name="Remarks"></textarea>
+                        </div>
+                    @endif
                 </div>
             </form>
             <button class="AddAvailabilityReportButton" form="availability-report-form-{{ $type }}" type="submit">Create →</button>

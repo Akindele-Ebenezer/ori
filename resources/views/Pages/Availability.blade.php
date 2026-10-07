@@ -2480,6 +2480,7 @@
                         <th>No. Of Jobs</th>
                         <th>Navy Jobs</th>
                         <th>Date</th> 
+                        <th>Time</th>
                         <th>#</th>
                     </tr>
                     @forelse ($AvailabilityReports->where('ReportType', 'tugs') as $TugsAssignment)
@@ -2489,16 +2490,57 @@
                         <td>{{ $TugsAssignment->NoOfJobs ?? 0 }}</td>
                         <td>{{ $TugsAssignment->NavyJobs }}</td>
                         <td>{{ $TugsAssignment->Date }}</td>
+                        <td>{{ $TugsAssignment->Time }}</td>
                         <td class="action">  
                             <img class="EditAvailabilityReportButton" src="{{ asset('images/write.png') }}" alt="Edit">
                             <img class="DeleteAvailabilityReportButton" src="{{ asset('images/delete.png') }}" alt="Delete">
                         </td>
                     </tr>
                     @empty
-                    <tr><td class="action" colspan="6">System doesn't have any records yet.</td></tr>
+                    <tr><td class="action" colspan="7">System doesn't have any records yet.</td></tr>
                     @endforelse
                 </table>
             </div> 
+        </div>
+        <div class="board-3i">
+            <div class="div">
+                <h1>Travelling</h1>
+                <table>
+                    <tr>
+                        <th class="Hide">ID</th>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Vessel</th>
+                        <th>Office</th>
+                        <th>Driver</th>
+                        <th>Lodging</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Done By</th>
+                        <th>#</th>
+                    </tr>
+                    @forelse ($AvailabilityReports->where('ReportType', 'travelling') as $TravellingReport)
+                    <tr data-availability-report="{{ base64_encode(json_encode($TravellingReport)) }}">
+                        <td class="Hide">{{ $TravellingReport->id }}</td>
+                        <td>{{ $TravellingReport->Name }}</td>
+                        <td>{{ $TravellingReport->Type }}</td>
+                        <td>{{ $TravellingReport->Vessel }}</td>
+                        <td>{{ $TravellingReport->Office }}</td>
+                        <td>{{ $TravellingReport->Driver }}</td>
+                        <td>{{ $TravellingReport->Lodging }}</td>
+                        <td>{{ $TravellingReport->Date }}</td>
+                        <td>{{ $TravellingReport->Time }}</td>
+                        <td>{{ $TravellingReport->DoneBy }}</td>
+                        <td class="action">
+                            <img class="EditAvailabilityReportButton" src="{{ asset('images/write.png') }}" alt="Edit">
+                            <img class="DeleteAvailabilityReportButton" src="{{ asset('images/delete.png') }}" alt="Delete">
+                        </td>
+                    </tr>
+                    @empty
+                    <tr><td class="action" colspan="11">System doesn't have any records yet.</td></tr>
+                    @endforelse
+                </table>
+            </div>
         </div>
         <div class="board-3i">
             <div class="div">

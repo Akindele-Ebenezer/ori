@@ -1269,7 +1269,6 @@ body {
   background: #225f7d;
   border: none;
   border-radius: 0.3em;
-  bottom: -10.6em;
   color: #eee;
   cursor: pointer;
   margin-block: 0.5em;
@@ -1596,6 +1595,7 @@ body {
 }
 .form-1.AddAvailability .AvailabilityFormWrapper .AddAvailabilityButton {
   align-items: center;
+  bottom: -10.6em !important;
   display: inline-flex;
   gap: 0.65em;
   transition: transform 180ms ease, box-shadow 180ms ease, opacity 180ms ease;

@@ -9,16 +9,17 @@
     $incidentReports = $availabilityReports->filter(fn ($report) => strtolower((string) ($report->ReportType ?? '')) === 'incident');
     $hospitalReports = $availabilityReports->filter(fn ($report) => strtolower((string) ($report->ReportType ?? '')) === 'hospital');
     $tugsReports = $availabilityReports->filter(fn ($report) => strtolower((string) ($report->ReportType ?? '')) === 'tugs');
+    $travellingReports = $availabilityReports->filter(fn ($report) => strtolower((string) ($report->ReportType ?? '')) === 'travelling');
     $cctvReports = $availabilityReports->filter(fn ($report) => strtolower((string) ($report->ReportType ?? '')) === 'cctv');
     $tugJobCounts = $tugsReports
         ->filter(fn ($report) => trim((string) ($report->Tugs ?? '')) !== '')
         ->groupBy(fn ($report) => strtoupper(trim((string) $report->Tugs)))
         ->map(fn ($reports) => $reports->sum(fn ($report) => is_numeric($report->NoOfJobs ?? null) ? (int) $report->NoOfJobs : 0))
         ->sortDesc();
-    $tugVessels = $tugsReports
+    $tugAssignments = $tugsReports
         ->filter(fn ($report) => trim((string) ($report->Tugs ?? '')) !== '')
         ->groupBy(fn ($report) => strtoupper(trim((string) $report->Tugs)))
-        ->map(fn ($reports) => $reports->pluck('Vessel')->filter(fn ($vessel) => trim((string) $vessel) !== '')->unique()->sort()->values());
+        ->map(fn ($reports) => $reports->sortByDesc(fn ($report) => ($report->Date ?? '') . ' ' . ($report->Time ?? ''))->values());
     $maxTugJobs = max(1, (int) $tugJobCounts->max());
     $tugJobTotal = (int) $tugJobCounts->sum();
     $officerCount = $officerLogs->sum(function ($log) {
@@ -257,7 +258,11 @@
                                         </div>
                                         <strong>{{ number_format((int) $jobs) }} <span>jobs</span></strong>
                                     </div>
-                                    <span class="deck-sub-text">Vessels: {{ $tugVessels->get($tug, collect())->join(', ') ?: 'No vessel recorded' }}</span>
+                                    @forelse ($tugAssignments->get($tug, collect()) as $assignment)
+                                        <span class="deck-sub-text">{{ $assignment->Vessel ?: 'No vessel recorded' }} · {{ $displayDate($assignment->Date ?? null) }} {{ $displayTime($assignment->Time ?? null) }}</span>
+                                    @empty
+                                        <span class="deck-sub-text">No vessel recorded</span>
+                                    @endforelse
                                     <div class="tug-jobs-track tug-jobs-track--{{ $jobLevel }}" role="meter" aria-label="{{ $tug }} job count" aria-valuetext="{{ number_format((int) $jobs) }} jobs, {{ $jobPercentage }}% of busiest tug" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ $jobPercentage }}">
                                         <span aria-hidden="true" style="width: {{ $jobPercentage }}%"></span>
                                     </div>
@@ -496,6 +501,14 @@
                         'Admission' => 'Admission',
                         'Departure Time' => 'DepartureTime',
                         'Arrival Time' => 'ArrivalTime',
+                    ]),
+                    $availabilityTable($travellingReports, 'Travelling', 'Search travelling reports', [
+                        'Name' => 'Name',
+                        'Type' => 'Type',
+                        'Vessel' => 'Vessel',
+                        'Office' => 'Office',
+                        'Driver' => 'Driver',
+                        'Lodging' => 'Lodging',
                     ]),
                     $availabilityTable($tugsReports, 'Tugs Reports', 'Search tugs reports', [
                         'Vessel' => 'Vessel',

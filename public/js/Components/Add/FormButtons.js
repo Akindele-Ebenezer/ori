@@ -8,6 +8,7 @@ const formButtons = {
     OthersFormButton: 'OthersFormWrapper',
     IncidentReportFormButton: 'IncidentReportFormWrapper',
     HospitalReportFormButton: 'HospitalReportFormWrapper',
+    TravellingReportFormButton: 'TravellingReportFormWrapper',
     TugsReportFormButton: 'TugsReportFormWrapper',
     CctvReportFormButton: 'CctvReportFormWrapper'
 };
