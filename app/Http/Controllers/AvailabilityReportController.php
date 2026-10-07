@@ -88,7 +88,10 @@ class AvailabilityReportController extends Controller
         abort_unless(isset(self::FIELDS_BY_TYPE[$type]), 404);
         $rules = [];
         foreach (self::FIELDS_BY_TYPE[$type] as $field) {
-            $isRequired = in_array($type, ['cctv', 'travelling'], true) || ($creating && ($type !== 'hospital' || in_array($field, ['Name', 'VesselOffice'], true)));
+            $isRequired = $type === 'cctv'
+                || ($type === 'travelling'
+                    ? !in_array($field, ['Vessel', 'Office'], true)
+                    : ($creating && ($type !== 'hospital' || in_array($field, ['Name', 'VesselOffice'], true))));
             $rules[$field] = [$isRequired ? 'required' : 'nullable', 'string', 'max:255'];
         }
         if ($type === 'cctv') {
@@ -100,7 +103,7 @@ class AvailabilityReportController extends Controller
         }
         if ($type === 'travelling') {
             $rules['Type'] = ['required', 'in:ARRIVAL,DEPARTURE'];
-            $rules['Vessel'] = ['required', 'string', 'exists:vessels_vessel_information,VesselName'];
+            $rules['Vessel'] = ['nullable', 'string', 'exists:vessels_vessel_information,VesselName'];
         }
         $rules['Date'] = ['required', 'date'];
         $rules['Time'] = [$type === 'cctv' ? 'nullable' : 'required', 'date_format:H:i'];

@@ -16,14 +16,14 @@
             </div>
             <div class="input">
                 <label for="travelling-edit-Vessel">Vessel</label>
-                <select id="travelling-edit-Vessel" name="Vessel" required>
+                <select id="travelling-edit-Vessel" name="Vessel">
                     <option value="">Select vessel</option>
                     @foreach ($Vessels as $Vessel)
                         <option value="{{ $Vessel->VesselName }}">{{ $Vessel->VesselName }}</option>
                     @endforeach
                 </select>
             </div>
-            <div class="input"><label for="travelling-edit-Office">Office</label><input id="travelling-edit-Office" type="text" name="Office" required></div>
+            <div class="input"><label for="travelling-edit-Office">Office</label><input id="travelling-edit-Office" type="text" name="Office"></div>
             <div class="input"><label for="travelling-edit-Driver">Driver</label><input id="travelling-edit-Driver" type="text" name="Driver" required></div>
             <div class="input"><label for="travelling-edit-Lodging">Lodging</label><input id="travelling-edit-Lodging" type="text" name="Lodging" required></div>
             <div class="input"><label for="travelling-edit-Date">Date</label><input id="travelling-edit-Date" type="date" name="Date" required></div>

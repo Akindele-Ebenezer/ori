@@ -65,14 +65,14 @@
                                                 <option value="DEPARTURE">DEPARTURE</option>
                                             </select>
                                         @elseif ($type === 'travelling' && $name === 'Vessel')
-                                            <select id="{{ $type }}-{{ $name }}" name="{{ $name }}" required>
+                                            <select id="{{ $type }}-{{ $name }}" name="{{ $name }}">
                                                 <option value="">Select vessel</option>
                                                 @foreach ($Vessels as $Vessel)
                                                     <option value="{{ $Vessel->VesselName }}">{{ $Vessel->VesselName }}</option>
                                                 @endforeach
                                             </select>
                                         @else
-                                            <input id="{{ $type }}-{{ $name }}" type="{{ in_array($name, ['DepartureTime', 'ArrivalTime'], true) ? 'time' : ($type === 'tugs' && $name === 'NoOfJobs' ? 'number' : 'text') }}" @if ($type === 'tugs' && $name === 'NoOfJobs') min="0" step="1" @endif name="{{ $name }}" @if ($type !== 'hospital' || !in_array($name, ['Admission', 'DepartureTime', 'ArrivalTime'], true)) required @endif>
+                                            <input id="{{ $type }}-{{ $name }}" type="{{ in_array($name, ['DepartureTime', 'ArrivalTime'], true) ? 'time' : ($type === 'tugs' && $name === 'NoOfJobs' ? 'number' : 'text') }}" @if ($type === 'tugs' && $name === 'NoOfJobs') min="0" step="1" @endif name="{{ $name }}" @if (($type !== 'hospital' || !in_array($name, ['Admission', 'DepartureTime', 'ArrivalTime'], true)) && !($type === 'travelling' && $name === 'Office')) required @endif>
                                         @endif
                                     </div>
                                 @endforeach
