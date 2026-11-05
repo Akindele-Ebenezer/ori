@@ -11,7 +11,11 @@
                     <section>
                         <div class="input">
                             <label for="">From date</label>
-                            <input type="date" name="FromDate_DAILYREPORTFILTER">
+                            <input
+                                type="date"
+                                name="FromDate_DAILYREPORTFILTER"
+                                value="{{ request('FromDate_DAILYREPORTFILTER', request()->filled('DailyReportFilter_SpecificDay') ? '' : ($DashboardFromDate ?? '')) }}"
+                            >
                         </div>  
                     </section> 
                 </div>
@@ -20,7 +24,11 @@
                 <section>
                     <div class="input">
                         <label for="">End date</label>
-                        <input type="date" name="EndDate_DAILYREPORTFILTER">
+                        <input
+                            type="date"
+                            name="EndDate_DAILYREPORTFILTER"
+                            value="{{ request('EndDate_DAILYREPORTFILTER', request()->filled('DailyReportFilter_SpecificDay') ? '' : ($DashboardEndDate ?? '')) }}"
+                        >
                     </div>  
                 </section> 
             </div>
@@ -28,7 +36,7 @@
                 <section>
                     <div class="input">
                         <label for="">Specific day</label>
-                        <input type="date" name="DailyReportFilter_SpecificDay">
+                        <input type="date" name="DailyReportFilter_SpecificDay" value="{{ request('DailyReportFilter_SpecificDay', '') }}">
                     </div>  
                 </section> 
             </div>

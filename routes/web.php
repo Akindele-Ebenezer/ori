@@ -124,11 +124,9 @@ Route::post('/Add/OthersReport', [OtherReportController::class, 'add_other_repor
 Route::post('/Edit/OthersReport/{Id}', [OtherReportController::class, 'edit_other_report'])->name('EditOtherReport');
 Route::get('/Delete/OthersReport/{Id}', [OtherReportController::class, 'delete_other_report'])->name('DeleteOtherReport');
   
-
-
-
-
-
+Route::get('/vtdl', function () {
+    return view('Pages.VesselTraineeDigitalLogbook');
+});
 
 // PDF 
 Route::get('/Testimonials/Template/1', [SeaServiceTestimonialPdf::class, 'template_1'])->name('template_1');

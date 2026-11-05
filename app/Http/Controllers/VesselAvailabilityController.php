@@ -35,33 +35,52 @@ class VesselAvailabilityController extends Controller
         $Vessels = \DB::table('vessels_vessel_information')->select(['VesselName', 'ImoNumber', 'CallSign'])->get();
         $STARTDATE = date('Y-m-d'); 
         $NumberOfVessels = \DB::table('vessels_vessel_information')->get();
-        $DailyReportsQuery = \DB::table('daily_reports');
-        if ($Request->filled('DailyReportFilter_SpecificDay')) {
-            $DailyReportsQuery->whereDate('StartDate', $Request->DailyReportFilter_SpecificDay);
-        } elseif ($Request->filled('FromDate_DAILYREPORTFILTER') && $Request->filled('EndDate_DAILYREPORTFILTER')) {
-            $DailyReportsQuery->whereBetween('StartDate', [$Request->FromDate_DAILYREPORTFILTER, $Request->EndDate_DAILYREPORTFILTER]);
-        } else {
-            $DailyReportsQuery->whereDate('StartDate', now()->toDateString());
-        }
+        $now = now();
+        $defaultStartDate = $now->copy()->startOfDay()->subDay();
+        $defaultEndDate = $now->copy()->startOfDay();
+        $hasSpecificDay = $Request->filled('DailyReportFilter_SpecificDay');
+        $hasDateRange = $Request->filled('FromDate_DAILYREPORTFILTER') && $Request->filled('EndDate_DAILYREPORTFILTER');
+        $usesDefaultDateRange = !$hasSpecificDay && !$hasDateRange;
+        $fromDate = $usesDefaultDateRange
+            ? $defaultStartDate->toDateString()
+            : ($hasSpecificDay ? $Request->DailyReportFilter_SpecificDay : $Request->FromDate_DAILYREPORTFILTER);
+        $endDate = $usesDefaultDateRange
+            ? $now->toDateString()
+            : ($hasSpecificDay ? $Request->DailyReportFilter_SpecificDay : $Request->EndDate_DAILYREPORTFILTER);
+        $currentTime = $now->format('H:i:s');
+        $limitToCurrentTime = $usesDefaultDateRange;
 
-        $ReportDateFilter = function ($query, string $column = 'Date') use ($Request) {
-            if ($Request->filled('DailyReportFilter_SpecificDay')) {
-                $query->whereDate($column, $Request->DailyReportFilter_SpecificDay);
-            } elseif ($Request->filled('FromDate_DAILYREPORTFILTER') && $Request->filled('EndDate_DAILYREPORTFILTER')) {
-                $query->whereBetween($column, [$Request->FromDate_DAILYREPORTFILTER, $Request->EndDate_DAILYREPORTFILTER]);
-            } else {
-                $query->whereDate($column, now()->toDateString());
+        $ReportDateFilter = function ($query, string $column = 'Date', ?string $timeColumn = null) use ($limitToCurrentTime, $fromDate, $endDate, $currentTime) {
+            $query->whereBetween($column, [$fromDate, $endDate]);
+
+            if ($limitToCurrentTime && $timeColumn !== null) {
+                $query->where(function ($dateQuery) use ($column, $timeColumn, $endDate, $currentTime) {
+                    $dateQuery->whereDate($column, '<', $endDate)
+                        ->orWhere(function ($todayQuery) use ($column, $timeColumn, $endDate, $currentTime) {
+                            $todayQuery->whereDate($column, $endDate)
+                                ->where(function ($timeQuery) use ($timeColumn, $currentTime) {
+                                    $timeQuery->where($timeColumn, '<=', $currentTime)
+                                        ->orWhereNull($timeColumn)
+                                        ->orWhere($timeColumn, '');
+                                });
+                        });
+                });
             }
 
             return $query;
         };
 
+        $DailyReportsQuery = $ReportDateFilter(\DB::table('daily_reports'), 'StartDate', 'StartTime');
         $ReportData = [
+            'DashboardFromDate' => $fromDate,
+            'DashboardEndDate' => $endDate,
+            'DashboardCurrentTime' => $currentTime,
+            'DashboardUsesDefaultDateRange' => $usesDefaultDateRange,
             'DailyReports' => $DailyReportsQuery->orderByDesc('StartDate')->orderByDesc('StartTime')->get(),
-            'RadioBroadcastReports' => $ReportDateFilter(\DB::table('radio_broadcast_reports as r')->leftJoin('vessels_vessel_information as v', 'r.Vessel', '=', 'v.VesselName'))->select('r.id as report_id','r.*', 'v.*')->orderByDesc('r.Date')->orderByDesc('r.id')->get(),
-            'DeviceReports' => $ReportDateFilter(\DB::table('device_reports'))->orderByDesc('Date')->orderByDesc('id')->get(),
-            'OfficerOnDutyReports' => $ReportDateFilter(\DB::table('officer_on_duty_reports'))->orderByDesc('Date')->orderByDesc('id')->get(),
-            'OtherReports' => $ReportDateFilter(\DB::table('other_reports'))
+            'RadioBroadcastReports' => $ReportDateFilter(\DB::table('radio_broadcast_reports as r')->leftJoin('vessels_vessel_information as v', 'r.Vessel', '=', 'v.VesselName'), 'r.Date', 'r.TimeIn')->select('r.id as report_id','r.*', 'v.*')->orderByDesc('r.Date')->orderByDesc('r.id')->get(),
+            'DeviceReports' => $ReportDateFilter(\DB::table('device_reports'), 'Date', 'Time')->orderByDesc('Date')->orderByDesc('id')->get(),
+            'OfficerOnDutyReports' => $ReportDateFilter(\DB::table('officer_on_duty_reports'), 'Date', 'TimeIn')->orderByDesc('Date')->orderByDesc('id')->get(),
+            'OtherReports' => $ReportDateFilter(\DB::table('other_reports'), 'Date', 'TimeIn')
                                 ->where(function ($query) {
                                     $query->where(function ($q) {
                                         $q->whereNotNull('ROB')
@@ -76,12 +95,12 @@ class VesselAvailabilityController extends Controller
                                 ->orderByDesc('TimeIn')
                                 ->orderByDesc('id')
                                 ->get(),
-            'AvailabilityReports' => $ReportDateFilter(\DB::table('availability_reports'))
+            'AvailabilityReports' => $ReportDateFilter(\DB::table('availability_reports'), 'Date', 'Time')
                                 ->orderByDesc('Date')
                                 ->orderByDesc('Time')
                                 ->orderByDesc('id')
                                 ->get(), 
-            'PeriodicCheckReports' => $ReportDateFilter(\DB::table('periodic_checks'))
+            'PeriodicCheckReports' => $ReportDateFilter(\DB::table('periodic_checks'), 'Date', 'Time')
                                 ->orderByDesc('Date')
                                 ->orderByDesc('Time')
                                 ->orderByDesc('id')
