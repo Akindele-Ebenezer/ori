@@ -38,9 +38,6 @@
     @unless (count($Vessels) > 0)
         <p class="empty-data">There's no vessel in the system..</p>
     @endunless
-    @php
-        $availabilityCompanies = \DB::table('companies_')->get();
-    @endphp
     @foreach ($availabilityCompanies as $Comapny)
         <h3 class="company-heading">
             <span>
@@ -49,7 +46,7 @@
         </h3>
         <h3 class="report-summary">Report summary <img class="report-summary ReportPdfButton" src="{{ asset('images/pdf.png') }}" alt=""></h3>
         @php
-            $Dredgers = \DB::table('vessels_vessel_information as v')->select(['v.VesselName', 'v.Captain', 'v.NightDutyCaptain', 'v.VesselType', 'v.Company', 'v.ImoNumber', 'v.CallSign', 's4.Area'])->join('vessels_section_4 as s4', 'v.VesselName', '=', 's4.VesselName')->where('v.Company', $Comapny->Alias)->where('v.VesselType', 'DREDGER')->get();
+            $Dredgers = $availabilityVesselsByCompanyType->get($Comapny->Alias . '|DREDGER', collect());
         @endphp
         <h3 class="report-summary -x"><img class="ToggleVessels_Icon" src="{{ asset('/images/add (1).png') }}" alt="">Vessels</h3>
         <h3 class="vessel-type-heading vessels_">DREDGERS :: {{ count($Dredgers) }}
@@ -61,35 +58,8 @@
         @endunless
         @foreach ($Dredgers as $Vessel)
         @php 
-            if (isset($_GET['FromDate_FILTERBYDATE']) AND isset($_GET['EndDate_FILTERBYDATE']) AND empty($_GET['SpecificDay'])) {
-                $Availability_STATUS = \DB::table('vessel_availabilities')->select(['Vessel', 'StartDate', 'EndDate', 'Status', 'StartTime', 'EndTime'])
-                                        ->where('Vessel', $Vessel->VesselName)
-                                        ->whereBetween('StartDate', [$_GET['FromDate_FILTERBYDATE'], $_GET['EndDate_FILTERBYDATE']])
-                                        ->whereNotNull('Status') 
-                                        ->orderBy('EndTime', 'DESC') 
-                                        ->first(); 
-                $Availability_STATUS_2 = $Availability_STATUS;
-            } elseif (!(empty($_GET['SpecificDay']))) {
-                $Availability_STATUS = \DB::table('vessel_availabilities')->select(['Vessel', 'StartDate', 'EndDate', 'Status', 'StartTime', 'EndTime'])
-                                        ->where('Vessel', $Vessel->VesselName)
-                                        ->where('StartDate', $_GET['SpecificDay'])
-                                        ->orderBy('EndTime', 'DESC') 
-                                        ->first(); 
-                $Availability_STATUS_2 = $Availability_STATUS;
-            } else {
-            $Availability_STATUS = \DB::table('vessel_availabilities')->select(['Vessel', 'Comment', 'StartDate', 'EndDate', 'Status', 'StartTime', 'EndTime', 'TillNow'])
-                                    ->where('Vessel', $Vessel->VesselName) 
-                                    ->where('EndDate', '>=', $STARTDATE) 
-                                    ->orWhere(function($query) use ($Vessel) {
-                                        $query->where('Vessel', $Vessel->VesselName) 
-                                                ->where('TillNow', 'YES');
-                                    })
-                                    ->orderBy('StartDate', 'DESC') 
-                                    ->orderBy('StartTime', 'DESC') 
-                                    ->orderBy('EndTime', 'DESC')
-                                    ->first(); 
+            $Availability_STATUS = $availabilityStatusByVessel->get($Vessel->VesselName);
             $Availability_STATUS_2 = $Availability_STATUS;
-            }
             $StartDate = $Availability_STATUS->StartDate ?? '00:00';
             $EndDate = $Availability_STATUS->EndDate ?? '00:00';
             if (!empty($Availability_STATUS->TillNow)) {
@@ -109,16 +79,7 @@
                     $EndTime_2 = \Carbon\Carbon::parse(date('H:i') ?? '00:00')->format('H:i').' HRS'; 
                 }
             }
-            $Dredgers_ROB = \DB::table('vessels_section_4')->select(['tanks.ROB'])->where('VesselName', $Vessel->VesselName)
-                            ->join('other_reports as tanks', 'vessels_section_4.VesselName', '=', 'tanks.Vessel')
-                            ->where(function ($query) {
-                                $query->whereNotNull('tanks.ROB')
-                                ->where('tanks.ROB', '!=', '');
-                            })
-                            ->orderByDesc('tanks.Date')
-                            ->orderByDesc('tanks.TimeIn')
-                            ->orderByDesc('tanks.id')
-                            ->first();
+            $Dredgers_ROB = $availabilityRobsByVessel->get($Vessel->VesselName);
         @endphp
         <div class="list tooltip-x vessels_">
             @if ($EndDate === $StartDate)  
@@ -131,7 +92,7 @@
                 <div class="Hide">{{ strtolower($Availability_STATUS->Status ?? 'READY TO GO') }}</div>
                 <div class="Hide"> {{ $Vessel->VesselName }}</div>
                 <strong class="notification-wrapper"> 
-                    @include('Components.Includes.VesselStats_DATA')
+                    @include('Components.Includes.VesselStats_Optimized')
                     <span class="status-x {{ strtolower($Availability_STATUS->Status ?? 'READY TO GO') }}  
                     "></span>
                     <span class="vessel-name--">{{ $Vessel->VesselName }}</span>
@@ -154,7 +115,14 @@
         </div> 
         @endforeach 
         @php
-            $TugBoats = \DB::table('vessels_vessel_information as v')->select(['v.VesselName', 'v.Captain', 'v.NightDutyCaptain', 'v.VesselType', 'v.Company', 'v.ImoNumber', 'v.CallSign', 's4.Area'])->join('vessels_section_4 as s4', 'v.VesselName', '=', 's4.VesselName')->where('v.Company', $Comapny->Alias)->where('v.VesselType', 'TUG BOAT')->orderByRaw("FIELD(v.VesselName, 'MAJIYA', 'UBIMA', 'UROMI', 'DAURA', 'ZARANDA', 'ASAGA', 'EMEKUKU', 'GUSAU')")->get();
+            $TugBoats = $availabilityVesselsByCompanyType->get($Comapny->Alias . '|TUG BOAT', collect())
+                ->sortBy(function ($vessel) {
+                    $priority = ['MAJIYA', 'UBIMA', 'UROMI', 'DAURA', 'ZARANDA', 'ASAGA', 'EMEKUKU', 'GUSAU'];
+                    $position = array_search($vessel->VesselName, $priority, true);
+
+                    return $position === false ? count($priority) : $position;
+                })
+                ->values();
         @endphp
         @unless (count($TugBoats) > 0)
         <span class="vessels_">
@@ -165,35 +133,8 @@
         @endunless
         @foreach ($TugBoats as $Vessel)
         @php 
-            if (isset($_GET['FromDate_FILTERBYDATE']) AND isset($_GET['EndDate_FILTERBYDATE']) AND empty($_GET['SpecificDay'])) {
-                $Availability_STATUS = \DB::table('vessel_availabilities')->select(['Vessel', 'StartDate', 'EndDate', 'Status', 'StartTime', 'EndTime'])
-                                        ->where('Vessel', $Vessel->VesselName)
-                                        ->whereBetween('StartDate', [$_GET['FromDate_FILTERBYDATE'], $_GET['EndDate_FILTERBYDATE']])
-                                        ->whereNotNull('Status') 
-                                        ->orderBy('EndTime', 'DESC') 
-                                        ->first(); 
-                $Availability_STATUS_2 = $Availability_STATUS;
-            } elseif (!(empty($_GET['SpecificDay']))) {
-                $Availability_STATUS = \DB::table('vessel_availabilities')->select(['Vessel', 'StartDate', 'EndDate', 'Status', 'StartTime', 'EndTime'])
-                                        ->where('Vessel', $Vessel->VesselName)
-                                        ->where('StartDate', $_GET['SpecificDay'])
-                                        ->orderBy('EndTime', 'DESC') 
-                                        ->first(); 
-                $Availability_STATUS_2 = $Availability_STATUS;
-            } else {
-            $Availability_STATUS = \DB::table('vessel_availabilities')->select(['Vessel', 'Comment', 'StartDate', 'EndDate', 'Status', 'StartTime', 'EndTime', 'TillNow'])
-                                    ->where('Vessel', $Vessel->VesselName) 
-                                    ->where('EndDate', '>=', $STARTDATE) 
-                                    ->orWhere(function($query) use ($Vessel) {
-                                        $query->where('Vessel', $Vessel->VesselName) 
-                                                ->where('TillNow', 'YES');
-                                    })
-                                    ->orderBy('StartDate', 'DESC') 
-                                    ->orderBy('StartTime', 'DESC') 
-                                    ->orderBy('EndTime', 'DESC') 
-                                    ->first(); 
+            $Availability_STATUS = $availabilityStatusByVessel->get($Vessel->VesselName);
             $Availability_STATUS_2 = $Availability_STATUS;
-            }
             $StartDate = $Availability_STATUS->StartDate ?? '00:00';
             $EndDate = $Availability_STATUS->EndDate ?? '00:00'; 
             if (!empty($Availability_STATUS->TillNow)) {
@@ -213,16 +154,7 @@
                     $EndTime_2 = \Carbon\Carbon::parse(date('H:i') ?? '00:00')->format('H:i').' HRS'; 
                 }
             }
-            $TugBoats_ROB = \DB::table('vessels_section_4')->select(['tanks.ROB'])->where('VesselName', $Vessel->VesselName)
-                            ->join('other_reports as tanks', 'vessels_section_4.VesselName', '=', 'tanks.Vessel')
-                            ->where(function ($query) {
-                                $query->whereNotNull('tanks.ROB')
-                                ->where('tanks.ROB', '!=', '');
-                            })
-                            ->orderByDesc('tanks.Date')
-                            ->orderByDesc('tanks.TimeIn')
-                            ->orderByDesc('tanks.id')
-                            ->first();
+            $TugBoats_ROB = $availabilityRobsByVessel->get($Vessel->VesselName);
         @endphp
         <div class="list tooltip-x vessels_"> 
             @if ($EndDate === $StartDate)  
@@ -235,7 +167,7 @@
                 <div class="Hide">{{ strtolower($Availability_STATUS->Status ?? 'READY TO GO') }}</div>
                 <div class="Hide"> {{ $Vessel->VesselName }}</div>
                 <strong class="notification-wrapper">
-                    @include('Components.Includes.VesselStats_DATA')
+                    @include('Components.Includes.VesselStats_Optimized')
                     <span class="status-x {{ strtolower($Availability_STATUS->Status ?? 'READY TO GO') }}
                     "></span>
                     <span class="vessel-name--">{{ $Vessel->VesselName }}</span>
@@ -259,7 +191,7 @@
         </div> 
         @endforeach
         @php
-            $PilotCutters = \DB::table('vessels_vessel_information as v')->select(['v.VesselName', 'v.Captain', 'v.NightDutyCaptain', 'v.VesselType', 'v.Company', 'v.ImoNumber', 'v.CallSign', 's4.Area'])->join('vessels_section_4 as s4', 'v.VesselName', '=', 's4.VesselName')->where('v.Company', $Comapny->Alias)->where('v.VesselType', 'PILOT CUTTERS')->get();
+            $PilotCutters = $availabilityVesselsByCompanyType->get($Comapny->Alias . '|PILOT CUTTERS', collect());
         @endphp
         @unless (count($PilotCutters) > 0)
         <span class="vessels_">
@@ -270,45 +202,8 @@
         @endunless
         @foreach ($PilotCutters as $Vessel)
         @php 
-            if (isset($_GET['FromDate_FILTERBYDATE']) AND isset($_GET['EndDate_FILTERBYDATE']) AND empty($_GET['SpecificDay'])) {
-                $Availability_STATUS = \DB::table('vessel_availabilities')->select(['Vessel', 'StartDate', 'EndDate', 'Status', 'StartTime', 'EndTime'])
-                                        ->where('Vessel', $Vessel->VesselName) 
-                                        ->whereBetween('StartDate', [$_GET['FromDate_FILTERBYDATE'], $_GET['EndDate_FILTERBYDATE']])
-                                        ->whereNotNull('Status') 
-                                        ->orderBy('EndTime', 'DESC') 
-                                        ->first(); 
-                $Availability_STATUS_2 = $Availability_STATUS;
-            } elseif (!(empty($_GET['SpecificDay']))) {
-                $Availability_STATUS = \DB::table('vessel_availabilities')->select(['Vessel', 'StartDate', 'EndDate', 'Status', 'StartTime', 'EndTime'])
-                                        ->where('Vessel', $Vessel->VesselName)
-                                        ->where('StartDate', $_GET['SpecificDay'])
-                                        ->orderBy('EndTime', 'DESC') 
-                                        ->first(); 
-                $Availability_STATUS_2 = $Availability_STATUS;
-            } else {
-            $Availability_STATUS = \DB::table('vessel_availabilities')->select(['Vessel', 'Comment', 'StartDate', 'EndDate', 'Status', 'StartTime', 'EndTime', 'TillNow'])
-                                    ->where('Vessel', $Vessel->VesselName) 
-                                    ->where('EndDate', '>=', $STARTDATE) 
-                                    ->orWhere(function($query) use ($Vessel) {
-                                        $query->where('Vessel', $Vessel->VesselName) 
-                                                ->where('TillNow', 'YES');
-                                    })
-                                    ->orderBy('StartDate', 'DESC') 
-                                    ->orderBy('StartTime', 'DESC') 
-                                    ->orderBy('EndTime', 'DESC')
-                                    ->first(); 
-            $Availability_STATUS_2 = \DB::table('vessel_availabilities')->select(['Vessel', 'Comment', 'StartDate', 'EndDate', 'Status', 'StartTime', 'EndTime', 'TillNow'])
-                                    ->where('Vessel', $Vessel->VesselName) 
-                                    ->where('StartDate', $STARTDATE)
-                                    ->orWhere(function($query) use ($Vessel) {
-                                        $query->where('Vessel', $Vessel->VesselName) 
-                                                ->where('TillNow', 'YES');
-                                    })
-                                    ->orderBy('StartDate', 'DESC') 
-                                    ->orderBy('StartTime', 'DESC') 
-                                    ->orderBy('EndTime', 'DESC') 
-                                    ->first();
-            }
+            $Availability_STATUS = $availabilityStatusByVessel->get($Vessel->VesselName);
+            $Availability_STATUS_2 = $availabilityTodayStatusByVessel->get($Vessel->VesselName, $Availability_STATUS);
             $StartDate = $Availability_STATUS->StartDate ?? '00:00';
             $EndDate = $Availability_STATUS->EndDate ?? '00:00';
             if (!empty($Availability_STATUS->TillNow)) {
@@ -328,16 +223,7 @@
                     $EndTime_2 = \Carbon\Carbon::parse(date('H:i') ?? '00:00')->format('H:i').' HRS'; 
                 }
             }
-            $PilotCutters_ROB = \DB::table('vessels_section_4')->select(['tanks.ROB'])->where('VesselName', $Vessel->VesselName)
-                                ->join('other_reports as tanks', 'vessels_section_4.VesselName', '=', 'tanks.Vessel')
-                                ->where(function ($query) {
-                                $query->whereNotNull('tanks.ROB')
-                                ->where('tanks.ROB', '!=', '');
-                            })
-                                ->orderByDesc('tanks.Date')
-                                ->orderByDesc('tanks.TimeIn')
-                                ->orderByDesc('tanks.id')
-                                ->first();
+            $PilotCutters_ROB = $availabilityRobsByVessel->get($Vessel->VesselName);
         @endphp
         <div class="list tooltip-x vessels_"> 
             @if ($EndDate === $StartDate)  
@@ -350,15 +236,15 @@
                 <div class="Hide">{{ strtolower($Availability_STATUS->Status ?? 'READY TO GO') }}</div>
                 <div class="Hide">{{ $Vessel->VesselName }}</div>
                 @php
-                    $Checklist1a = \DB::table('checklist_1a')->where('Boat', $Vessel->VesselName)->orderBy('Date', 'DESC')->orderBy('TimeIn')->first();
-                    $Checklist1b = \DB::table('checklist_1b')->where('Boat', $Vessel->VesselName)->orderBy('Date', 'DESC')->orderBy('TimeIn')->first();
-                    $Checklist1c = \DB::table('checklist_1c')->where('Boat', $Vessel->VesselName)->orderBy('Date', 'DESC')->orderBy('TimeIn')->first();
-                    $Checklist1d = \DB::table('checklist_1d')->where('Boat', $Vessel->VesselName)->orderBy('Date', 'DESC')->orderBy('TimeIn')->first();
-                    $Checklist1e = \DB::table('checklist_1e')->where('Boat', $Vessel->VesselName)->orderBy('Date', 'DESC')->orderBy('TimeIn')->first();
+                    $Checklist1a = $availabilityChecklistData->get('checklist_1a', collect())->get($Vessel->VesselName);
+                    $Checklist1b = $availabilityChecklistData->get('checklist_1b', collect())->get($Vessel->VesselName);
+                    $Checklist1c = $availabilityChecklistData->get('checklist_1c', collect())->get($Vessel->VesselName);
+                    $Checklist1d = $availabilityChecklistData->get('checklist_1d', collect())->get($Vessel->VesselName);
+                    $Checklist1e = $availabilityChecklistData->get('checklist_1e', collect())->get($Vessel->VesselName);
                 @endphp
                 @include('Components.Includes.Checklists.Checklist1_DATA')
                 <strong class="notification-wrapper">
-                    @include('Components.Includes.VesselStats_DATA')
+                    @include('Components.Includes.VesselStats_Optimized')
                     <span class="status-x  {{ strtolower($Availability_STATUS->Status ?? 'READY TO GO') }}
                     "></span>
                     <span class="vessel-name--">{{ $Vessel->VesselName }}</span>
@@ -382,7 +268,7 @@
         </div> 
         @endforeach
         @php
-            $Mooring = \DB::table('vessels_vessel_information as v')->select(['v.VesselName', 'v.Captain', 'v.NightDutyCaptain', 'v.VesselType', 'v.Company', 'v.ImoNumber', 'v.CallSign', 's4.Area'])->join('vessels_section_4 as s4', 'v.VesselName', '=', 's4.VesselName')->where('v.Company', $Comapny->Alias)->where('v.VesselType', 'MOORING')->get();
+            $Mooring = $availabilityVesselsByCompanyType->get($Comapny->Alias . '|MOORING', collect());
         @endphp
         @unless (count($Mooring) > 0)
         <span class="vessels_">
@@ -393,35 +279,8 @@
         @endunless
         @foreach ($Mooring as $Vessel)
         @php 
-            if (isset($_GET['FromDate_FILTERBYDATE']) AND isset($_GET['EndDate_FILTERBYDATE']) AND empty($_GET['SpecificDay'])) {
-                $Availability_STATUS = \DB::table('vessel_availabilities')->select(['Vessel', 'StartDate', 'EndDate', 'Status', 'StartTime', 'EndTime'])
-                                        ->where('Vessel', $Vessel->VesselName)
-                                        ->whereBetween('StartDate', [$_GET['FromDate_FILTERBYDATE'], $_GET['EndDate_FILTERBYDATE']])
-                                        ->whereNotNull('Status') 
-                                        ->orderBy('EndTime', 'DESC') 
-                                        ->first(); 
-                $Availability_STATUS_2 = $Availability_STATUS;
-            } elseif (!(empty($_GET['SpecificDay']))) {
-                $Availability_STATUS = \DB::table('vessel_availabilities')->select(['Vessel', 'StartDate', 'EndDate', 'Status', 'StartTime', 'EndTime'])
-                                        ->where('Vessel', $Vessel->VesselName)
-                                        ->where('StartDate', $_GET['SpecificDay'])
-                                        ->orderBy('EndTime', 'DESC') 
-                                        ->first(); 
-                $Availability_STATUS_2 = $Availability_STATUS;
-            } else {
-            $Availability_STATUS = \DB::table('vessel_availabilities')->select(['Vessel', 'Comment', 'StartDate', 'EndDate', 'Status', 'StartTime', 'EndTime', 'TillNow'])
-                                    ->where('Vessel', $Vessel->VesselName) 
-                                    ->where('EndDate', '>=', $STARTDATE) 
-                                    ->orWhere(function($query) use ($Vessel) {
-                                        $query->where('Vessel', $Vessel->VesselName) 
-                                                ->where('TillNow', 'YES');
-                                    })
-                                    ->orderBy('StartDate', 'DESC') 
-                                    ->orderBy('StartTime', 'DESC') 
-                                    ->orderBy('EndTime', 'DESC')
-                                    ->first(); 
+            $Availability_STATUS = $availabilityStatusByVessel->get($Vessel->VesselName);
             $Availability_STATUS_2 = $Availability_STATUS;
-            }
             $StartDate = $Availability_STATUS->StartDate ?? '00:00';
             $EndDate = $Availability_STATUS->EndDate ?? '00:00';
             if (!empty($Availability_STATUS->TillNow)) {
@@ -441,16 +300,7 @@
                     $EndTime_2 = \Carbon\Carbon::parse(date('H:i') ?? '00:00')->format('H:i').' HRS'; 
                 }
             }
-            $Mooring_ROB = \DB::table('vessels_section_4')->select(['tanks.ROB'])->where('VesselName', $Vessel->VesselName)
-                            ->join('other_reports as tanks', 'vessels_section_4.VesselName', '=', 'tanks.Vessel')
-                            ->where(function ($query) {
-                                $query->whereNotNull('tanks.ROB')
-                                ->where('tanks.ROB', '!=', '');
-                            })
-                            ->orderByDesc('tanks.Date')
-                            ->orderByDesc('tanks.TimeIn')
-                            ->orderByDesc('tanks.id')
-                            ->first();
+            $Mooring_ROB = $availabilityRobsByVessel->get($Vessel->VesselName);
         @endphp
         <div class="list tooltip-x vessels_"> 
             @if ($EndDate === $StartDate)  
@@ -463,7 +313,7 @@
                 <div class="Hide">{{ strtolower($Availability_STATUS->Status ?? 'READY TO GO') }}</div>
                 <div class="Hide"> {{ $Vessel->VesselName }}</div>
                 <strong class="notification-wrapper">
-                    @include('Components.Includes.VesselStats_DATA')
+                    @include('Components.Includes.VesselStats_Optimized')
                     <span class="status-x  {{ strtolower($Availability_STATUS->Status ?? 'READY TO GO') }}
                     "></span>
                     <span class="vessel-name--">{{ $Vessel->VesselName }}</span>
@@ -487,7 +337,7 @@
         </div> 
         @endforeach
         @php
-            $Multicat = \DB::table('vessels_vessel_information as v')->select(['v.VesselName', 'v.Captain', 'v.NightDutyCaptain', 'v.VesselType', 'v.Company', 'v.ImoNumber', 'v.CallSign', 's4.Area'])->join('vessels_section_4 as s4', 'v.VesselName', '=', 's4.VesselName')->where('v.Company', $Comapny->Alias)->where('v.VesselType', 'MULTICAT')->get();
+            $Multicat = $availabilityVesselsByCompanyType->get($Comapny->Alias . '|MULTICAT', collect());
         @endphp
         @unless (count($Multicat) > 0)
         <span class="vessels_">
@@ -498,35 +348,8 @@
         @endunless
         @foreach ($Multicat as $Vessel)
         @php 
-            if (isset($_GET['FromDate_FILTERBYDATE']) AND isset($_GET['EndDate_FILTERBYDATE']) AND empty($_GET['SpecificDay'])) {
-                $Availability_STATUS = \DB::table('vessel_availabilities')->select(['Vessel', 'StartDate', 'EndDate', 'Status', 'StartTime', 'EndTime'])
-                                        ->where('Vessel', $Vessel->VesselName)
-                                        ->whereBetween('StartDate', [$_GET['FromDate_FILTERBYDATE'], $_GET['EndDate_FILTERBYDATE']])
-                                        ->whereNotNull('Status') 
-                                        ->orderBy('EndTime', 'DESC') 
-                                        ->first(); 
-                $Availability_STATUS_2 = $Availability_STATUS;
-            } elseif (!(empty($_GET['SpecificDay']))) {
-                $Availability_STATUS = \DB::table('vessel_availabilities')->select(['Vessel', 'StartDate', 'EndDate', 'Status', 'StartTime', 'EndTime'])
-                                        ->where('Vessel', $Vessel->VesselName)
-                                        ->where('StartDate', $_GET['SpecificDay'])
-                                        ->orderBy('EndTime', 'DESC') 
-                                        ->first(); 
-                $Availability_STATUS_2 = $Availability_STATUS;
-            } else {
-            $Availability_STATUS = \DB::table('vessel_availabilities')->select(['Vessel', 'Comment', 'StartDate', 'EndDate', 'Status', 'StartTime', 'EndTime', 'TillNow'])
-                                    ->where('Vessel', $Vessel->VesselName) 
-                                    ->where('EndDate', '>=', $STARTDATE) 
-                                    ->orWhere(function($query) use ($Vessel) {
-                                        $query->where('Vessel', $Vessel->VesselName) 
-                                                ->where('TillNow', 'YES');
-                                    })
-                                    ->orderBy('StartDate', 'DESC') 
-                                    ->orderBy('StartTime', 'DESC') 
-                                    ->orderBy('EndTime', 'DESC')
-                                    ->first(); 
+            $Availability_STATUS = $availabilityStatusByVessel->get($Vessel->VesselName);
             $Availability_STATUS_2 = $Availability_STATUS;
-            }
             $StartDate = $Availability_STATUS->StartDate ?? '00:00';
             $EndDate = $Availability_STATUS->EndDate ?? '00:00';
             if (!empty($Availability_STATUS->TillNow)) {
@@ -546,16 +369,7 @@
                     $EndTime_2 = \Carbon\Carbon::parse(date('H:i') ?? '00:00')->format('H:i').' HRS'; 
                 }
             }
-            $Multicat_ROB = \DB::table('vessels_section_4')->select(['tanks.ROB'])->where('VesselName', $Vessel->VesselName)
-                            ->join('other_reports as tanks', 'vessels_section_4.VesselName', '=', 'tanks.Vessel')
-                            ->where(function ($query) {
-                                $query->whereNotNull('tanks.ROB')
-                                ->where('tanks.ROB', '!=', '');
-                            })
-                            ->orderByDesc('tanks.Date')
-                            ->orderByDesc('tanks.TimeIn')
-                            ->orderByDesc('tanks.id')
-                            ->first();
+            $Multicat_ROB = $availabilityRobsByVessel->get($Vessel->VesselName);
         @endphp
         <div class="list tooltip-x vessels_"> 
             @if ($EndDate === $StartDate)  
@@ -568,7 +382,7 @@
                 <div class="Hide">{{ strtolower($Availability_STATUS->Status ?? 'READY TO GO') }}</div>
                 <div class="Hide"> {{ $Vessel->VesselName }}</div>
                 <strong class="notification-wrapper">
-                    @include('Components.Includes.VesselStats_DATA')
+                    @include('Components.Includes.VesselStats_Optimized')
                     <span class="status-x  {{ strtolower($Availability_STATUS->Status ?? 'READY TO GO') }}
                     "></span>
                     <span class="vessel-name--">{{ $Vessel->VesselName }}</span>
@@ -592,7 +406,7 @@
         </div> 
         @endforeach
         @php
-            $Survey = \DB::table('vessels_vessel_information as v')->select(['v.VesselName', 'v.Captain', 'v.NightDutyCaptain', 'v.VesselType', 'v.Company', 'v.ImoNumber', 'v.CallSign', 's4.Area'])->join('vessels_section_4 as s4', 'v.VesselName', '=', 's4.VesselName')->where('v.Company', $Comapny->Alias)->where('v.VesselType', 'SURVEY')->get();
+            $Survey = $availabilityVesselsByCompanyType->get($Comapny->Alias . '|SURVEY', collect());
         @endphp
         @unless (count($Survey) > 0)
         <span class="vessels_">
@@ -603,35 +417,8 @@
         @endunless
         @foreach ($Survey as $Vessel)
         @php 
-            if (isset($_GET['FromDate_FILTERBYDATE']) AND isset($_GET['EndDate_FILTERBYDATE']) AND empty($_GET['SpecificDay'])) {
-                $Availability_STATUS = \DB::table('vessel_availabilities')->select(['Vessel', 'StartDate', 'EndDate', 'Status', 'StartTime', 'EndTime'])
-                                        ->where('Vessel', $Vessel->VesselName)
-                                        ->whereBetween('StartDate', [$_GET['FromDate_FILTERBYDATE'], $_GET['EndDate_FILTERBYDATE']])
-                                        ->whereNotNull('Status') 
-                                        ->orderBy('EndTime', 'DESC') 
-                                        ->first(); 
-                $Availability_STATUS_2 = $Availability_STATUS;
-            } elseif (!(empty($_GET['SpecificDay']))) {
-                $Availability_STATUS = \DB::table('vessel_availabilities')->select(['Vessel', 'StartDate', 'EndDate', 'Status', 'StartTime', 'EndTime'])
-                                        ->where('Vessel', $Vessel->VesselName)
-                                        ->where('StartDate', $_GET['SpecificDay'])
-                                        ->orderBy('EndTime', 'DESC') 
-                                        ->first(); 
-                $Availability_STATUS_2 = $Availability_STATUS;
-            } else {
-            $Availability_STATUS = \DB::table('vessel_availabilities')->select(['Vessel', 'Comment', 'StartDate', 'EndDate', 'Status', 'StartTime', 'EndTime', 'TillNow'])
-                                    ->where('Vessel', $Vessel->VesselName) 
-                                    ->where('EndDate', '>=', $STARTDATE) 
-                                    ->orWhere(function($query) use ($Vessel) {
-                                        $query->where('Vessel', $Vessel->VesselName) 
-                                                ->where('TillNow', 'YES');
-                                    })
-                                    ->orderBy('StartDate', 'DESC') 
-                                    ->orderBy('StartTime', 'DESC') 
-                                    ->orderBy('EndTime', 'DESC')
-                                    ->first(); 
+            $Availability_STATUS = $availabilityStatusByVessel->get($Vessel->VesselName);
             $Availability_STATUS_2 = $Availability_STATUS;
-            }
             $StartDate = $Availability_STATUS->StartDate ?? '00:00';
             $EndDate = $Availability_STATUS->EndDate ?? '00:00';
             if (!empty($Availability_STATUS->TillNow)) {
@@ -651,16 +438,7 @@
                     $EndTime_2 = \Carbon\Carbon::parse(date('H:i') ?? '00:00')->format('H:i').' HRS'; 
                 }
             }
-            $Survey_ROB = \DB::table('vessels_section_4')->select(['tanks.ROB'])->where('VesselName', $Vessel->VesselName)
-                            ->join('other_reports as tanks', 'vessels_section_4.VesselName', '=', 'tanks.Vessel')
-                            ->where(function ($query) {
-                                $query->whereNotNull('tanks.ROB')
-                                ->where('tanks.ROB', '!=', '');
-                            })
-                            ->orderByDesc('tanks.Date')
-                            ->orderByDesc('tanks.TimeIn')
-                            ->orderByDesc('tanks.id')
-                            ->first();
+            $Survey_ROB = $availabilityRobsByVessel->get($Vessel->VesselName);
         @endphp
         <div class="list tooltip-x vessels_"> 
             @if ($EndDate === $StartDate)  
@@ -673,7 +451,7 @@
                 <div class="Hide">{{ strtolower($Availability_STATUS->Status ?? 'READY TO GO') }}</div>
                 <div class="Hide"> {{ $Vessel->VesselName }}</div>
                 <strong class="notification-wrapper">
-                    @include('Components.Includes.VesselStats_DATA')
+                    @include('Components.Includes.VesselStats_Optimized')
                     <span class="status-x  {{ strtolower($Availability_STATUS->Status ?? 'READY TO GO') }}
                     "></span>
                     <span class="vessel-name--">{{ $Vessel->VesselName }}</span>
@@ -697,7 +475,7 @@
         </div> 
         @endforeach 
         @php
-            $SpeedBoats = \DB::table('vessels_vessel_information as v')->select(['v.VesselName', 'v.Captain', 'v.NightDutyCaptain', 'v.VesselType', 'v.Company', 'v.ImoNumber', 'v.CallSign', 's4.Area'])->join('vessels_section_4 as s4', 'v.VesselName', '=', 's4.VesselName')->where('v.Company', $Comapny->Alias)->where('v.VesselType', 'SPEED BOAT')->get();
+            $SpeedBoats = $availabilityVesselsByCompanyType->get($Comapny->Alias . '|SPEED BOAT', collect());
         @endphp
         @unless (count($SpeedBoats) > 0)
         <span class="vessels_">
@@ -708,35 +486,8 @@
         @endunless
         @foreach ($SpeedBoats as $Vessel)
         @php 
-            if (isset($_GET['FromDate_FILTERBYDATE']) AND isset($_GET['EndDate_FILTERBYDATE']) AND empty($_GET['SpecificDay'])) {
-                $Availability_STATUS = \DB::table('vessel_availabilities')->select(['Vessel', 'StartDate', 'EndDate', 'Status', 'StartTime', 'EndTime'])
-                                        ->where('Vessel', $Vessel->VesselName)
-                                        ->whereBetween('StartDate', [$_GET['FromDate_FILTERBYDATE'], $_GET['EndDate_FILTERBYDATE']])
-                                        ->whereNotNull('Status') 
-                                        ->orderBy('EndTime', 'DESC') 
-                                        ->first(); 
-                $Availability_STATUS_2 = $Availability_STATUS;
-            } elseif (!(empty($_GET['SpecificDay']))) {
-                $Availability_STATUS = \DB::table('vessel_availabilities')->select(['Vessel', 'StartDate', 'EndDate', 'Status', 'StartTime', 'EndTime'])
-                                        ->where('Vessel', $Vessel->VesselName)
-                                        ->where('StartDate', $_GET['SpecificDay'])
-                                        ->orderBy('EndTime', 'DESC') 
-                                        ->first(); 
-                $Availability_STATUS_2 = $Availability_STATUS;
-            } else {
-            $Availability_STATUS = \DB::table('vessel_availabilities')->select(['Vessel', 'Comment', 'StartDate', 'EndDate', 'Status', 'StartTime', 'EndTime', 'TillNow'])
-                                    ->where('Vessel', $Vessel->VesselName) 
-                                    ->where('EndDate', '>=', $STARTDATE) 
-                                    ->orWhere(function($query) use ($Vessel) {
-                                        $query->where('Vessel', $Vessel->VesselName) 
-                                                ->where('TillNow', 'YES');
-                                    })
-                                    ->orderBy('StartDate', 'DESC') 
-                                    ->orderBy('StartTime', 'DESC') 
-                                    ->orderBy('EndTime', 'DESC')
-                                    ->first(); 
+            $Availability_STATUS = $availabilityStatusByVessel->get($Vessel->VesselName);
             $Availability_STATUS_2 = $Availability_STATUS;
-            }
             $StartDate = $Availability_STATUS->StartDate ?? '00:00';
             $EndDate = $Availability_STATUS->EndDate ?? '00:00';
             if (!empty($Availability_STATUS->TillNow)) {
@@ -756,16 +507,7 @@
                     $EndTime_2 = \Carbon\Carbon::parse(date('H:i') ?? '00:00')->format('H:i').' HRS'; 
                 }
             }
-            $SpeedBoats_ROB = \DB::table('vessels_section_4')->select(['tanks.ROB'])->where('VesselName', $Vessel->VesselName)
-                                ->join('other_reports as tanks', 'vessels_section_4.VesselName', '=', 'tanks.Vessel')
-                                ->where(function ($query) {
-                                $query->whereNotNull('tanks.ROB')
-                                ->where('tanks.ROB', '!=', '');
-                            })
-                                ->orderByDesc('tanks.Date')
-                                ->orderByDesc('tanks.TimeIn')
-                                ->orderByDesc('tanks.id')
-                                ->first();
+            $SpeedBoats_ROB = $availabilityRobsByVessel->get($Vessel->VesselName);
         @endphp
         <div class="list tooltip-x vessels_"> 
             @if ($EndDate === $StartDate)  
@@ -778,7 +520,7 @@
                 <div class="Hide">{{ strtolower($Availability_STATUS->Status ?? 'READY TO GO') }}</div>
                 <div class="Hide"> {{ $Vessel->VesselName }}</div>
                 <strong class="notification-wrapper">
-                    @include('Components.Includes.VesselStats_DATA')
+                    @include('Components.Includes.VesselStats_Optimized')
                     <span class="status-x  {{ strtolower($Availability_STATUS->Status ?? 'READY TO GO') }}
                     "></span>
                     <span class="vessel-name--">{{ $Vessel->VesselName }}</span>
@@ -802,7 +544,7 @@
         </div> 
         @endforeach
         @php
-            $Ploughing = \DB::table('vessels_vessel_information as v')->select(['v.VesselName', 'v.Captain', 'v.NightDutyCaptain', 'v.VesselType', 'v.Company', 'v.ImoNumber', 'v.CallSign', 's4.Area'])->join('vessels_section_4 as s4', 'v.VesselName', '=', 's4.VesselName')->where('v.Company', $Comapny->Alias)->where('v.VesselType', 'PLOUGHING')->get();
+            $Ploughing = $availabilityVesselsByCompanyType->get($Comapny->Alias . '|PLOUGHING', collect());
         @endphp
         @unless (count($Ploughing) > 0)
         <span class="vessels_">
@@ -813,35 +555,8 @@
         @endunless
         @foreach ($Ploughing as $Vessel)
         @php 
-            if (isset($_GET['FromDate_FILTERBYDATE']) AND isset($_GET['EndDate_FILTERBYDATE']) AND empty($_GET['SpecificDay'])) {
-                $Availability_STATUS = \DB::table('vessel_availabilities')->select(['Vessel', 'StartDate', 'EndDate', 'Status', 'StartTime', 'EndTime'])
-                                        ->where('Vessel', $Vessel->VesselName)
-                                        ->whereBetween('StartDate', [$_GET['FromDate_FILTERBYDATE'], $_GET['EndDate_FILTERBYDATE']])
-                                        ->whereNotNull('Status') 
-                                        ->orderBy('EndTime', 'DESC') 
-                                        ->first(); 
-                $Availability_STATUS_2 = $Availability_STATUS;
-            } elseif (!(empty($_GET['SpecificDay']))) {
-                $Availability_STATUS = \DB::table('vessel_availabilities')->select(['Vessel', 'StartDate', 'EndDate', 'Status', 'StartTime', 'EndTime'])
-                                        ->where('Vessel', $Vessel->VesselName)
-                                        ->where('StartDate', $_GET['SpecificDay'])
-                                        ->orderBy('EndTime', 'DESC') 
-                                        ->first(); 
-                $Availability_STATUS_2 = $Availability_STATUS;
-            } else {
-            $Availability_STATUS = \DB::table('vessel_availabilities')->select(['Vessel', 'Comment', 'StartDate', 'EndDate', 'Status', 'StartTime', 'EndTime', 'TillNow'])
-                                    ->where('Vessel', $Vessel->VesselName) 
-                                    ->where('EndDate', '>=', $STARTDATE) 
-                                    ->orWhere(function($query) use ($Vessel) {
-                                        $query->where('Vessel', $Vessel->VesselName) 
-                                                ->where('TillNow', 'YES');
-                                    })
-                                    ->orderBy('StartDate', 'DESC') 
-                                    ->orderBy('StartTime', 'DESC') 
-                                    ->orderBy('EndTime', 'DESC')
-                                    ->first(); 
+            $Availability_STATUS = $availabilityStatusByVessel->get($Vessel->VesselName);
             $Availability_STATUS_2 = $Availability_STATUS;
-            }
             $StartDate = $Availability_STATUS->StartDate ?? '00:00';
             $EndDate = $Availability_STATUS->EndDate ?? '00:00';
             if (!empty($Availability_STATUS->TillNow)) {
@@ -861,16 +576,7 @@
                     $EndTime_2 = \Carbon\Carbon::parse(date('H:i') ?? '00:00')->format('H:i').' HRS'; 
                 }
             }
-            $Ploughing_ROB = \DB::table('vessels_section_4')->select(['tanks.ROB'])->where('VesselName', $Vessel->VesselName)
-                            ->join('other_reports as tanks', 'vessels_section_4.VesselName', '=', 'tanks.Vessel')
-                            ->where(function ($query) {
-                                $query->whereNotNull('tanks.ROB')
-                                ->where('tanks.ROB', '!=', '');
-                            })
-                            ->orderByDesc('tanks.Date')
-                            ->orderByDesc('tanks.TimeIn')
-                            ->orderByDesc('tanks.id')
-                            ->first();
+            $Ploughing_ROB = $availabilityRobsByVessel->get($Vessel->VesselName);
         @endphp
         <div class="list tooltip-x vessels_"> 
             @if ($EndDate === $StartDate)  
@@ -883,7 +589,7 @@
                 <div class="Hide">{{ strtolower($Availability_STATUS->Status ?? 'READY TO GO') }}</div>
                 <div class="Hide"> {{ $Vessel->VesselName }}</div>
                 <strong class="notification-wrapper">
-                    @include('Components.Includes.VesselStats_DATA')
+                    @include('Components.Includes.VesselStats_Optimized')
                     <span class="status-x  {{ strtolower($Availability_STATUS->Status ?? 'READY TO GO') }}
                     "></span>
                     <span class="vessel-name--">{{ $Vessel->VesselName }}</span>
@@ -907,7 +613,7 @@
         </div> 
         @endforeach  
         @php
-            $Others = \DB::table('vessels_vessel_information as v')->select(['v.VesselName', 'v.Captain', 'v.NightDutyCaptain', 'v.VesselType', 'v.Company', 'v.ImoNumber', 'v.CallSign', 's4.Area'])->join('vessels_section_4 as s4', 'v.VesselName', '=', 's4.VesselName')->where('v.Company', $Comapny->Alias)->where('v.VesselType', 'OTHERS')->get();
+            $Others = $availabilityVesselsByCompanyType->get($Comapny->Alias . '|OTHERS', collect());
         @endphp
         @unless (count($Others) > 0)
         <span class="vessels_">
@@ -918,35 +624,8 @@
         @endunless
         @foreach ($Others as $Vessel)
         @php 
-            if (isset($_GET['FromDate_FILTERBYDATE']) AND isset($_GET['EndDate_FILTERBYDATE']) AND empty($_GET['SpecificDay'])) {
-                $Availability_STATUS = \DB::table('vessel_availabilities')->select(['Vessel', 'StartDate', 'EndDate', 'Status', 'StartTime', 'EndTime'])
-                                        ->where('Vessel', $Vessel->VesselName)
-                                        ->whereBetween('StartDate', [$_GET['FromDate_FILTERBYDATE'], $_GET['EndDate_FILTERBYDATE']])
-                                        ->whereNotNull('Status') 
-                                        ->orderBy('EndTime', 'DESC') 
-                                        ->first(); 
-                $Availability_STATUS_2 = $Availability_STATUS;
-            } elseif (!(empty($_GET['SpecificDay']))) {
-                $Availability_STATUS = \DB::table('vessel_availabilities')->select(['Vessel', 'StartDate', 'EndDate', 'Status', 'StartTime', 'EndTime'])
-                                        ->where('Vessel', $Vessel->VesselName)
-                                        ->where('StartDate', $_GET['SpecificDay'])
-                                        ->orderBy('EndTime', 'DESC') 
-                                        ->first(); 
-                $Availability_STATUS_2 = $Availability_STATUS;
-            } else {
-            $Availability_STATUS = \DB::table('vessel_availabilities')->select(['Vessel', 'Comment', 'StartDate', 'EndDate', 'Status', 'StartTime', 'EndTime', 'TillNow'])
-                                    ->where('Vessel', $Vessel->VesselName) 
-                                    ->where('EndDate', '>=', $STARTDATE) 
-                                    ->orWhere(function($query) use ($Vessel) {
-                                        $query->where('Vessel', $Vessel->VesselName) 
-                                                ->where('TillNow', 'YES');
-                                    })
-                                    ->orderBy('StartDate', 'DESC') 
-                                    ->orderBy('StartTime', 'DESC') 
-                                    ->orderBy('EndTime', 'DESC')
-                                    ->first(); 
+            $Availability_STATUS = $availabilityStatusByVessel->get($Vessel->VesselName);
             $Availability_STATUS_2 = $Availability_STATUS;
-            }
             $StartDate = $Availability_STATUS->StartDate ?? '00:00';
             $EndDate = $Availability_STATUS->EndDate ?? '00:00';
             if (!empty($Availability_STATUS->TillNow)) {
@@ -966,16 +645,7 @@
                     $EndTime_2 = \Carbon\Carbon::parse(date('H:i') ?? '00:00')->format('H:i').' HRS'; 
                 }
             }
-            $Others_ROB = \DB::table('vessels_section_4')->select(['tanks.ROB'])->where('VesselName', $Vessel->VesselName)
-                            ->join('other_reports as tanks', 'vessels_section_4.VesselName', '=', 'tanks.Vessel')
-                            ->where(function ($query) {
-                                $query->whereNotNull('tanks.ROB')
-                                ->where('tanks.ROB', '!=', '');
-                            })
-                            ->orderByDesc('tanks.Date')
-                            ->orderByDesc('tanks.TimeIn')
-                            ->orderByDesc('tanks.id')
-                            ->first();
+            $Others_ROB = $availabilityRobsByVessel->get($Vessel->VesselName);
         @endphp
         <div class="list tooltip-x vessels_"> 
             @if ($EndDate === $StartDate)  
@@ -988,7 +658,7 @@
                 <div class="Hide">{{ strtolower($Availability_STATUS->Status ?? 'READY TO GO') }}</div>
                 <div class="Hide"> {{ $Vessel->VesselName }}</div>
                 <strong class="notification-wrapper">
-                    @include('Components.Includes.VesselStats_DATA')
+                    @include('Components.Includes.VesselStats_Optimized')
                     <span class="status-x  {{ strtolower($Availability_STATUS->Status ?? 'READY TO GO') }}
                     "></span>
                     <span class="vessel-name--">{{ $Vessel->VesselName }}</span>
@@ -1013,15 +683,16 @@
         @endforeach  
         {{--  --}}
         @php
-            $MachineTypeCounts = \DB::table('generators')
-                ->where('Company', $Comapny->Alias)
-                ->selectRaw('LOWER(MachineType) as machine_type, COUNT(*) as aggregate')
-                ->groupByRaw('LOWER(MachineType)')
-                ->pluck('aggregate', 'machine_type');
+            $MachineTypeCounts = collect([
+                'pump' => $availabilityMachineTypeCounts->get($Comapny->Alias . '|pump', 0),
+                'generator' => $availabilityMachineTypeCounts->get($Comapny->Alias . '|generator', 0),
+                'engine' => $availabilityMachineTypeCounts->get($Comapny->Alias . '|engine', 0),
+                'compressor' => $availabilityMachineTypeCounts->get($Comapny->Alias . '|compressor', 0),
+            ]);
         @endphp
         <h3 class="report-summary -x"><img class="ToggleGenerators_Icon" src="{{ asset('/images/add (1).png') }}" alt="">Pumps ({{ $MachineTypeCounts->get('pump', 0) }}) :: Generators ({{ $MachineTypeCounts->get('generator', 0) }}) :: Engines ({{ $MachineTypeCounts->get('engine', 0) }}) :: Compressors ({{ $MachineTypeCounts->get('compressor', 0) }})</h3>
         @php
-            $OfficeGenerators1 = \DB::table('generators')->where('Company', $Comapny->Alias)->where('Class', 'ENGINES IN STOCK')->get();
+            $OfficeGenerators1 = $availabilityGeneratorsByCompanyClass->get($Comapny->Alias . '|ENGINES IN STOCK', collect());
         @endphp
             @unless (count($OfficeGenerators1) > 0)
             <span class="generators_">
@@ -1033,11 +704,7 @@
         @endunless
         @foreach ($OfficeGenerators1 as $Generator) 
         @php
-            $OfficeGenerators1_InStock = \DB::table('generator_availability')
-            ->where('GeneratorId', $Generator->id)
-            ->orderBy('EndDate', 'DESC')
-            ->orderBy('StartTime', 'DESC')
-            ->first();
+            $OfficeGenerators1_InStock = $availabilityByGeneratorId->get($Generator->id);
         @endphp
         <div class="list tooltip-x generators_">
             <span class="Hide tooltip-x-span"><div class="{{ ($OfficeGenerators1_InStock->Status ?? 'READY') }} tooltip-x-div"></div> On {{ ($OfficeGenerators1_InStock->Status ?? 'READY') == 'IDLE' ? 'READY' : ($OfficeGenerators1_InStock->Status ?? 'READY') }}
@@ -1049,7 +716,7 @@
                 <div class="Hide">{{ strtolower(($OfficeGenerators1_InStock->Status ?? 'READY')) }}</div>
                 <div class="Hide"> {{ $Generator->EngineMake }}</div>
                 <strong class="notification-wrapper _generator_"> 
-                    {{-- @include('Components.Includes.VesselStats_DATA') --}}
+                    {{-- @include('Components.Includes.VesselStats_Optimized') --}}
                     <span class="status-x {{ strtolower(($OfficeGenerators1_InStock->Status ?? 'READY')) }}  
                     "></span>
                     <span class="vessel-name--">{{ $Generator->EngineMake }} - {{ $Generator->UsedBy }}</span> 
@@ -1076,7 +743,7 @@
         </div> 
         @endforeach 
         @php
-            $AshoreGenerators = \DB::table('generators')->where('Company', $Comapny->Alias)->where('Class', 'ASHORE MACHINERY')->get();
+            $AshoreGenerators = $availabilityGeneratorsByCompanyClass->get($Comapny->Alias . '|ASHORE MACHINERY', collect());
         @endphp
             @unless (count($AshoreGenerators) > 0)
             <span class="generators_">
@@ -1088,11 +755,7 @@
         @endunless
         @foreach ($AshoreGenerators as $Generator) 
         @php
-            $AshoreGenerators_Availability = \DB::table('generator_availability')
-            ->where('GeneratorId', $Generator->id)
-            ->orderBy('EndDate', 'DESC')
-            ->orderBy('StartTime', 'DESC')
-            ->first();
+            $AshoreGenerators_Availability = $availabilityByGeneratorId->get($Generator->id);
         @endphp
         <div class="list tooltip-x generators_">
             <span class="Hide tooltip-x-span"><div class="{{ ($AshoreGenerators_Availability->Status ?? 'READY') }} tooltip-x-div"></div> On {{ (($AshoreGenerators_Availability->Status ?? 'READY') == 'IDLE' ? 'READY' : ($AshoreGenerators_Availability->Status ?? 'READY')) }}
@@ -1104,7 +767,7 @@
                 <div class="Hide">{{ strtolower(($AshoreGenerators_Availability->Status ?? 'READY')) }}</div>
                 <div class="Hide"> {{ $Generator->EngineMake }}</div>
                 <strong class="notification-wrapper _generator_"> 
-                    {{-- @include('Components.Includes.VesselStats_DATA') --}}
+                    {{-- @include('Components.Includes.VesselStats_Optimized') --}}
                     <span class="status-x {{ strtolower(($AshoreGenerators_Availability->Status ?? 'READY')) }}  
                     "></span>
                     <span class="vessel-name--">{{ $Generator->EngineMake }} - {{ $Generator->UsedBy }}</span> 
@@ -1290,35 +953,10 @@
                     </tr>
                     @foreach ($Vessels as $Vessel)
                     @php 
-                        $Vessel_ = \DB::table('vessel_availabilities')->where('Vessel', $Vessel->VesselName)->first();
-                        if (isset($_GET['FromDate_FILTERBYDATE']) AND isset($_GET['EndDate_FILTERBYDATE']) AND empty($_GET['SpecificDay'])) {
-                            $Vessel_STARTIME = \DB::table('vessel_availabilities') 
-                                                ->where('Vessel', $Vessel->VesselName)
-                                                // ->whereBetween('StartDate', [$_GET['FromDate_FILTERBYDATE'], $_GET['EndDate_FILTERBYDATE']])
-                                                ->whereBetween('EndDate', [$_GET['FromDate_FILTERBYDATE'], $_GET['EndDate_FILTERBYDATE']])
-                                                ->orderBy('DateIn', 'DESC')
-                                                ->orderBy('TimeIn', 'DESC')
-                                                ->get();
-                        } elseif (!(empty($_GET['SpecificDay']))) {
-                            $Vessel_STARTIME = \DB::table('vessel_availabilities') 
-                                                ->where('Vessel', $Vessel->VesselName)
-                                                ->where('StartDate', '<=', $_GET['SpecificDay'])
-                                                ->where('EndDate', '>=', $_GET['SpecificDay']) 
-                                                ->orderBy('DateIn', 'DESC')
-                                                ->orderBy('TimeIn', 'DESC')
-                                                ->get();
-                        } else {
-                            $Vessel_STARTIME = \DB::table('vessel_availabilities') 
-                                            ->where('Vessel', $Vessel->VesselName)
-                                            ->where('StartDate', '<=', date('Y-m-d'))
-                                            ->where('EndDate', '>=', date('Y-m-d')) 
-                                            ->orWhere(function($query) use ($Vessel) {
-                                                $query->where('Vessel', $Vessel->VesselName)
-                                                        ->where('TillNow', 'YES');
-                                            })
-                                            ->orderBy('DateIn', 'DESC')
-                                            ->orderBy('TimeIn', 'DESC')
-                                            ->paginate(30);
+                        $Vessel_ = $availabilityLatestCommentsByVessel->get($Vessel->VesselName);
+                        $Vessel_STARTIME = $availabilityTrackingByVessel->get($Vessel->VesselName, collect());
+                        if (!request()->filled('FromDate_FILTERBYDATE') && !request()->filled('SpecificDay')) {
+                            $Vessel_STARTIME = $Vessel_STARTIME->forPage(request()->query('page', 1), 30);
                         }
                     @endphp
                     <tr>
@@ -1625,21 +1263,13 @@
                         <th>21:00 - 23:59</th>
                     </tr>
                     @php
-                        $Machineries = \DB::table('generators')->select('EngineMake')->get()
+                        $Machineries = $machineries;
                     @endphp
                     @foreach ($Machineries as $Machinery)
                     @php
-                        $Machinery_STARTIME = \DB::table('generator_availability') 
-                                            ->where('EngineMake', $Machinery->EngineMake)
-                                            ->where('StartDate', '<=', date('Y-m-d'))
-                                            ->where('EndDate', '>=', date('Y-m-d')) 
-                                            ->orWhere(function($query) use ($Machinery) {
-                                                $query->where('EngineMake', $Machinery->EngineMake)
-                                                        ->where('TillNow', 'YES');
-                                            })
-                                            ->orderBy('DateIn', 'DESC')
-                                            ->orderBy('TimeIn', 'DESC')
-                                            ->paginate(30);
+                        $Machinery_STARTIME = $generatorTrackingByEngine
+                            ->get($Machinery->EngineMake, collect())
+                            ->forPage(request()->query('page', 1), 30);
                     @endphp
                     <tr>
                         <td>{{ $Machinery->EngineMake ?? '-' }}</td>
@@ -1963,15 +1593,6 @@
                        $StartDate = $Availabilty->StartDate;
                        $EndDate = $Availabilty->EndDate;
                        $Date = $Availabilty->StartDate;
-                       $Scheduled_COUNT = \App\Models\VesselAvailability::where('StartDate', '>', date('Y-m-d'))
-                                                                            ->orWhere(function($query) {
-                                                                                $query->where('StartDate', date('Y-m-d'))
-                                                                                        ->where('StartTime', '>', \Carbon\Carbon::now());
-                                                                            })->get();
-                       $Today_COUNT = \App\Models\VesselAvailability::where('StartDate', date('Y-m-d'))->get();
-                       $ThisWeek_COUNT = \App\Models\VesselAvailability::where('StartDate', '>=', date('Y-m-d', strtotime('last Sunday')))->get();
-                       $LastWeek_COUNT = \App\Models\VesselAvailability::where('StartDate', '>=', date('Y-m-d', strtotime('last week Monday')))->where('StartDate', '<', date('Y-m-d', strtotime('last Sunday')))->get();
-                       $Older_COUNT = \App\Models\VesselAvailability::where('StartDate', '<', date('Y-m-d', strtotime('last week Monday')))->get();
                     @endphp
                     @if (
                             $StartTime > \Carbon\Carbon::now() ||
@@ -1979,10 +1600,10 @@
                             $EndDate > date('Y-m-d')
                         )
                     <tr class="scheduled history Hide">
-                        <td>Scheduled :: {{ count($Scheduled_COUNT) }}</td> 
+                        <td>Scheduled :: {{ $availabilityHistoryCounts['scheduled'] }}</td>
                     </tr>
                     @endif
-                    @include('Components.History.History') 
+                    @include('Components.History.AvailabilityHistory')
                     <tr> 
                         <td class="Hide">{{ $Availabilty->id }}</td> 
                         <td class="Hide"> {{ $Availabilty->Vessel }}</td> 
@@ -2490,15 +2111,6 @@
                 {{ $GeneratorAvailability->appends(request()->query())->links() }}
             </div> 
         </div>
-        @php
-            if (isset($_GET['Vessel_FILTER'])) { 
-                $Checklist1 = \DB::table('checklist_1a')->select(['id', 'Boat', 'Date'])->where('Boat', $_GET['Vessel_FILTER'])->whereBetween('Date', [$_GET['FromDate_FILTERBYDATE'], $_GET['EndDate_FILTERBYDATE']])->orderBy('Date', 'DESC')->orderBy('TimeIn', 'DESC')->paginate(20);
-            } else if (isset($_GET['SpecificDay'])) { 
-                $Checklist1 = \DB::table('checklist_1a')->select(['id', 'Boat', 'Date'])->where('Boat', $_GET['Vessel_FILTER'])->where('Date', $_GET['SpecificDay'])->orderBy('Date', 'DESC')->orderBy('TimeIn', 'DESC')->paginate(20);
-            } else {
-                $Checklist1 = \DB::table('checklist_1a')->select(['id', 'Boat', 'Date'])->orderBy('Date', 'DESC')->orderBy('TimeIn', 'DESC')->paginate(20);
-            }
-        @endphp
         <div class="board-3">
             <div class="div">
                 <h1>Handover statements, inspections and maintenance logs</h1>
@@ -2522,11 +2134,11 @@
                         <td>{{ $Checklist->Boat }}</td> 
                         <td>{{ $Checklist->Date }}</td>
                         @php
-                            $Checklist1a = \DB::table('checklist_1a')->where('id', $Checklist->id)->first();
-                            $Checklist1b = \DB::table('checklist_1b')->where('id', $Checklist->id)->first();
-                            $Checklist1c = \DB::table('checklist_1c')->where('id', $Checklist->id)->first();
-                            $Checklist1d = \DB::table('checklist_1d')->where('id', $Checklist->id)->first();
-                            $Checklist1e = \DB::table('checklist_1e')->where('id', $Checklist->id)->first();
+                            $Checklist1a = $availabilityChecklistRowsById->get('checklist_1a', collect())->get($Checklist->id);
+                            $Checklist1b = $availabilityChecklistRowsById->get('checklist_1b', collect())->get($Checklist->id);
+                            $Checklist1c = $availabilityChecklistRowsById->get('checklist_1c', collect())->get($Checklist->id);
+                            $Checklist1d = $availabilityChecklistRowsById->get('checklist_1d', collect())->get($Checklist->id);
+                            $Checklist1e = $availabilityChecklistRowsById->get('checklist_1e', collect())->get($Checklist->id);
                         @endphp
                         <td class="action"> 
                             <span class="Hide">{{ $Checklist->id }}</span> 
@@ -2545,7 +2157,8 @@
             </div> 
         </div>
         <div class="board-2">
-            @php 
+            @php
+                if (!isset($NumberOfVessels_IDLE_LASTMONTH)) {
                 $NumberOfVessels_IDLE_LASTMONTH = App\Models\VesselAvailability::select('Vessel')
                                                     ->where('Status', 'IDLE')
                                                     ->where(function($query) {
@@ -2632,7 +2245,8 @@
                                                                         $query->whereBetween('StartDate', [date('Y-m-01', strtotime('-' . $i . ' months')), date('Y-m-t', strtotime('-' . $i . ' months'))])
                                                                                 ->orWhereBetween('EndDate', [date('Y-m-01', strtotime('-' . $i . ' months')), date('Y-m-t', strtotime('-' . $i . ' months'))]);
                                                                     })->groupBy('Vessel')->get();
-                } 
+                }
+                }
             @endphp
             <div class="div recent-workflow" style="width: 100%">
                 <h1>Recent Workflow</h1>  
