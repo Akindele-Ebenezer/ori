@@ -1,4 +1,4 @@
-let CreateAvailabilityButton = document.querySelector('.RecordAvailabilityButton');
+(() => {
 let AddAvailabilityModal = document.querySelector('.AddAvailability');
 let CancelButton_Availability = document.querySelector('.cancel-button-availability');
 let NoDataSelectedModal_Availability = document.querySelector('.no-data-selected.moc');
@@ -65,7 +65,13 @@ const closeAvailabilityModal = (event) => {
     }
 };
 
-if (CreateAvailabilityButton) CreateAvailabilityButton.addEventListener('click', openAvailabilityModal);
+document.addEventListener('click', (event) => {
+    const button = event.target instanceof Element
+        ? event.target.closest('.RecordAvailabilityButton')
+        : null;
+
+    if (button) openAvailabilityModal();
+});
 if (CancelButton_Availability) CancelButton_Availability.addEventListener('click', closeAvailabilityModal);
 
 const AddAvailabilityButton = document.querySelector('.AddAvailabilityButton');
@@ -190,15 +196,16 @@ AddAvailabilityButton.addEventListener('click', () => {
    
     
 const TrackingContainer = document.querySelector('.tracking');
- 
-setInterval(function() { 
-    TrackingContainer.scrollTop += 33; 
-}, 2000); 
-setInterval(function() { 
-    if (TrackingContainer.scrollTop + TrackingContainer.clientHeight >= TrackingContainer.scrollHeight) { 
-      TrackingContainer.scrollTop = 0;
-    }
-  }, 2000);
+if (TrackingContainer) {
+    setInterval(function() {
+        TrackingContainer.scrollTop += 33;
+    }, 2000);
+    setInterval(function() {
+        if (TrackingContainer.scrollTop + TrackingContainer.clientHeight >= TrackingContainer.scrollHeight) {
+            TrackingContainer.scrollTop = 0;
+        }
+    }, 2000);
+}
 
   let Chart4Modal = document.querySelector('.chart-4');
   let Chart4Modal_CloseButton = document.querySelector('.chart-4 .Close');
@@ -211,9 +218,12 @@ setInterval(function() {
   let Chart4Modal_ReadyCount = document.querySelector('.chart-4 .chart-4-wrapper .ReadyCount small');
   let Chart4Modal_Comment = document.querySelector('.chart-4 .Comment');
   let Chart4Modal_Indicator = document.querySelector('.chart-4 .indicator');
-  let __Vessels__ = document.querySelectorAll('.availability .notification-wrapper'); 
- 
+  const bindVesselChartInteractions = () => {
+  let __Vessels__ = document.querySelectorAll('.availability .notification-wrapper:not(._generator_)');
+
   __Vessels__.forEach(Vessel => {
+    if (Vessel.dataset.chartInteractionBound) return;
+    Vessel.dataset.chartInteractionBound = 'true';
     Vessel.addEventListener('click', () => { 
         Chart4Modal.classList.remove('Hide');
         Chart4Modal.style.display = 'flex';
@@ -231,15 +241,20 @@ setInterval(function() {
         Chart4Modal_Indicator.firstElementChild.classList.add(Vessel.firstElementChild.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.textContent);
         document.querySelector('.OpenChart4Filter').nextElementSibling.nextElementSibling.textContent = Vessel.firstElementChild.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.textContent;
     })
-    Chart4Modal_CloseButton.addEventListener('click', () => {
-        Chart4Modal.style.display = 'none';
-        Chart4Modal_Indicator.firstElementChild.className = '';
-    })
+  });
+  };
+
+  bindVesselChartInteractions();
+  document.addEventListener('vessel-content-updated', bindVesselChartInteractions);
+  Chart4Modal_CloseButton?.addEventListener('click', () => {
+    Chart4Modal.style.display = 'none';
+    Chart4Modal_Indicator.firstElementChild.className = '';
   });
  
   
 let open_idashboard = document.querySelector('.open-idashboard');
-open_idashboard.addEventListener('click', () => {   
+if (open_idashboard) open_idashboard.addEventListener('click', () => {
     console.log('Opening Vessel Spotlight Dashboard');
     document.querySelector('.VesselSpotlight').style.display = 'flex';
 });
+})();

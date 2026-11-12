@@ -278,6 +278,21 @@
                         }
                     }
                 }
+
+            }
+        }
+
+        .AddAvailability.is-open {
+            background: rgba(0, 0, 0, .5);
+            backdrop-filter: blur(.5em);
+            height: 100vh;
+            inset: 0;
+            position: fixed;
+            width: 100vw;
+            z-index: 2200;
+
+            > .inner {
+                display: flex;
             }
         }
     }

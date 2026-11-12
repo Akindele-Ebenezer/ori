@@ -19,12 +19,11 @@ EditChecklist1_Icons.forEach(EditChecklist1_Icon => {
     });
 });
 
-let OpenMaintenanceInfoIcon = document.querySelectorAll('.OpenMaintenanceInfoIcon');
 let Diagram1 = document.querySelector('.Diagram1');
 let Diagram1_CloseButton = document.querySelector('.Diagram1 .Close');
 let Diagram1_VesselName = document.querySelector('.Diagram1 .VesselName h2');
 let Diagram1_VesselStatus = document.querySelector('.Diagram1 .VesselName .indicator .status-x');
-let Checklist1_PdfIcons = document.querySelectorAll('.Checklist1_PdfIcon');
+let Diagram1_Status = '';
 
 let Checklist1_VesselName_Edit = document.querySelector('.EditSmallBoats_ChecklistForm .input.Hide select[name=Boat]');
 let Checklist1_VesselName_Edit_Disabled = document.querySelector('.EditSmallBoats_ChecklistForm .input select[name=Boat_]');
@@ -36,10 +35,15 @@ let Checklist1_OutgoingCapt_EngineerName_Comment_Edit = document.querySelector('
 let Checklist1_IncomingCapt_EngineerName_Comment_Edit = document.querySelector('.EditSmallBoats_ChecklistForm .input textarea[name=Incoming_Captain_Engineer]');
 let PdfWrapper = document.querySelector('.PdfWrapper');
 
-OpenMaintenanceInfoIcon.forEach(Icon => {
-    Icon.addEventListener('click', () => {
+document.addEventListener('click', (event) => {
+    if (!(event.target instanceof Element)) return;
+
+    const Icon = event.target.closest('.OpenMaintenanceInfoIcon');
+    if (!Icon || !Diagram1 || !Diagram1_VesselStatus || !Diagram1_VesselName) return;
+
     let Checklist1Id = Icon.nextElementSibling.nextElementSibling.nextElementSibling.firstElementChild.textContent;
     let Status = Icon.nextElementSibling.textContent.split(" ")[0];
+    Diagram1_Status = Status;
     EditSmallBoats_ChecklistButton.nextElementSibling.textContent = Checklist1Id; 
       Diagram1.style.display = 'flex'; 
       Diagram1_VesselStatus.className = '';
@@ -64,18 +68,22 @@ OpenMaintenanceInfoIcon.forEach(Icon => {
         NeedsAttention.style.width = NeedsAttention_;
         GoodCondition.setAttribute('data-progress', (Yes_Indicator / Sum) * 100);
         NeedsAttention.setAttribute('data-progress', (No_Indicator / Sum) * 100); 
-  })
-  Diagram1_CloseButton.addEventListener('click', () => {
-      Diagram1.style.display = 'none';
-      Diagram1_VesselStatus.classList.remove(Status);
-  })
-  Checklist1_PdfIcons.forEach(PdfIcon => {
-    PdfIcon.addEventListener('click', () => {
-        let Checklist1Id = PdfIcon.parentElement.firstElementChild.textContent;  
-        let BoatName = PdfIcon.parentElement.firstElementChild.nextElementSibling.textContent;  
-        window.open('/Availability/Report/Checklists/SmallBoats/?Boat='+ BoatName + '&Id=' + Checklist1Id);
-      })
-  });
+});
+
+Diagram1_CloseButton?.addEventListener('click', () => {
+    Diagram1.style.display = 'none';
+    Diagram1_VesselStatus?.classList.remove(Diagram1_Status);
+});
+
+document.addEventListener('click', (event) => {
+    if (!(event.target instanceof Element)) return;
+
+    const PdfIcon = event.target.closest('.Checklist1_PdfIcon');
+    if (!PdfIcon) return;
+
+    const Checklist1Id = PdfIcon.parentElement.firstElementChild.textContent;
+    const BoatName = PdfIcon.parentElement.firstElementChild.nextElementSibling.textContent;
+    window.open('/Availability/Report/Checklists/SmallBoats/?Boat=' + BoatName + '&Id=' + Checklist1Id);
 });
 
 let Checklist1_Edit_Error = document.querySelector('.error-edit-small-boats-checklist'); 

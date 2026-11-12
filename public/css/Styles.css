@@ -1167,7 +1167,7 @@ body {
   color: #fff;
 }
 .form-1.AddVessel, .form-1.FilterChart4ForVesselData {
-  z-index: 300;
+  z-index: 2300;
 }
 .form-1.AddSmallBoats_Checklist .inner, .form-1.AddSpeedBoats_Checklist .inner, .form-1.AddVessel_Checklist3 .inner, .form-1.EditSmallBoats_Checklist .inner, .form-1.EditSpeedBoats_Checklist .inner, .form-1.Tanks .inner {
   height: 85%;
@@ -2431,6 +2431,18 @@ main .left-navigation ul li .total {
 .content-data .add-testimonial-wrapper .AddTestimonial .inner form select:focus, .content-data .add-testimonial-wrapper .AddTestimonial .inner form input:focus, .content-data .add-testimonial-wrapper .AddAvailability .inner form select:focus, .content-data .add-testimonial-wrapper .AddAvailability .inner form input:focus, .content-data .add-availabilty-wrapper .AddTestimonial .inner form select:focus, .content-data .add-availabilty-wrapper .AddTestimonial .inner form input:focus, .content-data .add-availabilty-wrapper .AddAvailability .inner form select:focus, .content-data .add-availabilty-wrapper .AddAvailability .inner form input:focus {
   border-bottom: 3px solid #225f7d;
 }
+.content-data .add-testimonial-wrapper .AddAvailability.is-open, .content-data .add-availabilty-wrapper .AddAvailability.is-open {
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(0.5em);
+  height: 100vh;
+  inset: 0;
+  position: fixed;
+  width: 100vw;
+  z-index: 2200;
+}
+.content-data .add-testimonial-wrapper .AddAvailability.is-open > .inner, .content-data .add-availabilty-wrapper .AddAvailability.is-open > .inner {
+  display: flex;
+}
 .content-data .AddVesselButton {
   display: flex;
   justify-content: end;
@@ -2765,10 +2777,15 @@ main .left-navigation ul li .total {
 }
 
 .pie {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  box-sizing: border-box;
+  flex: 0 0 200px;
   height: 200px;
-  width: 200px;
+  overflow: hidden;
   position: relative;
   margin: 0 30px 30px 0;
+  width: 200px;
 }
 
 .pie::before {

@@ -1,10 +1,19 @@
-let TooltipX = document.querySelectorAll('.tooltip-x');
+document.addEventListener('mouseover', (event) => {
+    if (!(event.target instanceof Element)) return;
 
-TooltipX.forEach(ToolTip => {
-    ToolTip.addEventListener('mouseover', () => {
-        ToolTip.firstElementChild.classList.add('Show');
-    })
-    ToolTip.addEventListener('mouseleave', () => {
-        ToolTip.firstElementChild.classList.remove('Show');
-    })
+    const tooltip = event.target.closest('.tooltip-x');
+    const previousTarget = event.relatedTarget;
+    if (!tooltip || (previousTarget instanceof Node && tooltip.contains(previousTarget))) return;
+
+    tooltip.firstElementChild?.classList.add('Show');
+});
+
+document.addEventListener('mouseout', (event) => {
+    if (!(event.target instanceof Element)) return;
+
+    const tooltip = event.target.closest('.tooltip-x');
+    const nextTarget = event.relatedTarget;
+    if (!tooltip || (nextTarget instanceof Node && tooltip.contains(nextTarget))) return;
+
+    tooltip.firstElementChild?.classList.remove('Show');
 });

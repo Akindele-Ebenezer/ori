@@ -1,4 +1,5 @@
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.7.0"></script>
 @php 
 $Status = $_GET['ChartReportStatus'] ?? 'BREAKDOWN';
 $ChartType = $_GET['ChartReportChartType'] ?? 'bar';
@@ -13,6 +14,28 @@ $Vessels_SURVEY_OTHERS = \DB::table('vessels_vessel_information')->select('Vesse
 
 @endphp
 <script> 
+const vesselStatusDataLabels = {
+  anchor: 'center',
+  align: 'center',
+  clamp: true,
+  clip: true,
+  color: '#111',
+  display: function(context) {
+    return Number(context.dataset.data[context.dataIndex]) > 0;
+  },
+  formatter: function(value, context) {
+    const total = context.chart.data.datasets.reduce((sum, dataset) => {
+      return sum + (Number(dataset.data[context.dataIndex]) || 0);
+    }, 0);
+
+    return total > 0 ? ((Number(value) / total) * 100).toFixed(1) + '%' : '0%';
+  },
+  font: {
+    size: 10,
+    weight: 'bold'
+  }
+};
+
 @if (isset($Vessels_TUGS))  
   let datasets = [{
       label: 'Breakdown',
@@ -80,12 +103,9 @@ $Vessels_SURVEY_OTHERS = \DB::table('vessels_vessel_information')->select('Vesse
             @endforeach  
       ],
 		}]
-  let sums = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-  for (let i = 0; i < sums.length; i++) {
-    for (let dataset of datasets) {
-        sums[i] += dataset.data[i]; 
-      }
-    } 
+  let sums = datasets[0].data.map((_, index) => datasets.reduce((total, dataset) => {
+    return total + (Number(dataset.data[index]) || 0);
+  }, 0));
 var ctx = document.getElementById("barChart").getContext('2d');
 var barChart = new Chart(ctx, {
   type: '{{ $ChartType }}', 
@@ -99,12 +119,7 @@ var barChart = new Chart(ctx, {
 	},
 options: {
     plugins: {
-      datalabels: {
-        color: '#000',
-        display: function(context) {
-          return context.dataset.data[context.dataIndex];
-        }
-      }
+      datalabels: vesselStatusDataLabels
     },  
     tooltips: {
       displayColors: true,
@@ -118,13 +133,13 @@ options: {
             const dataset = data.datasets[tooltipItem.datasetIndex];
             const value = dataset.data[tooltipItem.index];
             let Total = sums[tooltipItem.index];  
+            const percentage = Total > 0 ? ((value / Total) * 100).toFixed(2) : '0.00';
             if (value < 60) {
-              return 'Minute(s): ' + value + ' (' + ((value/Total) * 100).toFixed(2) + '%)';
-            } else if ((value > 60) && (value < 1440)) {
-              return 'Hour(s): ' + Math.round(value / 60) + ' (' + ((value/Total) * 100).toFixed(2) + '%)';
-            } else if (value > 1440) {
-              return 'Day(s): ' + Math.round((value / 1440)) + ' (' + Math.round(((value/Total) * 100)) + '%)';
+              return 'Minute(s): ' + value + ' (' + percentage + '%)';
+            } else if (value < 1440) {
+              return 'Hour(s): ' + Math.round(value / 60) + ' (' + percentage + '%)';
             }
+            return 'Day(s): ' + Math.round(value / 1440) + ' (' + percentage + '%)';
         }
       },
     },
@@ -223,12 +238,9 @@ options: {
             @endforeach  
       ],
 		}]
-  let sums1 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-  for (let i = 0; i < sums1.length; i++) {
-    for (let dataset1 of datasets1) {
-        sums1[i] += dataset1.data[i]; 
-      }
-    } 
+  let sums1 = datasets1[0].data.map((_, index) => datasets1.reduce((total, dataset) => {
+    return total + (Number(dataset.data[index]) || 0);
+  }, 0));
 var ctx1 = document.getElementById("barChart1").getContext('2d');
 var barChart1 = new Chart(ctx1, {
   type: '{{ $ChartType }}', 
@@ -242,12 +254,7 @@ var barChart1 = new Chart(ctx1, {
 	},
 options: {
     plugins: {
-      datalabels: {
-        color: '#000',
-        display: function(context) {
-          return context.dataset.data[context.dataIndex];
-        }
-      }
+      datalabels: vesselStatusDataLabels
     },  
     tooltips: {
       displayColors: true,
@@ -261,13 +268,13 @@ options: {
             const dataset = data.datasets[tooltipItem.datasetIndex];
             const value = dataset.data[tooltipItem.index];
             let Total = sums1[tooltipItem.index]; 
+            const percentage = Total > 0 ? ((value / Total) * 100).toFixed(2) : '0.00';
             if (value < 60) {
-              return 'Minute(s): ' + value + ' (' + ((value/Total) * 100).toFixed(2) + '%)';
-            } else if ((value > 60) && (value < 1440)) {
-              return 'Hour(s): ' + Math.round(value / 60) + ' (' + ((value/Total) * 100).toFixed(2) + '%)';
-            } else if (value > 1440) {
-              return 'Day(s): ' + Math.round((value / 1440)) + ' (' + Math.round(((value/Total) * 100)) + '%)';
+              return 'Minute(s): ' + value + ' (' + percentage + '%)';
+            } else if (value < 1440) {
+              return 'Hour(s): ' + Math.round(value / 60) + ' (' + percentage + '%)';
             }
+            return 'Day(s): ' + Math.round(value / 1440) + ' (' + percentage + '%)';
         }
       },
     },
@@ -365,12 +372,9 @@ options: {
             @endforeach  
       ],
 		}]
-  let sums2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-  for (let i = 0; i < sums2.length; i++) {
-    for (let dataset2 of datasets2) {
-        sums2[i] += dataset2.data[i];
-      }
-    } 
+  let sums2 = datasets2[0].data.map((_, index) => datasets2.reduce((total, dataset) => {
+    return total + (Number(dataset.data[index]) || 0);
+  }, 0));
 var ctx2 = document.getElementById("barChart2").getContext('2d');
 var barChart2 = new Chart(ctx2, {
   type: '{{ $ChartType }}', 
@@ -384,12 +388,7 @@ var barChart2 = new Chart(ctx2, {
 	},
 options: {
     plugins: {
-      datalabels: {
-        color: '#000',
-        display: function(context) {
-          return context.dataset.data[context.dataIndex];
-        }
-      }
+      datalabels: vesselStatusDataLabels
     },  
     tooltips: {
       displayColors: true,
@@ -403,13 +402,13 @@ options: {
             const dataset = data.datasets[tooltipItem.datasetIndex];
             const value = dataset.data[tooltipItem.index];
             let Total = sums2[tooltipItem.index]; 
+            const percentage = Total > 0 ? ((value / Total) * 100).toFixed(2) : '0.00';
             if (value < 60) {
-              return 'Minute(s): ' + value + ' (' + ((value/Total) * 100).toFixed(2) + '%)';
-            } else if ((value > 60) && (value < 1440)) {
-              return 'Hour(s): ' + Math.round(value / 60) + ' (' + ((value/Total) * 100).toFixed(2) + '%)';
-            } else if (value > 1440) {
-              return 'Day(s): ' + Math.round((value / 1440)) + ' (' + Math.round(((value/Total) * 100)) + '%)';
+              return 'Minute(s): ' + value + ' (' + percentage + '%)';
+            } else if (value < 1440) {
+              return 'Hour(s): ' + Math.round(value / 60) + ' (' + percentage + '%)';
             }
+            return 'Day(s): ' + Math.round(value / 1440) + ' (' + percentage + '%)';
         }
       },
     },
@@ -507,12 +506,9 @@ options: {
             @endforeach  
       ],
 		}]
-  let sums3 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-  for (let i = 0; i < sums3.length; i++) {
-    for (let dataset3 of datasets3) {
-        sums3[i] += dataset3.data[i];
-      }
-    } 
+  let sums3 = datasets3[0].data.map((_, index) => datasets3.reduce((total, dataset) => {
+    return total + (Number(dataset.data[index]) || 0);
+  }, 0));
 var ctx3 = document.getElementById("barChart3").getContext('2d');
 var barChart3 = new Chart(ctx3, {
   type: '{{ $ChartType }}', 
@@ -526,12 +522,7 @@ var barChart3 = new Chart(ctx3, {
 	},
 options: {
     plugins: {
-      datalabels: {
-        color: '#000',
-        display: function(context) {
-          return context.dataset.data[context.dataIndex];
-        }
-      }
+      datalabels: vesselStatusDataLabels
     },  
     tooltips: {
       displayColors: true,
@@ -545,13 +536,13 @@ options: {
             const dataset = data.datasets[tooltipItem.datasetIndex];
             const value = dataset.data[tooltipItem.index];
             let Total = sums3[tooltipItem.index]; 
+            const percentage = Total > 0 ? ((value / Total) * 100).toFixed(2) : '0.00';
             if (value < 60) {
-              return 'Minute(s): ' + value + ' (' + ((value/Total) * 100).toFixed(2) + '%)';
-            } else if ((value > 60) && (value < 1440)) {
-              return 'Hour(s): ' + Math.round(value / 60) + ' (' + ((value/Total) * 100).toFixed(2) + '%)';
-            } else if (value > 1440) {
-              return 'Day(s): ' + Math.round((value / 1440)) + ' (' + Math.round(((value/Total) * 100)) + '%)';
+              return 'Minute(s): ' + value + ' (' + percentage + '%)';
+            } else if (value < 1440) {
+              return 'Hour(s): ' + Math.round(value / 60) + ' (' + percentage + '%)';
             }
+            return 'Day(s): ' + Math.round(value / 1440) + ' (' + percentage + '%)';
         }
       },
     },
@@ -649,12 +640,9 @@ options: {
             @endforeach  
       ],
 		}]
-  let sums4 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-  for (let i = 0; i < sums4.length; i++) {
-    for (let dataset4 of datasets4) {
-        sums4[i] += dataset4.data[i];
-      }
-    } 
+  let sums4 = datasets4[0].data.map((_, index) => datasets4.reduce((total, dataset) => {
+    return total + (Number(dataset.data[index]) || 0);
+  }, 0));
 var ctx4 = document.getElementById("barChart4").getContext('2d');
 var barChart4 = new Chart(ctx4, {
   type: '{{ $ChartType }}', 
@@ -668,12 +656,7 @@ var barChart4 = new Chart(ctx4, {
 	},
 options: {
     plugins: {
-      datalabels: {
-        color: '#000',
-        display: function(context) {
-          return context.dataset.data[context.dataIndex];
-        }
-      }
+      datalabels: vesselStatusDataLabels
     },  
     tooltips: {
       displayColors: true,
@@ -687,13 +670,13 @@ options: {
             const dataset = data.datasets[tooltipItem.datasetIndex];
             const value = dataset.data[tooltipItem.index];
             let Total = sums4[tooltipItem.index]; 
+            const percentage = Total > 0 ? ((value / Total) * 100).toFixed(2) : '0.00';
             if (value < 60) {
-              return 'Minute(s): ' + value + ' (' + ((value/Total) * 100).toFixed(2) + '%)';
-            } else if ((value > 60) && (value < 1440)) {
-              return 'Hour(s): ' + Math.round(value / 60) + ' (' + ((value/Total) * 100).toFixed(2) + '%)';
-            } else if (value > 1440) {
-              return 'Day(s): ' + Math.round((value / 1440)) + ' (' + Math.round(((value/Total) * 100)) + '%)';
+              return 'Minute(s): ' + value + ' (' + percentage + '%)';
+            } else if (value < 1440) {
+              return 'Hour(s): ' + Math.round(value / 60) + ' (' + percentage + '%)';
             }
+            return 'Day(s): ' + Math.round(value / 1440) + ' (' + percentage + '%)';
         }
       },
     },

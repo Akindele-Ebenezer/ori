@@ -150,7 +150,7 @@
             }
         }
     }
-    &.AddVessel, &.FilterChart4ForVesselData { z-index: 300; }
+    &.AddVessel, &.FilterChart4ForVesselData { z-index: 2300; }
     &.AddSmallBoats_Checklist, &.AddSpeedBoats_Checklist, &.AddVessel_Checklist3, &.EditSmallBoats_Checklist, &.EditSpeedBoats_Checklist, &.Tanks {
         // display: flex;
         .inner {

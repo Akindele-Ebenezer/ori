@@ -1,7 +1,5 @@
-let FilterReportByDatePdfButtons = document.querySelectorAll('.ReportPdfButton');
 let FilterReportByDateModal = document.querySelector('.FilterReportByDate');
 let CancelButtonFilterReportByDate = document.querySelectorAll('.cancel-button-filter-report-by-date');
-let FilterReportForVesselByDatePdfButtons = document.querySelectorAll('.ReportPdfButtonForVessels');
 let FilterReportForVesselByDateModal = document.querySelector('.FilterReportForVesselByDate');
 let CancelButtonFilterReportForVesselByDate = document.querySelectorAll('.cancel-button-filter-report-for-vessel-by-date');
 let FilterReportForVesselByMonth_GoButton = document.querySelector('.FilterReportForVesselByMonth_GoButton');
@@ -12,21 +10,30 @@ let Year_REPORT = document.querySelector('select[name=Year_REPORT]');
 let Month_REPORT_AllVessels = document.querySelector('select[name=Month_REPORT_AllVessels]');
 let Year_REPORT_AllVessels = document.querySelector('select[name=Year_REPORT_AllVessels]');
 
-FilterReportByDatePdfButtons.forEach(Button => {
-    Button.addEventListener('click', () => {
+document.addEventListener('click', (event) => {
+    if (!(event.target instanceof Element)) return;
+
+    if (event.target.closest('.ReportPdfButton')) {
+        if (!Month_REPORT_AllVessels || !Year_REPORT_AllVessels || !FilterReportByDateModal) return;
+
         Month_REPORT_AllVessels.value = new Date().getMonth() + 1;
         Year_REPORT_AllVessels.value = new Date().getFullYear();
         FilterReportByDateModal.style.display = 'flex';
-    })
-});
-FilterReportForVesselByDatePdfButtons.forEach(Button => {
-    Button.addEventListener('click', () => {
-        FilterReportForVesselByMonth_GoButton.nextElementSibling.textContent = Button.nextElementSibling.textContent;
-        VesselName_REPORT.value = Button.nextElementSibling.textContent;
-        Month_REPORT.value = new Date().getMonth() + 1;
-        Year_REPORT.value = new Date().getFullYear();
-        FilterReportForVesselByDateModal.style.display = 'flex';
-    })
+        return;
+    }
+
+    const Button = event.target.closest('.ReportPdfButtonForVessels');
+    if (!Button || !FilterReportForVesselByMonth_GoButton || !VesselName_REPORT ||
+        !Month_REPORT || !Year_REPORT || !FilterReportForVesselByDateModal) return;
+
+    const vesselName = Button.nextElementSibling?.textContent.trim();
+    if (!vesselName) return;
+
+    FilterReportForVesselByMonth_GoButton.nextElementSibling.textContent = vesselName;
+    VesselName_REPORT.value = vesselName;
+    Month_REPORT.value = new Date().getMonth() + 1;
+    Year_REPORT.value = new Date().getFullYear();
+    FilterReportForVesselByDateModal.style.display = 'flex';
 });
 
 CancelButtonFilterReportByDate.forEach(CancelButtonFilterReportByDate => {

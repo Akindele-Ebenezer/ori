@@ -103,7 +103,8 @@
     ">
         <button class="AddVesselButton">+ Add Vessel</button>
     </div>
-    <center class="add-availabilty-wrapper"> 
+    <center class="add-availabilty-wrapper">
+        @include('Components.Forms.Add.Availability')
     </center>
     {{-- @if (parse_url(url()->current())['host'] == 'vesseltracker.lttcoastalmarine.com' || parse_url(url()->current())['host'] == '192.168.20.252')
         <center class="add-availabilty-wrapper">
@@ -502,4 +503,12 @@
 <script src="{{ asset('js/Components/Delete/Vessel.js') }}"></script>
 <script src="{{ asset('js/Components/Add/Testimonial.js') }}"></script>
 <script src="{{ asset('js/Components/Add/Availability.js') }}"></script>
+<script src="{{ asset('js/Components/Add/FormButtons.js') }}"></script>
+<script src="{{ asset('js/Components/Add/AvailabilityReports.js') }}"></script>
+<script src="{{ asset('js/Components/Add/DailyReport.js') }}"></script>
+<script src="{{ asset('js/Components/Add/RadioBroadcast.js') }}"></script>
+<script src="{{ asset('js/Components/Add/Devices.js') }}"></script>
+<script src="{{ asset('js/Components/Add/PeriodicChecks.js') }}"></script>
+<script src="{{ asset('js/Components/Add/OfficersOnDuty.js') }}"></script>
+<script src="{{ asset('js/Components/Add/Others.js') }}"></script>
 @endsection

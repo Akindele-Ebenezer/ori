@@ -26,23 +26,18 @@ AddGeneratorButton.addEventListener('click', () => {
     })
 });
 
-let ToggleGenerators_Icon = document.querySelectorAll('.ToggleGenerators_Icon');
-let Generators_ = document.querySelectorAll('.generators_');
+document.addEventListener('click', (event) => {
+    if (!(event.target instanceof Element)) return;
 
-ToggleGenerators_Icon.forEach(Icon => {
-    Icon.addEventListener('click', () => {
-        Generators_.forEach(Generators => {
-            Generators.classList.toggle('Hide');
+    if (event.target.closest('.ToggleGenerators_Icon')) {
+        document.querySelectorAll('.generators_').forEach((generator) => {
+            generator.classList.toggle('Hide');
         });
-    })
-});
-let ToggleVessels_Icon = document.querySelectorAll('.ToggleVessels_Icon');
-let Vessels_ = document.querySelectorAll('.vessels_');
+    }
 
-ToggleVessels_Icon.forEach(Icon => {
-    Icon.addEventListener('click', () => {
-        Vessels_.forEach(Vessels => {
-            Vessels.classList.toggle('Hide');
+    if (event.target.closest('.ToggleVessels_Icon')) {
+        document.querySelectorAll('.vessels_').forEach((vessel) => {
+            vessel.classList.toggle('Hide');
         });
-    })
+    }
 });

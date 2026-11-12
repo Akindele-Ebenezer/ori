@@ -153,6 +153,9 @@ class VesselDataRefresher {
             return;
         }
         currentSection.innerHTML = newSection.innerHTML;
+        if (selector === '.vessel-content') {
+            document.dispatchEvent(new Event('vessel-content-updated'));
+        }
     }
 
     initializeCloseButton() {
