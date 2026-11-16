@@ -93,17 +93,17 @@ class VesselAvailabilityController extends Controller
             ->groupBy('Vessel')
             ->map->first();
 
-        // 4. FIX FULL-TABLE SCAN: Fetch ONLY the single latest ROB row per vessel via ROW_NUMBER()
-        $availabilityRobsByVessel = DB::table('other_reports')
-            ->fromSub(function ($query) use ($availabilityVesselNames) {
-                $query->from('other_reports')
-                    ->select(['Vessel', 'ROB'])
-                    ->selectRaw('ROW_NUMBER() OVER (PARTITION BY Vessel ORDER BY `Date` DESC, `TimeIn` DESC, `id` DESC) as rn')
-                    ->whereIn('Vessel', $availabilityVesselNames)
-                    ->whereNotNull('ROB')
-                    ->where('ROB', '!=', '');
-            }, 'ranked_robs')
-            ->where('rn', 1)
+        // 4. MySQL 5.7 Compatible: Fetch ONLY the latest ROB row per vessel
+        $latestRobIds = DB::table('other_reports')
+            ->selectRaw('MAX(id) as max_id')
+            ->whereIn('Vessel', $availabilityVesselNames)
+            ->whereNotNull('ROB')
+            ->where('ROB', '!=', '')
+            ->groupBy('Vessel');
+
+        $availabilityRobsByVessel = DB::table('other_reports as o')
+            ->joinSub($latestRobIds, 'latest', fn ($join) => $join->on('o.id', '=', 'latest.max_id'))
+            ->select(['o.Vessel', 'o.ROB'])
             ->get()
             ->keyBy('Vessel');
 
@@ -116,29 +116,29 @@ class VesselAvailabilityController extends Controller
             ->get()
             ->groupBy('Vessel');
 
-        // 6. FIX FULL-TABLE SCAN: Fetch ONLY the single latest comment per vessel via ROW_NUMBER()
-        $availabilityLatestCommentsByVessel = DB::table('vessel_availabilities')
-            ->fromSub(function ($query) use ($allVesselNames) {
-                $query->from('vessel_availabilities')
-                    ->select(['Vessel', 'Comment'])
-                    ->selectRaw('ROW_NUMBER() OVER (PARTITION BY Vessel ORDER BY `StartDate` DESC, `StartTime` DESC, `id` DESC) as rn')
-                    ->whereIn('Vessel', $allVesselNames);
-            }, 'ranked_comments')
-            ->where('rn', 1)
+        // 6. MySQL 5.7 Compatible: Fetch ONLY the latest comment per vessel
+        $latestCommentIds = DB::table('vessel_availabilities')
+            ->selectRaw('MAX(id) as max_id')
+            ->whereIn('Vessel', $allVesselNames)
+            ->groupBy('Vessel');
+
+        $availabilityLatestCommentsByVessel = DB::table('vessel_availabilities as va')
+            ->joinSub($latestCommentIds, 'latest', fn ($join) => $join->on('va.id', '=', 'latest.max_id'))
+            ->select(['va.Vessel', 'va.Comment'])
             ->get()
             ->keyBy('Vessel');
 
-        // 7. Latest Checklists per Boat
+        // 7. MySQL 5.7 Compatible: Latest Checklists per Boat
         $availabilityChecklistData = collect();
         foreach (['checklist_1a', 'checklist_1b', 'checklist_1c', 'checklist_1d', 'checklist_1e'] as $table) {
-            $availabilityChecklistData[$table] = DB::table($table)
-                ->fromSub(function ($query) use ($table, $availabilityVesselNames) {
-                    $query->from($table)
-                        ->select('*')
-                        ->selectRaw('ROW_NUMBER() OVER (PARTITION BY Boat ORDER BY `Date` DESC, `TimeIn` DESC, `id` DESC) as rn')
-                        ->whereIn('Boat', $availabilityVesselNames);
-                }, 'ranked_cl')
-                ->where('rn', 1)
+            $latestChecklistIds = DB::table($table)
+                ->selectRaw('MAX(id) as max_id')
+                ->whereIn('Boat', $availabilityVesselNames)
+                ->groupBy('Boat');
+
+            $availabilityChecklistData[$table] = DB::table($table . ' as cl')
+                ->joinSub($latestChecklistIds, 'latest', fn ($join) => $join->on('cl.id', '=', 'latest.max_id'))
+                ->select('cl.*')
                 ->get()
                 ->keyBy('Boat');
         }
@@ -163,7 +163,7 @@ class VesselAvailabilityController extends Controller
                 : DB::table($table)->whereIn('id', $checklistHistoryIds)->get()->keyBy('id');
         }
 
-        // 8. Generators & Machineries (Fetch ONLY latest availability per GeneratorId via ROW_NUMBER)
+        // 8. MySQL 5.7 Compatible: Generators & Machineries (Fetch ONLY latest availability per GeneratorId)
         $availabilityGenerators = DB::table('generators')->orderBy('EngineMake')->get();
         $availabilityGeneratorsByCompanyClass = $availabilityGenerators->groupBy(
             fn ($g) => $g->Company . '|' . $g->Class
@@ -176,18 +176,20 @@ class VesselAvailabilityController extends Controller
             ->whereIn('Class', ['ENGINES IN STOCK', 'ASHORE MACHINERY'])
             ->pluck('id');
 
-        $availabilityByGeneratorId = $availabilityGeneratorIds->isEmpty()
-            ? collect()
-            : DB::table('generator_availability')
-                ->fromSub(function ($query) use ($availabilityGeneratorIds) {
-                    $query->from('generator_availability')
-                        ->select('*')
-                        ->selectRaw('ROW_NUMBER() OVER (PARTITION BY GeneratorId ORDER BY `EndDate` DESC, `StartTime` DESC, `id` DESC) as rn')
-                        ->whereIn('GeneratorId', $availabilityGeneratorIds);
-                }, 'ranked_gen')
-                ->where('rn', 1)
+        if ($availabilityGeneratorIds->isEmpty()) {
+            $availabilityByGeneratorId = collect();
+        } else {
+            $latestGenAvailIds = DB::table('generator_availability')
+                ->selectRaw('MAX(id) as max_id')
+                ->whereIn('GeneratorId', $availabilityGeneratorIds)
+                ->groupBy('GeneratorId');
+
+            $availabilityByGeneratorId = DB::table('generator_availability as ga')
+                ->joinSub($latestGenAvailIds, 'latest', fn ($join) => $join->on('ga.id', '=', 'latest.max_id'))
+                ->select('ga.*')
                 ->get()
                 ->keyBy('GeneratorId');
+        }
 
         // 9. Tracking timelines (only select columns used in the view)
         $availabilityTrackingQuery = DB::table('vessel_availabilities')
@@ -485,6 +487,26 @@ class VesselAvailabilityController extends Controller
         ], $statusCounts, $ReportData, $availabilityViewData));
     }
 
+    public function create()
+    {
+        //
+    }
+
+    public function store(Request $Request)
+    {
+        //
+    }
+
+    public function show(VesselAvailability $VesselAvailability)
+    {
+        //
+    }
+
+    public function edit(VesselAvailability $VesselAvailability)
+    {
+        //
+    }
+
     public function update(Request $request, $id)
     {
         DB::transaction(function () use ($request, $id) {
@@ -555,7 +577,6 @@ class VesselAvailabilityController extends Controller
             ]);
         });
 
-        // Clear cached workflow/lookup stats on mutation
         Cache::forget('avail_recent_workflow_' . now()->toDateString());
 
         return back();
