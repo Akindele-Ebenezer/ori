@@ -4,18 +4,7 @@
         <div class="inner-1"> 
             <div class="fields">
                 <p class="error-daily-report error"></p>  
-                <h1>Officers On Duty</h1>
-                <section>
-                    <div class="input">
-                        <label for="officers-supervisor">Supervisor</label>
-                        <select name="Supervisor" id="officers-supervisor">
-                            <option value="">Select supervisor</option>
-                            @foreach ($Employees as $Employee)
-                                <option value="{{ $Employee->FullName }}">{{ $Employee->FullName }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </section>
+                <h1>Officers On Duty</h1> 
                 <section>
                     <div class="input OfficersOnDuty">
                         <label for="">Name</label> 
@@ -100,6 +89,33 @@
                         <input type="date" name="Date">
                     </div>  
                 </section> 
+                <br> <br>
+                <h1>Supervisor</h1>
+                <section>
+                    <div class="input">
+                        <label for="officers-supervisor">Supervisor</label>
+                        <select name="Supervisor" id="officers-supervisor">
+                            <option value="">Select supervisor</option>
+                            @foreach ($Employees as $Employee)
+                                <option value="{{ $Employee->FullName }}">{{ $Employee->FullName }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="input">
+                        <label for="officers-supervisor-signature">Supervisor Signature</label>
+                        <input type="file" name="SupervisorSignature" id="officers-supervisor-signature" accept="image/*">
+                    </div>
+                    <div class="input supervisor-agreement">
+                        <div class="supervisor-agreement-heading">
+                            <strong>Supervisor Agreement</strong>
+                            <p>Please review the duty assignments before accepting this report.</p>
+                        </div>
+                        <label class="supervisor-agreement-consent" for="officers-supervisor-agreement">
+                            <input type="checkbox" name="SupervisorAgreement" id="officers-supervisor-agreement" value="Yes" required>
+                            <span>I confirm that I have reviewed the duty assignments and accept this officers-on-duty report.</span>
+                        </label>
+                    </div>
+                </section>
             </div>
             <br>
         </div> 

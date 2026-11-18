@@ -20,8 +20,22 @@ reportEditButtons.forEach((button) => {
         if (!report || !form) return;
         Object.entries(report).forEach(([name, value]) => {
             const input = form.querySelector(`[name="${name}"]`);
-            if (input && !['id', 'ReportType', 'created_at', 'updated_at'].includes(name)) input.value = value ?? '';
+            if (input && input.type !== 'file' && !['id', 'ReportType', 'created_at', 'updated_at'].includes(name)) input.value = value ?? '';
         });
+        if (report.ReportType === 'incident') {
+            const attachmentLink = form.querySelector('.incident-attachment-link');
+            if (attachmentLink) {
+                if (report.Attachment) {
+                    attachmentLink.href = `/storage/${String(report.Attachment).replace(/^\/+/, '')}`;
+                    attachmentLink.style.display = 'block';
+                    attachmentLink.querySelector('.incident-attachment-file').textContent = String(report.Attachment).split('/').pop();
+                } else {
+                    attachmentLink.removeAttribute('href');
+                    attachmentLink.style.display = 'none';
+                    if (attachmentLink.querySelector('.incident-attachment-file')) attachmentLink.querySelector('.incident-attachment-file').textContent = '';
+                }
+            }
+        }
         form.action = `/Edit/AvailabilityReport/${report.ReportType}/${report.id}`;
         const modal = form.closest('.UpdateAvailabilityReport');
         modal.classList.remove('Hide');

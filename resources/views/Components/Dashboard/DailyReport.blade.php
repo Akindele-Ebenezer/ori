@@ -134,9 +134,9 @@
                 <span class="deck-card-metric-note">Logged Entries in Window</span>
             </div>
             <div class="deck-card-metric">
-                <span class="deck-card-metric-label">Active Vessels</span>
-                <span class="deck-card-metric-value">{{ $uniqueVessels }}</span>
-                <span class="deck-card-metric-note">Tracked Fleet Units</span>
+                <span class="deck-card-metric-label">Total Jobs (Done by Tugs)</span>
+                <span class="deck-card-metric-value">{{ number_format($tugJobTotal) }}</span>
+                <span class="deck-card-metric-note">Completed Tug Assignments</span>
             </div>
             <div class="deck-card-metric">
                 <span class="deck-card-metric-label">Ongoing Tasks</span>
@@ -548,6 +548,9 @@
                                     <th>Date / Time</th>
                                     <th>Done By</th>
                                     <th>Remarks</th>
+                                    @if ($availabilityTable['title'] === 'Incident Reports')
+                                        <th>Attachment</th>
+                                    @endif
                                     <th style="visibility: hidden; width: 100px;">Actions</th>
                                 </tr>
                             </thead>
@@ -567,6 +570,20 @@
                                         <td style="white-space: nowrap;">{{ $displayDate($report->Date) }} <br><span class="deck-sub-text" style="display:inline;">{{ $displayTime($report->Time) }}</span></td>
                                         <td>{{ $report->DoneBy ?: 'Unassigned' }}</td>
                                         <td style="color: var(--text-muted); max-width: 200px;">{{ $report->Remarks ?: 'None' }}</td>
+                                        @if ($availabilityTable['title'] === 'Incident Reports')
+                                            <td>
+                                                @if (!empty($report->Attachment))
+                                                    <a href="{{ asset('storage/' . ltrim($report->Attachment, '/')) }}" target="_blank" rel="noopener" title="View incident attachment" aria-label="View incident attachment">
+                                                        <svg style="width: 24px; height: 24px; color: #dc2626;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                                            <path d="M6 2h9l5 5v15H6z"></path>
+                                                            <path d="M15 2v6h5M8 13h8M8 17h6"></path>
+                                                        </svg>
+                                                    </a>
+                                                @else
+                                                    <span class="deck-sub-text">None</span>
+                                                @endif
+                                            </td>
+                                        @endif
                                         <td class="action" style="visibility: hidden">
                                             <div style="display: flex; gap: 0.25rem;">
                                                 <button type="button" class="EditAvailabilityReportButton" data-report-type="{{ $report->ReportType }}">Edit</button>
@@ -576,7 +593,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="{{ count($availabilityTable['columns']) + 4 }}" style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                                        <td colspan="{{ count($availabilityTable['columns']) + ($availabilityTable['title'] === 'Incident Reports' ? 5 : 4) }}" style="text-align: center; padding: 2rem; color: var(--text-muted);">
                                             No {{ strtolower($availabilityTable['title']) }} found.
                                         </td>
                                     </tr>
@@ -633,7 +650,7 @@
                                 <span class="status-pill status-amber">ROB {{ $log->ROB }}</span>
                                 <span class="status-pill status-blue">FW {{ $log->FreshWater }}</span>
                                 <span class="status-pill {{ ($log->CCTV ?? 'No') === 'No' ? 'status-red' : 'status-teal' }}">CCTV {{ $log->CCTV ?? 'No' }}</span>
-                                <span class="status-pill {{ ($log->Internet ?? 'No') === 'No' ? 'status-red' : 'status-violet' }}">Internet {{ $log->Internet ?? 'No' }}</span>
+                                <span class="status-pill {{ ($log->Internet ?? 'No') === 'No' ? 'status-red' : 'status-green' }}">Internet {{ $log->Internet ?? 'No' }}</span>
                             </div>
                         </div>
                     @endforeach

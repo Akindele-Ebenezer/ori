@@ -4,13 +4,17 @@
 
 @section('Content')
 <div class="video"> 
-    <h1>🎥 Video Presentations</h1>
+    <h1>🎥 Video Portfolios</h1>
     <div class="video-container"> 
         {{-- VIDEO --}}
         @foreach ($Portfolios as $video)
         <div class="mb-4">
+            <h2>{{ $video->title ?: 'Untitled Video Presentation' }}</h2>
             <video width="500" controls>
-                <source src="{{ asset('videos/' . $video->title) }}" type="video/mp4">
+                @php
+                    $videoSource = $video->thumbnail ?: $video->title;
+                @endphp
+                <source src="{{ str_starts_with((string) $videoSource, 'http') ? $videoSource : asset('videos/' . basename((string) $videoSource)) }}" type="video/mp4">
             </video>
         </div> 
         @endforeach

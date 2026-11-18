@@ -789,6 +789,11 @@
         animation: shared-form-enter 240ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
+    .AddOfficersOnDutyForm {
+        overflow-y: scroll;
+        height: 40em;
+    }
+
     .form-1 form .input select,
     .form-1 form .input input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
     .form-1 form .input textarea,

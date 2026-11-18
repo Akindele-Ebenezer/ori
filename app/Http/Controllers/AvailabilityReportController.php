@@ -57,6 +57,9 @@ class AvailabilityReportController extends Controller
 
         $rules = $this->rulesForType($type, true);
         $data = $request->validate($rules);
+        if ($type === 'incident' && $request->hasFile('Attachment')) {
+            $data['Attachment'] = $request->file('Attachment')->store('incident-attachments', 'public');
+        }
         $data['ReportType'] = $type;
         AvailabilityReport::create($data);
 
@@ -69,6 +72,12 @@ class AvailabilityReportController extends Controller
         abort_unless(isset(self::FIELDS_BY_TYPE[$type]), 404);
         $data = $request->validate($this->rulesForType($type, false));
         $report = AvailabilityReport::where('ReportType', $type)->findOrFail($id);
+        if ($type === 'incident' && $request->hasFile('Attachment')) {
+            if ($report->Attachment) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($report->Attachment);
+            }
+            $data['Attachment'] = $request->file('Attachment')->store('incident-attachments', 'public');
+        }
         $report->update($data);
         $this->notifyReport($report->Vessel ?: $report->PersonVesselInvolved ?: 'Availability', 'Update', 'Availability Report Updated!', ($report->DoneBy ?: 'A user') . ' updated a ' . $report->ReportType . ' report.');
         return back();
@@ -78,6 +87,9 @@ class AvailabilityReportController extends Controller
     {
         abort_unless(isset(self::FIELDS_BY_TYPE[$type]), 404);
         $report = AvailabilityReport::where('ReportType', $type)->findOrFail($id);
+        if ($type === 'incident' && $report->Attachment) {
+            \Illuminate\Support\Facades\Storage::disk('public')->delete($report->Attachment);
+        }
         $this->notifyReport($report->Vessel ?: $report->PersonVesselInvolved ?: 'Availability', 'Delete', 'Availability Report Removed!', ($report->DoneBy ?: 'A user') . ' deleted a ' . $report->ReportType . ' report.');
         $report->delete();
         return back();
@@ -109,6 +121,9 @@ class AvailabilityReportController extends Controller
         $rules['Time'] = [$type === 'cctv' ? 'nullable' : 'required', 'date_format:H:i'];
         $rules['DoneBy'] = ['required', 'string', 'max:255'];
         $rules['Remarks'] = ['nullable', 'string'];
+        if ($type === 'incident') {
+            $rules['Attachment'] = ['nullable', 'file', 'mimes:pdf,doc,docx,jpg,jpeg,png,gif,xlsx,xls', 'max:10240'];
+        }
 
         return $rules;
     }

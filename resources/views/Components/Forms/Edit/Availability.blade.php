@@ -4,7 +4,7 @@
             <span>    </span>
             <button class="close-button-update-availability">✖</button>
         </div>
-        <form action="" class="UpdateAvailabilityForm" method="POST">
+        <form action="" class="UpdateAvailabilityForm" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="inner-1"> 
                 <div class="fields">
@@ -30,10 +30,11 @@
                             <label for="">Done By</label>
                             <input type="text" name="EditDoneBy">
                         </div> 
-                        <div class="input Hide">
+                        <div class="input">
                             <label for="">Attachment</label>
                             <input type="file" name="EditAttachment">
                         </div> 
+                    <a class="attachment-file-link" target="_blank" rel="noopener"><div class="attachment-file"></div></a>
                         <div class="input">
                             <label for="">Comment</label>
                             <input type="text" name="EditComment">

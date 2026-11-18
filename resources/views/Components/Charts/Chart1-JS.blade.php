@@ -140,7 +140,16 @@
     let NumberOfGenerators_READY2 = document.querySelectorAll('.availability-status.generators.idle');
     let NumberOfVessels_READY = NumberOfVessels_READY1.length + NumberOfVessels_READY2.length;
     let NumberOfGenerators_READY = NumberOfGenerators_READY1.length + NumberOfGenerators_READY2.length;
-    document.querySelector('.ready-x').innerHTML = 'V: ' + NumberOfVessels_READY + ' <br>G: ' + NumberOfGenerators_READY; 
+    const setAvailabilityMetric = (selector, value, asHtml = false) => {
+        const element = document.querySelector(selector);
+        if (!element) return;
+        if (asHtml) {
+            element.innerHTML = value;
+        } else {
+            element.textContent = value;
+        }
+    };
+    setAvailabilityMetric('.ready-x', 'V: ' + NumberOfVessels_READY + ' <br>G: ' + NumberOfGenerators_READY, true);
     let NumberOfVessels_MAINTENANCE = document.querySelectorAll('.availability-status.vessels.maintenance');
     let NumberOfGenerators_MAINTENANCE = document.querySelectorAll('.availability-status.generators.maintenance');
     let NumberOfVessels_BREAKDOWN = document.querySelectorAll('.availability-status.vessels.breakdown');
@@ -149,11 +158,11 @@
     let NumberOfVessels_INSPECTION = document.querySelectorAll('.availability-status.vessels.inspection');
     let NumberOfGenerators_INSPECTION = document.querySelectorAll('.availability-status.generators.inspection');
     let NumberOfVessels_BUNKERY = document.querySelectorAll('.availability-status.vessels.bunkery');
-    document.querySelector('.maintenance-x').innerHTML = 'V: ' + NumberOfVessels_MAINTENANCE.length + ' <br>G: ' + NumberOfGenerators_MAINTENANCE.length; 
-    document.querySelector('.breakdown-x').innerHTML = 'V: ' + NumberOfVessels_BREAKDOWN.length + ' <br>G: ' + NumberOfGenerators_BREAKDOWN.length; 
-    document.querySelector('.docking-x').textContent = NumberOfVessels_DOCKING.length;
-    document.querySelector('.inspection-x').innerHTML = 'V: ' + NumberOfVessels_INSPECTION.length + ' <br>G: ' + NumberOfGenerators_INSPECTION.length; 
-    document.querySelector('.bunkery-x').textContent = NumberOfVessels_BUNKERY.length;
+    setAvailabilityMetric('.maintenance-x', 'V: ' + NumberOfVessels_MAINTENANCE.length + ' <br>G: ' + NumberOfGenerators_MAINTENANCE.length, true);
+    setAvailabilityMetric('.breakdown-x', 'V: ' + NumberOfVessels_BREAKDOWN.length + ' <br>G: ' + NumberOfGenerators_BREAKDOWN.length, true);
+    setAvailabilityMetric('.docking-x', NumberOfVessels_DOCKING.length);
+    setAvailabilityMetric('.inspection-x', 'V: ' + NumberOfVessels_INSPECTION.length + ' <br>G: ' + NumberOfGenerators_INSPECTION.length, true);
+    setAvailabilityMetric('.bunkery-x', NumberOfVessels_BUNKERY.length);
     // Create chart  
     // 
     const selectElement = document.createElement('select');

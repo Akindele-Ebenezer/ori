@@ -12,6 +12,6 @@ class AvailabilityReport extends Model
         'ArrivalTime', 'Vessel', 'NoOfJobs', 'NavyJobs', 'Tugs', 'Type', 'Office',
         'Driver', 'Lodging', 'RecordingCapacity',
         'Positioning', 'Correction', 'From', 'To', 'Date', 'Time',
-        'DoneBy', 'Remarks',
+        'DoneBy', 'Remarks', 'Attachment',
     ];
 }

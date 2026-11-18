@@ -10,7 +10,7 @@
     @endphp
     @foreach ($reportForms as $type => $form)
         <div class="{{ $form['class'] }} FormWrapper Hide">
-            <form id="availability-report-form-{{ $type }}" action="{{ route('AddAvailabilityReport', ['type' => $type]) }}" class="AddAvailabilityReportForm" method="POST">
+            <form id="availability-report-form-{{ $type }}" action="{{ route('AddAvailabilityReport', ['type' => $type]) }}" class="AddAvailabilityReportForm" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="inner-1">
                     <div class="fields">
@@ -78,6 +78,12 @@
                                 @endforeach
                             @endif
                         </section>
+                        @if ($type === 'incident')
+                            <div class="input">
+                                <label for="incident-Attachment">Incident Attachment (image, PDF or document)</label>
+                                <input id="incident-Attachment" type="file" name="Attachment" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.xlsx,.xls">
+                            </div>
+                        @endif
                     </div>
                 </div>
                 <div class="inner-2">

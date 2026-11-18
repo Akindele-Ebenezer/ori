@@ -431,7 +431,7 @@ class VesselController extends Controller
         $Companies = \DB::table('companies')->orderBy('id', 'DESC')->get();
         $Ranks = \DB::table('ranks')->orderBy('id', 'DESC')->get();
         $Vessels = \DB::table('vessels_vessel_information')->select('VesselName')->get(); 
-        $portfolios = \DB::table('portfolio')->get();
+        $portfolios = \DB::table('portfolios')->get();
         return view('Pages.Portfolio', [
                 'Employees' => $Employees,
                 'Vessels' => $Vessels,  

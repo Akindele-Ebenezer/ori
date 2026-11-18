@@ -509,6 +509,11 @@ class VesselAvailabilityController extends Controller
 
     public function update(Request $request, $id)
     {
+        $request->validate([
+            'EditAttachment' => ['nullable', 'file', 'mimes:pdf,doc,docx,xls,xlsx,csv,jpg,jpeg,png', 'max:10240'],
+            'EditReport' => ['nullable', 'file', 'mimes:pdf,doc,docx,xls,xlsx,csv,jpg,jpeg,png', 'max:10240'],
+            'EditPicture' => ['nullable', 'file', 'mimes:jpg,jpeg,png,gif,webp', 'max:10240'],
+        ]);
         DB::transaction(function () use ($request, $id) {
             $startTime = substr($request->EditStartTime, 0, 5);
             $endTime   = substr($request->EditEndTime, 0, 5);
@@ -517,6 +522,29 @@ class VesselAvailabilityController extends Controller
             $vessel    = $request->EditVessel;
 
             $currentRow = VesselAvailability::where('id', $id)->lockForUpdate()->firstOrFail();
+
+            $reportName = $currentRow->Report;
+            $pictureName = $currentRow->Picture;
+            $attachmentName = $currentRow->Attachment;
+            if ($request->hasFile('EditAttachment')) {
+                $attachmentName = $request->file('EditAttachment')->store('vessel-attachments', 'public');
+            }
+            if ($request->hasFile('EditReport')) {
+                $reportDirectory = public_path('Documents/Reports/Vessels/' . $vessel);
+                if (!is_dir($reportDirectory)) {
+                    mkdir($reportDirectory, 0755, true);
+                }
+                $reportName = time() . '_' . $request->file('EditReport')->getClientOriginalName();
+                $request->file('EditReport')->move($reportDirectory, $reportName);
+            }
+            if ($request->hasFile('EditPicture')) {
+                $pictureDirectory = public_path('Documents/Pictures/Vessels/' . $vessel);
+                if (!is_dir($pictureDirectory)) {
+                    mkdir($pictureDirectory, 0755, true);
+                }
+                $pictureName = time() . '_' . $request->file('EditPicture')->getClientOriginalName();
+                $request->file('EditPicture')->move($pictureDirectory, $pictureName);
+            }
 
             $previousRow = VesselAvailability::where('Vessel', $vessel)
                 ->where('id', '!=', $id)
@@ -539,8 +567,8 @@ class VesselAvailabilityController extends Controller
                 'DoneBy'     => $request->EditDoneBy,
                 'Attachment' => $request->EditAttachment,
                 'Comment'    => $request->EditComment,
-                'Report'     => $request->EditReport,
-                'Picture'    => $request->EditPicture,
+                'Report'     => $reportName,
+                'Picture'    => $pictureName,
                 'Location'   => $request->EditLocation,
                 'StartTime'  => $startTime,
                 'EndTime'    => $endTime,

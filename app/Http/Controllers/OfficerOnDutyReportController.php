@@ -11,6 +11,10 @@ class OfficerOnDutyReportController extends Controller
     private function attributes(Request $request): array
     {
         $data = ['Supervisor' => $request->input('Supervisor'), 'Remarks' => $request->input('Remarks'), 'Date' => $request->input('Date'), 'DateIn' => now()->toDateString(), 'TimeIn' => now()->format('H:i')];
+        $data['SupervisorAgreement'] = $request->boolean('SupervisorAgreement') ? 'Yes' : 'No';
+        if ($request->hasFile('SupervisorSignature')) {
+            $data['SupervisorSignature'] = $request->file('SupervisorSignature')->store('officer-signatures', 'public');
+        }
         for ($index = 1; $index <= 7; $index++) {
             $suffix = $index === 1 ? '' : $index;
             foreach (['Name', 'Morning', 'Afternoon', 'Night'] as $field) {
@@ -42,6 +46,13 @@ class OfficerOnDutyReportController extends Controller
         $request->validate($this->validationRules());
         $attributes = $this->attributes($request);
         $existing = DB::table('officer_on_duty_reports')->where('id', $Id)->first();
+        if (!array_key_exists('SupervisorSignature', $attributes) && $existing?->SupervisorSignature) {
+            $attributes['SupervisorSignature'] = $existing->SupervisorSignature;
+        }
+        if (array_key_exists('SupervisorSignature', $attributes) && $existing?->SupervisorSignature
+            && $attributes['SupervisorSignature'] !== $existing->SupervisorSignature) {
+            Storage::disk('public')->delete($existing->SupervisorSignature);
+        }
         foreach (range(1, 7) as $index) {
             $suffix = $index === 1 ? '' : $index;
             $field = 'Signature' . $suffix;
@@ -57,6 +68,8 @@ class OfficerOnDutyReportController extends Controller
     private function validationRules(): array
     {
         $rules = ['Supervisor' => ['nullable', 'string', 'max:255'], 'Date' => ['required', 'date']];
+        $rules['SupervisorSignature'] = ['nullable', 'image', 'max:5120'];
+        $rules['SupervisorAgreement'] = ['required', 'accepted'];
         foreach (range(1, 7) as $index) {
             $suffix = $index === 1 ? '' : $index;
             $rules['Signature' . $suffix] = ['nullable', 'image', 'max:5120'];
@@ -71,6 +84,9 @@ class OfficerOnDutyReportController extends Controller
             $this->notifyReport($report->Supervisor ?: 'All vessels', 'Delete', 'Officers On Duty Report Removed!', 'A watchkeeping report for ' . $report->Date . ' was deleted.');
         }
         if ($report) {
+            if ($report->SupervisorSignature) {
+                Storage::disk('public')->delete($report->SupervisorSignature);
+            }
             foreach (range(1, 7) as $index) {
                 $suffix = $index === 1 ? '' : $index;
                 $signature = $report->{'Signature' . $suffix};

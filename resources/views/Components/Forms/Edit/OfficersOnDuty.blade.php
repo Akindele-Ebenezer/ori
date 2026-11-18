@@ -20,6 +20,20 @@
                                 @endforeach
                             </select>
                         </div>
+                        <div class="input">
+                            <label for="edit-officers-supervisor-signature">Supervisor Signature</label>
+                            <input type="file" name="SupervisorSignature" id="edit-officers-supervisor-signature" accept="image/*">
+                        </div>
+                        <div class="input supervisor-agreement">
+                            <div class="supervisor-agreement-heading">
+                                <strong>Supervisor Agreement</strong>
+                                <p>Please review the duty assignments before accepting this report.</p>
+                            </div>
+                            <label class="supervisor-agreement-consent" for="edit-officers-supervisor-agreement">
+                                <input type="checkbox" name="SupervisorAgreement" id="edit-officers-supervisor-agreement" value="Yes" required>
+                                <span>I confirm that I have reviewed the duty assignments and accept this officers-on-duty report.</span>
+                            </label>
+                        </div>
                     </section>
                     <section>
                         <div class="input OfficersOnDuty">

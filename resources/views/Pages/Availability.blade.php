@@ -206,7 +206,7 @@
                             <span class="vessel-night-duty-captain--">{{ $Vessel->NightDutyCaptain }}</span>
                             <span class="vessel-area--">{{ $Vessel->Area ?? 'N/A' }}</span>
                             <span class="vessel-rob--">{{ $vesselRob->ROB ?? 0 }}</span>
-                            <span class="imo availability-status vessels {{ $statusLower }} {{ $cat['key'] !== 'DREDGER' ? ($Availability_STATUS->Status ?? 'ready') : '' }} status-1">
+                            <span class="imo availability-status vessels {{ $statusLower }} {{ $cat['key'] !== 'DREDGER' ? ($Availability_STATUS->Status ?? 'ready') : '' }} status-1" data-availability-status="{{ $statusLower }}">
                                 {{ $displayStatus }}
                             </span>
                         </strong>
@@ -260,7 +260,7 @@
                         <strong class="notification-wrapper _generator_">
                             <span class="status-x {{ $genStatusLower }}"></span>
                             <span class="vessel-name--">{{ $Generator->EngineMake }} - {{ $Generator->UsedBy }}</span>
-                            <span class="imo availability-status generators {{ $genStatusLower }} status-1">
+                            <span class="imo availability-status generators {{ $genStatusLower }} status-1" data-availability-status="{{ $genStatusLower }}">
                                 {{ $genStatusDisplay }}
                             </span>
                         </strong>
@@ -300,7 +300,8 @@
             !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');
         </script>
 
-        <div class="board-1">
+        <div class="board-1 universal-operations-board">
+            {{--
             <div class="div">
                 <h1>
                     Vessels/Machineries <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M192 32c0-17.7 14.3-32 32-32H352c17.7 0 32 14.3 32 32V64h48c26.5 0 48 21.5 48 48V240l44.4 14.8c23.1 7.7 29.5 37.5 11.5 53.9l-101 92.6c-16.2 9.4-34.7 15.1-50.9 15.1c-19.6 0-40.8-7.7-59.2-20.3c-22.1-15.5-51.6-15.5-73.7 0c-17.1 11.8-38 20.3-59.2 20.3c-16.2 0-34.7-5.7-50.9-15.1l-101-92.6c-18-16.5-11.6-46.2 11.5-53.9L96 240V112c0-26.5 21.5-48 48-48h48V32zM160 218.7l107.8-35.9c13.1-4.4 27.3-4.4 40.5 0L416 218.7V128H160v90.7zM306.5 421.9C329 437.4 356.5 448 384 448c26.9 0 55.4-10.8 77.4-26.1l0 0c11.9-8.5 28.1-7.8 39.2 1.7c14.4 11.9 32.5 21 50.6 25.2c17.2 4 27.9 21.2 23.9 38.4s-21.2 27.9-38.4 23.9c-24.5-5.7-44.9-16.5-58.2-25C449.5 501.7 417 512 384 512c-31.9 0-60.6-9.9-80.4-18.9c-5.8-2.7-11.1-5.3-15.6-7.7c-4.5 2.4-9.7 5.1-15.6 7.7c-19.8 9-48.5 18.9-80.4 18.9c-33 0-65.5-10.3-94.5-25.8c-13.4 8.4-33.7 19.3-58.2 25c-17.2 4-34.4-6.7-38.4-23.9s6.7-34.4 23.9-38.4c18.1-4.2 36.2-13.3 50.6-25.2c11.1-9.4 27.3-10.1 39.2-1.7l0 0C136.7 437.2 165.1 448 192 448c27.5 0 55-10.6 77.5-26.1c11.1-7.9 25.9-7.9 37 0z"></path></svg>
@@ -370,11 +371,151 @@
                     </span>
                 </h2>
             </div> 
-            @include('Components.Charts.Chart2') 
+            --}}
+            @php
+                $universalDailyReports = collect($DailyReports ?? []);
+                $universalTugsReports = collect($AvailabilityReports ?? [])
+                    ->filter(fn ($report) => strtolower((string) ($report->ReportType ?? '')) === 'tugs');
+                $universalTugJobs = $universalTugsReports
+                    ->filter(fn ($report) => trim((string) ($report->Tugs ?? '')) !== '')
+                    ->groupBy(fn ($report) => strtoupper(trim((string) $report->Tugs)))
+                    ->map(fn ($reports) => $reports->sum(fn ($report) => is_numeric($report->NoOfJobs ?? null) ? (int) $report->NoOfJobs : 0))
+                    ->sortDesc();
+                $universalTugJobTotal = (int) $universalTugJobs->sum();
+                $universalMaxTugJobs = max(1, (int) $universalTugJobs->max());
+            @endphp
+            <div class="dashboard-2-x universal-dashboard">
+                <div class="universal-dashboard-head">
+                    <h1>Universal Operations</h1>
+                    <span>{{ $universalDailyReports->count() }} vessel logs · {{ $universalTugJobTotal }} tug jobs</span>
+                </div>
+                <div class="universal-dashboard-scroll">
+                    <section class="universal-dashboard-section">
+                        <div class="universal-dashboard-title">
+                            <h2>Vessel Operational Logbook</h2>
+                            <span>{{ $universalDailyReports->count() }} entries</span>
+                        </div>
+                        <div class="universal-dashboard-table-wrap" data-auto-scroll-container>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Vessel</th>
+                                        <th>Status</th>
+                                        <th>Remarks</th>
+                                        <th>Date / Time</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse ($universalDailyReports->take(30) as $dailyReport)
+                                        @php
+                                            $status = strtoupper((string) ($dailyReport->Status ?? 'UNSPECIFIED'));
+                                            $statusClass = strtolower(str_replace(' ', '-', $status));
+                                            $startTime = !empty($dailyReport->StartTime) ? substr((string) $dailyReport->StartTime, 0, 5) : '--:--';
+                                            $endTime = !empty($dailyReport->EndTime) ? substr((string) $dailyReport->EndTime, 0, 5) : '--:--';
+                                            $startDate = !empty($dailyReport->StartDate) ? \Carbon\Carbon::parse($dailyReport->StartDate)->format('d M Y') : 'Date not set';
+                                            $endDate = !empty($dailyReport->EndDate) ? \Carbon\Carbon::parse($dailyReport->EndDate)->format('d M Y') : null;
+                                        @endphp
+                                        <tr data-auto-scroll-item>
+                                            <td><strong>{{ $dailyReport->Vessel ?: 'Unnamed Vessel' }}</strong></td>
+                                            <td><span class="universal-status {{ $statusClass }}">{{ $status }}</span></td>
+                                            <td>{{ $dailyReport->Remarks ?: 'No remarks' }}</td>
+                                            <td>
+                                                {{ $startDate }}@if ($endDate && $endDate !== $startDate) - {{ $endDate }}@endif
+                                                <br>{{ $startTime }} - {{ $endTime }}
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="4" class="universal-empty">No vessel operational records found.</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            <section class="universal-tugs-dashboard deck-panel">
+                <section class="tug-assignments-insight" aria-labelledby="availability-tug-assignments-heading">
+                    <div class="tug-jobs-heading">
+                        <div class="tug-jobs-copy">
+                            <h3 id="availability-tug-assignments-heading">Tug Assignments</h3>
+                            <p class="tug-jobs-caption">Jobs by tug, compared with the busiest tug.</p>
+                        </div>
+                        <div class="tug-jobs-total">
+                            <strong>{{ number_format($universalTugJobTotal) }}</strong>
+                            <span>Total jobs</span>
+                        </div>
+                    </div>
+                    @if ($universalTugJobs->isNotEmpty())
+                        <div class="tug-jobs-legend" aria-label="Bar color thresholds">
+                            <span class="tug-jobs-legend-item"><i class="tug-jobs-swatch tug-jobs-swatch--low" aria-hidden="true"></i>Low <small>0-25%</small></span>
+                            <span class="tug-jobs-legend-item"><i class="tug-jobs-swatch tug-jobs-swatch--medium" aria-hidden="true"></i>Medium <small>26-50%</small></span>
+                            <span class="tug-jobs-legend-item"><i class="tug-jobs-swatch tug-jobs-swatch--high" aria-hidden="true"></i>High <small>51-99%</small></span>
+                            <span class="tug-jobs-legend-item"><i class="tug-jobs-swatch tug-jobs-swatch--full" aria-hidden="true"></i>Full <small>100%</small></span>
+                        </div>
+                        <div class="universal-tugs-list-scroll" data-auto-scroll-container>
+                            <ol class="tug-jobs-list" aria-label="Job counts by tug">
+                                @foreach ($universalTugJobs as $tug => $jobs)
+                                    @php
+                                        $jobPercentage = (int) round(($jobs / $universalMaxTugJobs) * 100);
+                                        $jobLevel = $jobPercentage <= 25 ? 'low' : ($jobPercentage <= 50 ? 'medium' : ($jobPercentage < 100 ? 'high' : 'full'));
+                                        $tugAssignments = $universalTugsReports
+                                            ->filter(fn ($report) => strtoupper(trim((string) ($report->Tugs ?? ''))) === $tug)
+                                            ->sortByDesc(fn ($report) => ($report->Date ?? '') . ' ' . ($report->Time ?? ''));
+                                    @endphp
+                                    <li class="tug-jobs-row" data-auto-scroll-item>
+                                        <div class="tug-jobs-meta">
+                                            <div class="tug-jobs-name">
+                                                <span class="tug-jobs-rank" aria-hidden="true">{{ $loop->iteration }}</span>
+                                                <span class="tug-jobs-label" title="{{ $tug }}">{{ $tug }}</span>
+                                            </div>
+                                            <strong>{{ number_format((int) $jobs) }} <span>jobs</span></strong>
+                                        </div>
+                                        <div class="tug-jobs-assignments">
+                                            @forelse ($tugAssignments as $assignment)
+                                                <span class="deck-sub-text">{{ $assignment->Vessel ?: 'No vessel recorded' }} · {{ $assignment->Date ? \Carbon\Carbon::parse($assignment->Date)->format('d M Y') : 'Date not set' }} {{ $assignment->Time ? substr((string) $assignment->Time, 0, 5) : '--:--' }}</span>
+                                            @empty
+                                                <span class="deck-sub-text">No vessel recorded</span>
+                                            @endforelse
+                                        </div>
+                                        <div class="tug-jobs-track tug-jobs-track--{{ $jobLevel }}" role="meter" aria-label="{{ $tug }} job count" aria-valuetext="{{ number_format((int) $jobs) }} jobs, {{ $jobPercentage }}% of busiest tug" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ $jobPercentage }}">
+                                            <span aria-hidden="true" style="width: {{ $jobPercentage }}%"></span>
+                                        </div>
+                                    </li>
+                                @endforeach
+                            </ol>
+                        </div>
+                    @else
+                        <div class="tug-jobs-empty">No tug assignment data available.</div>
+                    @endif
+                </section>
+            </section>
+            <script>
+                (() => {
+                    const containers = document.querySelectorAll('.universal-operations-board [data-auto-scroll-container]');
+                    window.setInterval(() => {
+                        containers.forEach((container) => {
+                            if (container.scrollHeight <= container.clientHeight + 1) return;
+                            const item = container.querySelector('[data-auto-scroll-item]');
+                            const step = item ? item.getBoundingClientRect().height : 36;
+                            const maxTop = container.scrollHeight - container.clientHeight;
+                            const nextTop = container.scrollTop >= maxTop - 1
+                                ? 0
+                                : Math.min(container.scrollTop + step, maxTop);
+                            container.scrollTo({
+                                top: nextTop,
+                                behavior: 'smooth',
+                            });
+                        });
+                    }, 2000);
+                })();
+            </script>
             @include('Components.Charts.Chart1-JS') 
+            {{-- @include('Components.Charts.Chart2')   --}}
             @include('Components.Charts.Chart4-JS') 
             @include('Components.Charts.Chart5-JS') 
-            @include('Components.Charts.Chart6-JS') 
+            @include('Components.Charts.Chart6-JS')
         </div>  
 
         <div class="board-1 board-x">
@@ -387,32 +528,71 @@
                         <div class="indicators-inner-x">
                             <span class="docking"></span> 
                             <span class="FilterDocking">DOCKING</span>
+                            <span class="indicator-count" data-indicator-count="docking" aria-label="Docking status count">0</span>
                         </div>
                         <div class="indicators-inner-x">
                             <span class="inspection"></span> 
                             <span class="FilterInspection">INSPECTION</span>
+                            <span class="indicator-count" data-indicator-count="inspection" aria-label="Inspection status count">0</span>
                         </div>
                         <div class="indicators-inner-x">
                             <span class="bunkery"></span> 
                             <span class="FilterBunkering">BUNKERING</span>
+                            <span class="indicator-count" data-indicator-count="bunkery" aria-label="Bunkering status count">0</span>
                         </div>
                     </div>
                     <div class="indicators-inner">
                         <div class="indicators-inner-x">
                             <span class="breakdown"></span> 
                             <span class="FilterBreakdown">BREAKDOWN</span>
+                            <span class="indicator-count" data-indicator-count="breakdown" aria-label="Breakdown status count">0</span>
                         </div>
                         <div class="indicators-inner-x">
                             <span class="idle"></span> 
                             <span class="FilterReady">READY TO GO</span>
+                            <span class="indicator-count" data-indicator-count="ready" aria-label="Ready status count">0</span>
                         </div> 
                         <div class="indicators-inner-x">
                             <span class="maintenance"></span> 
                             <span class="FilterMaintenance">MAINTENANCE</span>
+                            <span class="indicator-count" data-indicator-count="maintenance" aria-label="Maintenance status count">0</span>
                         </div>
                     </div>
                 </div>
             </div> 
+            <script>
+                (() => {
+                    const countAvailabilityStatuses = () => {
+                        const content = document.querySelector('.vessel-content.notifications.availability');
+                        if (!content) return;
+
+                        const statusElements = Array.from(content.querySelectorAll('.availability-status[data-availability-status]'));
+                        const aliases = {
+                            docking: ['docking'],
+                            inspection: ['inspection'],
+                            bunkery: ['bunkery', 'bunkering'],
+                            breakdown: ['breakdown'],
+                            ready: ['ready', 'ready to go', 'idle'],
+                            maintenance: ['maintenance']
+                        };
+
+                        Object.keys(aliases).forEach((key) => {
+                            const count = statusElements.filter((element) => {
+                                const status = (element.getAttribute('data-availability-status') || '')
+                                    .trim()
+                                    .toLowerCase()
+                                    .replace(/\s+/g, ' ');
+                                return aliases[key].indexOf(status) !== -1;
+                            }).length;
+                            const countElement = document.querySelector('[data-indicator-count="' + key + '"]');
+                            if (countElement) countElement.textContent = String(count);
+                        });
+                    };
+
+                    countAvailabilityStatuses();
+                    document.addEventListener('vessel-content-updated', countAvailabilityStatuses);
+                })();
+            </script>
 
             <div class="div tracking">
                 <h1>Tracking (Status)</h1>  

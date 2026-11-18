@@ -1671,6 +1671,11 @@ body {
   animation: shared-form-enter 240ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+.AddOfficersOnDutyForm {
+  overflow-y: scroll;
+  height: 40em;
+}
+
 .form-1 form .input select,
 .form-1 form .input input:not([type=checkbox]):not([type=radio]):not([type=file]),
 .form-1 form .input textarea,
@@ -5722,6 +5727,459 @@ button.Close):focus-visible {
   button.Close):focus-visible {
     transform: none;
   }
+}
+
+/* Availability Universal Operations board */
+.dashboard-inner .board-1.universal-operations-board {
+  align-items: stretch;
+  display: grid !important;
+  gap: 1em;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: auto;
+}
+.universal-operations-board > .universal-dashboard,
+.universal-operations-board > .universal-tugs-dashboard {
+  box-sizing: border-box;
+  height: 20em;
+  min-width: 0;
+  width: 100%;
+}
+.universal-dashboard {
+  background: rgb(12.0503144654%, 33.6699963004%, 44.3026267111%);
+  border: 1px solid #225f7d;
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgb(0 0 0 / 0.2);
+  color: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+.universal-dashboard-head {
+  align-items: center;
+  background: linear-gradient(115deg, #174b66 0%, #225f7d 58%, #16796f 100%);
+  border-bottom: 0;
+  display: flex;
+  gap: 0.65em;
+  justify-content: space-between;
+  min-height: 3.5em;
+  padding: 0.65em 0.9em;
+}
+.universal-dashboard-head h1 {
+  color: #fff;
+  font-size: 1.1em;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  padding: 0;
+}
+.universal-dashboard-head span {
+  background: rgb(255 255 255 / 0.14);
+  border: 1px solid rgb(255 255 255 / 0.22);
+  border-radius: 999px;
+  font-size: 0.68em;
+  font-weight: 600;
+  line-height: 1.35;
+  padding: 0.35em 0.65em;
+  text-align: center;
+}
+.universal-dashboard-scroll {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  height: auto;
+  min-height: 0;
+  overflow: hidden;
+  padding: 0.8em;
+  scrollbar-color: #4b8aa3 #173f53;
+}
+.universal-dashboard-section {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  height: auto;
+  min-height: 0;
+  overflow: hidden;
+}
+.universal-dashboard-title {
+  align-items: center;
+  display: flex;
+  gap: 0.6em;
+  justify-content: space-between;
+  margin-bottom: 0.6em;
+}
+.universal-dashboard-title h2 {
+  align-items: center;
+  color: #f8fafc;
+  display: flex;
+  font-size: 0.82em;
+  gap: 0.55em;
+  letter-spacing: 0.045em;
+  margin: 0;
+  text-transform: uppercase;
+}
+.universal-dashboard-title h2::before {
+  background: #34d399;
+  border-radius: 999px;
+  content: "";
+  height: 1.15em;
+  width: 0.25em;
+}
+.universal-dashboard-title span {
+  background: #225f7d;
+  border-radius: 999px;
+  color: #e2f3f8;
+  font-size: 0.66em;
+  font-weight: 600;
+  padding: 0.3em 0.65em;
+}
+.universal-dashboard-table-wrap {
+  border: 1px solid #225f7d;
+  border-radius: 8px;
+  flex: 1;
+  max-height: none;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-color: #4b8aa3 #173f53;
+}
+.universal-dashboard table {
+  border-collapse: collapse;
+  color: #f1f5f9;
+  font-size: 0.73em;
+  width: 100%;
+}
+.universal-dashboard table th,
+.universal-dashboard table td {
+  border-bottom: 1px solid rgb(75 138 163 / 0.42);
+  border-right: 0;
+  padding: 0.58em 0.62em;
+  text-align: left;
+  vertical-align: top;
+}
+.universal-dashboard table th {
+  background: #174b66;
+  color: #e2f3f8;
+  font-size: 0.88em;
+  letter-spacing: 0.035em;
+  position: sticky;
+  text-transform: uppercase;
+  top: 0;
+  z-index: 2;
+}
+.universal-dashboard table tbody tr:nth-child(even) {
+  background: rgb(255 255 255 / 0.035);
+}
+.universal-dashboard table tbody tr:hover {
+  background: rgb(52 211 153 / 0.12);
+}
+.universal-dashboard table td:first-child strong {
+  color: #fff;
+  font-weight: 700;
+}
+.universal-dashboard table td:nth-child(3) {
+  overflow-wrap: anywhere;
+}
+.universal-empty {
+  padding: 1.25em;
+  text-align: center;
+  opacity: 0.75;
+}
+.universal-status {
+  border-radius: 999px;
+  display: inline-block;
+  font-size: 0.76em;
+  font-weight: 700;
+  line-height: 1.35;
+  max-width: none;
+  overflow-wrap: anywhere;
+  padding: 0.24em 0.6em;
+  white-space: normal;
+}
+.universal-status.departure,
+.universal-status.unberthing,
+.universal-status.breakdown {
+  background: #dc2626;
+  color: #fff;
+}
+.universal-status.arrival,
+.universal-status.docking,
+.universal-status.weather-broadcast {
+  background: #2563eb;
+  color: #fff;
+}
+.universal-status.berthing,
+.universal-status.disembarkation,
+.universal-status.bunkery {
+  background: #0f766e;
+  color: #fff;
+}
+.universal-status.shifting,
+.universal-status.inspection,
+.universal-status.drill,
+.universal-status.dive-check {
+  background: #f59e0b;
+  color: #422006;
+}
+.universal-status.maintenance,
+.universal-status.embarkation {
+  background: #22c55e;
+  color: #14532d;
+}
+.universal-tugs-dashboard {
+  --bg-surface: #fff;
+  --border-bright: #cbd5e1;
+  --border-dim: #e2e8f0;
+  --radius-md: 12px;
+  --radius-sm: 8px;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --status-amber-text: #b45309;
+  --status-blue-text: #0369a1;
+  --status-coral-text: #c2410c;
+  --status-green-text: #15803d;
+  --status-teal-bg: #f0fdfa;
+  --status-teal-text: #0f766e;
+  --text-heading: #0f172a;
+  --text-main: #334155;
+  --text-muted: #64748b;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-dim);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  color: var(--text-main);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+.universal-tugs-dashboard .tug-assignments-insight {
+  border-top: 0;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  margin: 0;
+  min-height: 0;
+  overflow: hidden;
+  padding: 1em;
+}
+.universal-tugs-dashboard .tug-jobs-heading {
+  align-items: center;
+  border-bottom: 1px solid #e2e8f0;
+  gap: 0.75em;
+  margin-bottom: 0.75em;
+  padding-bottom: 0.7em;
+}
+.universal-tugs-dashboard .tug-jobs-copy h3 {
+  font-size: 1.05rem;
+  letter-spacing: 0.01em;
+}
+.universal-tugs-dashboard .tug-jobs-caption {
+  font-size: 0.72rem;
+}
+.universal-tugs-dashboard .tug-jobs-total {
+  min-width: 5.25rem;
+  box-shadow: 0 3px 8px rgb(15 118 110 / 0.08);
+}
+.universal-tugs-dashboard .tug-jobs-legend {
+  gap: 0.35rem;
+  margin: 0 0 0.65em;
+}
+.universal-tugs-dashboard .tug-jobs-legend-item {
+  padding: 0.2rem 0.42rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 999px;
+  background: #fff;
+  font-size: 0.62rem;
+}
+.universal-tugs-dashboard .universal-tugs-list-scroll {
+  flex: 1;
+  max-height: none;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-color: #94a3b8 #f1f5f9;
+  scrollbar-width: thin;
+  padding: 0.1em 0.35em 0.3em 0.1em;
+}
+.universal-tugs-dashboard .tug-jobs-list {
+  align-content: start;
+  gap: 0.55rem;
+}
+.universal-tugs-dashboard .tug-jobs-row {
+  position: relative;
+  padding: 0.6rem 0.65rem 0.55rem 0.8rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.65rem;
+  background: linear-gradient(110deg, #fff 0%, #f8fafc 100%);
+  box-shadow: 0 2px 6px rgb(15 23 42 / 0.04);
+  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+.universal-tugs-dashboard .tug-jobs-row::before {
+  position: absolute;
+  top: 0.65rem;
+  bottom: 0.65rem;
+  left: 0.3rem;
+  width: 0.2rem;
+  border-radius: 999px;
+  background: #0f766e;
+  content: "";
+}
+.universal-tugs-dashboard .tug-jobs-row:hover {
+  transform: translateY(-1px);
+  border-color: #99f6e4;
+  box-shadow: 0 5px 12px rgb(15 118 110 / 0.1);
+}
+.universal-tugs-dashboard .tug-jobs-row:first-child {
+  border-color: #fde68a;
+  background: linear-gradient(110deg, #fffbeb 0%, #fff 75%);
+}
+.universal-tugs-dashboard .tug-jobs-row:first-child::before {
+  background: #d97706;
+}
+.universal-tugs-dashboard .tug-jobs-row:first-child .tug-jobs-rank {
+  border-color: #fcd34d;
+  background: #fef3c7;
+  color: #92400e;
+}
+.universal-tugs-dashboard .tug-jobs-meta {
+  margin-bottom: 0.35rem;
+}
+.universal-tugs-dashboard .tug-jobs-assignments {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin: 0.15rem 0.35rem 0.35rem 2.05rem;
+  min-width: 0;
+}
+.universal-tugs-dashboard .tug-jobs-meta > strong {
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+  background: #f1f5f9;
+}
+.universal-tugs-dashboard .tug-jobs-row:first-child .tug-jobs-meta > strong {
+  background: #fef3c7;
+}
+.universal-tugs-dashboard .tug-jobs-track {
+  height: 0.45rem;
+  border: 0;
+  background: #e2e8f0;
+  margin-top: 0.3rem;
+}
+.universal-tugs-dashboard .deck-sub-text {
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 999px;
+  color: #475569;
+  display: inline-flex;
+  font-size: 0.64rem;
+  line-height: 1.25;
+  max-width: 100%;
+  min-width: 0;
+  padding: 0.2rem 0.45rem;
+  overflow-wrap: anywhere;
+}
+.universal-tugs-dashboard .tug-jobs-empty {
+  margin-top: auto;
+  margin-bottom: auto;
+  background: #f8fafc;
+  text-align: center;
+}
+.universal-tugs-list-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.dashboard-inner .board-1.board-x .div.indicators .indicator-count {
+  align-items: center;
+  background: #225f7d;
+  border: 1px solid rgb(255 255 255 / 0.18);
+  border-radius: 999px;
+  color: #fff;
+  display: inline-flex;
+  flex: 0 0 auto;
+  font-size: 0.78em;
+  font-weight: 700;
+  justify-content: center;
+  line-height: 1;
+  min-width: 2em;
+  padding: 0.38em 0.55em;
+}
+@media (max-width: 760px) {
+  .dashboard-inner .board-1.universal-operations-board {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .universal-tugs-dashboard .tug-jobs-row {
+    transition: none;
+  }
+  .universal-tugs-dashboard .tug-jobs-row:hover {
+    transform: none;
+  }
+}
+.FormWrapper .AddOfficersOnDutyForm .input.supervisor-agreement,
+.form-1.UpdateOfficersOnDuty .UpdateOfficersOnDutyForm .input.supervisor-agreement {
+  align-items: stretch;
+  background: #f2f8fb;
+  border: 1px solid #cfe0e8 !important;
+  border-left: 4px solid #225f7d !important;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgb(34 95 125 / 0.08);
+  box-sizing: border-box;
+  display: grid;
+  gap: 0.75rem;
+  margin: 0.75rem 0 1rem;
+  padding: 1rem;
+  width: 100%;
+}
+.FormWrapper .AddOfficersOnDutyForm .supervisor-agreement-heading strong,
+.form-1.UpdateOfficersOnDuty .UpdateOfficersOnDutyForm .supervisor-agreement-heading strong {
+  color: #174b66;
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+.FormWrapper .AddOfficersOnDutyForm .supervisor-agreement-heading p,
+.form-1.UpdateOfficersOnDuty .UpdateOfficersOnDutyForm .supervisor-agreement-heading p {
+  color: #64748b;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  margin: 0.2rem 0 0;
+}
+.FormWrapper .AddOfficersOnDutyForm .supervisor-agreement-consent,
+.form-1.UpdateOfficersOnDuty .UpdateOfficersOnDutyForm .supervisor-agreement-consent {
+  align-items: flex-start;
+  background: #fff;
+  border: 1px solid #dbe7ee;
+  border-radius: 8px;
+  color: #334155;
+  cursor: pointer;
+  display: flex;
+  font-weight: 500;
+  gap: 0.65rem;
+  line-height: 1.45;
+  padding: 0.75rem 0.85rem !important;
+  text-align: left !important;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+  width: auto !important;
+}
+.FormWrapper .AddOfficersOnDutyForm .supervisor-agreement-consent:hover,
+.form-1.UpdateOfficersOnDuty .UpdateOfficersOnDutyForm .supervisor-agreement-consent:hover {
+  border-color: #8eb6c8;
+}
+.FormWrapper .AddOfficersOnDutyForm .supervisor-agreement-consent input[type=checkbox],
+.form-1.UpdateOfficersOnDuty .UpdateOfficersOnDutyForm .supervisor-agreement-consent input[type=checkbox] {
+  accent-color: #225f7d;
+  flex: 0 0 auto;
+  height: 1.1rem;
+  margin: 0.12rem 0 0;
+  padding: 0;
+  width: 1.1rem !important;
+}
+.FormWrapper .AddOfficersOnDutyForm .supervisor-agreement-consent input[type=checkbox]:focus-visible,
+.form-1.UpdateOfficersOnDuty .UpdateOfficersOnDutyForm .supervisor-agreement-consent input[type=checkbox]:focus-visible {
+  outline: 3px solid rgb(34 95 125 / 0.28);
+  outline-offset: 2px;
 }
 
 /*# sourceMappingURL=Styles.css.map */

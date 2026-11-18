@@ -12,14 +12,15 @@ class PriorityExcelImportController extends Controller
 {
     public function import(Request $request)
     { 
-        if ($request->hasFile('Attachment')) {
+        if ($request->hasFile('PriorityAttachment')) {
             VesselAvailability::where('Source', 'PRIORITY')
                 ->whereNull('Status')
                 ->delete();
 
+            $attachmentPath = $request->file('PriorityAttachment')->store('files', 'public');
             Excel::import(
                 new PriorityImportClass,
-                $request->file('Attachment')->store('files')
+                storage_path('app/public/' . $attachmentPath)
             );
             \DB::table('notifications')->insert([
                 'DateIn' => now()->format('Y-m-d'),
@@ -31,25 +32,50 @@ class PriorityExcelImportController extends Controller
             ]);
             return redirect()->back();
         } 
+        $request->validate([
+            'Vessel' => ['required', 'string', 'max:255'],
+            'Status' => ['required', 'string', 'max:255'],
+            'DoneBy' => ['required', 'string', 'max:255'],
+            'Attachment' => ['nullable', 'file', 'mimes:pdf,doc,docx,xls,xlsx,csv,jpg,jpeg,png', 'max:10240'],
+            'Report' => ['nullable', 'file', 'mimes:pdf,doc,docx,xls,xlsx,csv,jpg,jpeg,png', 'max:10240'],
+            'Picture' => ['nullable', 'file', 'mimes:jpg,jpeg,png,gif,webp', 'max:10240'],
+            'StartTime' => ['required', 'string'],
+            'EndTime' => ['required', 'string'],
+            'StartDate' => ['required', 'date'],
+            'EndDate' => ['required', 'date'],
+        ]);
         \DB::transaction(function () use ($request) {
 
             $fileNameReport = '';
             $fileNamePicture = '';
+            $attachmentName = '';
+
+            if ($request->hasFile('Attachment')) {
+                $attachmentName = $request->file('Attachment')->store('vessel-attachments', 'public');
+            }
 
             // ---- Report Upload
             if ($request->hasFile('Report')) {
                 $reportFile = $request->file('Report');
                 $fileNameReport = time() . '_' . $reportFile->getClientOriginalName();
+                $reportDirectory = public_path('Documents/Reports/Vessels/' . $request->Vessel);
+                if (!is_dir($reportDirectory)) {
+                    mkdir($reportDirectory, 0755, true);
+                }
                 $reportFile->move(
-                    public_path('Documents/Reports/Vessels/' . $request->Vessel),
+                    $reportDirectory,
                     $fileNameReport
                 );
             }
             if ($request->hasFile('Picture')) {
                 $pictureFile = $request->file('Picture');
                 $fileNamePicture = time() . '_' . $pictureFile->getClientOriginalName();
+                $pictureDirectory = public_path('Documents/Pictures/Vessels/' . $request->Vessel);
+                if (!is_dir($pictureDirectory)) {
+                    mkdir($pictureDirectory, 0755, true);
+                }
                 $pictureFile->move(
-                    public_path('Documents/Pictures/Vessels/' . $request->Vessel),
+                    $pictureDirectory,
                     $fileNamePicture
                 );
             }
@@ -59,6 +85,7 @@ class PriorityExcelImportController extends Controller
                 'Vessel'     => $request->Vessel,
                 'Status'     => $request->Status,
                 'DoneBy'     => $request->DoneBy,
+                'Attachment' => $attachmentName,
                 'Report'     => $fileNameReport,
                 'Picture'    => $fileNamePicture,
                 'Comment'    => $request->Comment,

@@ -12,6 +12,8 @@ if (updateOfficersOnDutyButton && updateOfficersOnDutyForm) {
             const report = JSON.parse(atob(row.dataset.report));
             const supervisor = updateOfficersOnDutyForm.querySelector('[name="Supervisor"]');
             if (supervisor) supervisor.value = report.Supervisor || '';
+            const agreement = updateOfficersOnDutyForm.querySelector('[name="SupervisorAgreement"]');
+            if (agreement) agreement.checked = String(report.SupervisorAgreement).toLowerCase() === 'yes';
             for (let index = 1; index <= 7; index += 1) {
                 const suffix = index === 1 ? '' : index;
                 ['Name', 'Morning', 'Afternoon', 'Night'].forEach((name) => {

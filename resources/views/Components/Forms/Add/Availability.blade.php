@@ -68,8 +68,12 @@
                                 <input type="text" name="DoneBy">
                             </div> 
                             <div class="input Hide">
+                                <label for="">Priority Import Attachment</label>
+                                <input type="file" name="PriorityAttachment" accept=".xls,.xlsx,.csv">
+                            </div>
+                            <div class="input">
                                 <label for="">Attachment</label>
-                                <input type="file" name="Attachment">
+                                <input type="file" name="Attachment" accept=".pdf,.doc,.docx,.xls,.xlsx,.csv,.jpg,.jpeg,.png">
                             </div> 
                             <div class="input">
                                 <label for="">Comment</label>

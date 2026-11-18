@@ -40,6 +40,7 @@ editButtons.forEach(button => {
         const cells = row.children; 
         const availabilityId = cells[0].textContent.trim();
         const form = updateForm;
+        if (!form) return;
         form.querySelector('[name=EditVessel]').value = cells[1].textContent.trim();
         form.querySelector('[name=EditStatus]').value = cells[2].textContent.trim();
         form.querySelector('[name=EditDoneBy]').value = cells[3].textContent.trim();
@@ -52,16 +53,48 @@ editButtons.forEach(button => {
         form.querySelector('[name=EditLocation]').value = cells[13].textContent.trim();
  
         const vessel = cells[1].textContent.trim();
+        const attachmentFile = cells[4].textContent.trim();
         const reportFile = cells[11].textContent.trim();
         const pictureFile = cells[12].textContent.trim();
 
-        form.querySelector('.report-file').textContent = reportFile;
-        form.querySelector('.report-file-link').href =
-            `/Documents/Reports/Vessels/${vessel}/${reportFile}`;
+        const attachmentLink = form.querySelector('.attachment-file-link');
+        if (attachmentLink) {
+            if (attachmentFile) {
+                attachmentLink.href = `/storage/${attachmentFile.replace(/^\/+/, '')}`;
+                attachmentLink.style.display = 'block';
+                form.querySelector('.attachment-file').textContent = attachmentFile;
+            } else {
+                attachmentLink.removeAttribute('href');
+                attachmentLink.style.display = 'none';
+                form.querySelector('.attachment-file').textContent = '';
+            }
+        }
 
-        form.querySelector('.picture-file').textContent = pictureFile;
-        form.querySelector('.picture-file-link').href =
-            `/Documents/Pictures/Vessels/${vessel}/${pictureFile}`;
+        const reportLink = form.querySelector('.report-file-link');
+        if (reportLink) {
+            if (reportFile) {
+                reportLink.href = `/Documents/Reports/Vessels/${encodeURIComponent(vessel)}/${encodeURIComponent(reportFile)}`;
+                reportLink.style.display = 'block';
+                form.querySelector('.report-file').textContent = reportFile;
+            } else {
+                reportLink.removeAttribute('href');
+                reportLink.style.display = 'none';
+                form.querySelector('.report-file').textContent = '';
+            }
+        }
+
+        const pictureLink = form.querySelector('.picture-file-link');
+        if (pictureLink) {
+            if (pictureFile) {
+                pictureLink.href = `/Documents/Pictures/Vessels/${encodeURIComponent(vessel)}/${encodeURIComponent(pictureFile)}`;
+                pictureLink.style.display = 'block';
+                form.querySelector('.picture-file').textContent = pictureFile;
+            } else {
+                pictureLink.removeAttribute('href');
+                pictureLink.style.display = 'none';
+                form.querySelector('.picture-file').textContent = '';
+            }
+        }
 
         modal.style.display = 'flex';
 

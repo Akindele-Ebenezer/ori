@@ -1,7 +1,7 @@
 <div class="form-1 UpdateAvailabilityReport UpdateIncidentAccidentNearMiss FormWrapper Hide">
     <div class="inner">
         <div class="close-button"><span></span><button type="button" class="close-button-update-availability-report">✖</button></div>
-        <form action="" class="UpdateAvailabilityReportForm" method="POST">
+        <form action="" class="UpdateAvailabilityReportForm" method="POST" enctype="multipart/form-data">
             @csrf
             <input type="hidden" name="ReportType" value="incident">
             <h1>Update Incident / Accident / Near Miss Report</h1>
@@ -12,6 +12,8 @@
             <div class="input"><label for="incident-edit-Time">Time</label><input id="incident-edit-Time" type="time" name="Time" required></div>
             <div class="input"><label for="incident-edit-DoneBy">Done By</label><input id="incident-edit-DoneBy" type="text" name="DoneBy" required></div>
             <div class="input"><label for="incident-edit-Remarks">Remarks</label><textarea id="incident-edit-Remarks" name="Remarks"></textarea></div>
+            <div class="input"><label for="incident-edit-Attachment">Incident Attachment</label><input id="incident-edit-Attachment" type="file" name="Attachment" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.xlsx,.xls"></div>
+            <a class="incident-attachment-link" target="_blank" rel="noopener" style="display:none;"><div class="incident-attachment-file"></div></a>
             <button type="submit">Update</button>
         </form>
     </div>
