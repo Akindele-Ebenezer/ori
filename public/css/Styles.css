@@ -5848,6 +5848,25 @@ button.Close):focus-visible {
   font-size: 0.73em;
   width: 100%;
 }
+.universal-dashboard .universal-logbook-table {
+  table-layout: fixed;
+}
+.universal-dashboard .universal-logbook-table th:nth-child(1),
+.universal-dashboard .universal-logbook-table td:nth-child(1) {
+  width: 18%;
+}
+.universal-dashboard .universal-logbook-table th:nth-child(2),
+.universal-dashboard .universal-logbook-table td:nth-child(2) {
+  width: 19.2%;
+}
+.universal-dashboard .universal-logbook-table th:nth-child(3),
+.universal-dashboard .universal-logbook-table td:nth-child(3) {
+  width: 36%;
+}
+.universal-dashboard .universal-logbook-table th:nth-child(4),
+.universal-dashboard .universal-logbook-table td:nth-child(4) {
+  width: 26.8%;
+}
 .universal-dashboard table th,
 .universal-dashboard table td {
   border-bottom: 1px solid rgb(75 138 163 / 0.42);
@@ -5865,6 +5884,9 @@ button.Close):focus-visible {
   text-transform: uppercase;
   top: 0;
   z-index: 2;
+}
+.universal-dashboard table tbody td {
+  font-size: 0.9em;
 }
 .universal-dashboard table tbody tr:nth-child(even) {
   background: rgb(255 255 255 / 0.035);
@@ -6103,6 +6125,34 @@ button.Close):focus-visible {
   line-height: 1;
   min-width: 2em;
   padding: 0.38em 0.55em;
+}
+.dashboard-inner .board-1.board-x .div.indicators .indicator-vessel-total {
+  align-items: center;
+  background: rgb(255 255 255 / 0.06);
+  border: 1px solid rgb(255 255 255 / 0.14);
+  border-radius: 0.65em;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.75em;
+  padding: 0.6em 0.8em;
+}
+.dashboard-inner .board-1.board-x .div.indicators .indicator-vessel-total > span {
+  color: #e2f3f8;
+  font-size: 0.82em;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.dashboard-inner .board-1.board-x .div.indicators .indicator-vessel-total > strong {
+  background: #225f7d;
+  border-radius: 0.35em;
+  color: #fff;
+  float: none;
+  font-size: 2em;
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  line-height: 1;
+  padding: 0.15em 0.4em;
 }
 @media (max-width: 760px) {
   .dashboard-inner .board-1.universal-operations-board {

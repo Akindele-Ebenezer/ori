@@ -396,7 +396,7 @@
                             <span>{{ $universalDailyReports->count() }} entries</span>
                         </div>
                         <div class="universal-dashboard-table-wrap" data-auto-scroll-container>
-                            <table>
+                            <table class="universal-logbook-table">
                                 <thead>
                                     <tr>
                                         <th>Vessel</th>
@@ -558,6 +558,10 @@
                             <span class="indicator-count" data-indicator-count="maintenance" aria-label="Maintenance status count">0</span>
                         </div>
                     </div>
+                </div>
+                <div class="indicator-vessel-total">
+                    <span>Total vessels</span>
+                    <strong>{{ count($Vessels) }}</strong>
                 </div>
             </div> 
             <script>
